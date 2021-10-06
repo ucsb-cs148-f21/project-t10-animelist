@@ -1,0 +1,23 @@
+# User Journey
+
+- If the user is not logged in, the homepage is a landing page.
+- For a logged in user, the homepage is their anime list.
+- The user can create an account for the site.
+  - The user can log in to the site using their account.
+- Users can log in using an existing MyAnimeList account.
+  - If using a MyAnimeList account, the user completes an onboarding step where they can import their existing collection.
+- After creating an account, the user completes an "onboarding" step where they choose their ranking system.
+  - The user can choose from common ranking systems, e.g. 1-10 or n/5 stars.
+  - The user can create a customized numerical ranking system, where they specify a minimum, maximum, and increment.
+  - The user can create a fully customized ranking system, where they enumerate the possible ratings and order them.
+- The user can add anime to their collection by searching for the anime they have.
+- The user can view the page for an anime and view information about the series, including episodes and characters.
+- On the anime page, the user can add it to their collection and rate the anime.
+- The user can see an overview page of their collection that shows the anime they've watched along with their ratings.
+  - The collection page uses the user's rating system of choice.
+  - The collection page can be themed and rearranged using an intuitive interface.
+- Users can suggest changes to another user's ratings for a given anime, including comments and their justification for the updated rating.
+  - The user receiving a change request can agree or disagree with the suggestion.
+  - If the receiving user agrees, their rating will be automatically updated.
+  - If the receiving user agrees, the user sending the change request will receive some points for
+  - Users can opt in/out of this feature.
