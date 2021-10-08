@@ -12,7 +12,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:8082](http://localhost:8082) to view it in the browser.
+Open [http://localhost:8080](http://localhost:8080） to view it in the browser.
 ](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 then 
