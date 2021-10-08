@@ -1,6 +1,8 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). Nodejs and express using as my backend.
+you should install myreact.and node.js
+also the npm add express express-favicon path
 
 ## Available Scripts
 
