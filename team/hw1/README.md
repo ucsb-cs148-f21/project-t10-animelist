@@ -17,8 +17,16 @@ Open [http://localhost:8082](http://localhost:8082) to view it in the browser.
 
 then 
 git init
+
+
 heroku git:remote -a helloworld11236
+
+
 git add .
+
+
 git commit -m ""
+
 git push heroku master.
+
 finally i deloy my helloworld.
