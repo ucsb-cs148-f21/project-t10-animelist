@@ -25,6 +25,9 @@ I finished my Hello World app and deployed it on Heroku. I decided to continue t
 ## Rowan
 I finished my Hello World app and deployed it to Heroku. I plan to begin the Sprint planning meeting to have user stories prepared on kanban board. I intend to take a look at the sprint, look at issues, and assign some to myself or others.
 
+## Collective
+By the end of next meeting, we will collectively decide on a tech stack and being Sprint planning.
+
 # Hello World Demo and Tech Stacks
 
 ## Christopher 
