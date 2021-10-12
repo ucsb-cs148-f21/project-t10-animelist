@@ -1,0 +1,10 @@
+mutation MALLogin($input: MALOauthInput!) {
+  malLogin(input: $input) {
+    success
+    user {
+      id
+      username
+    }
+    token
+  }
+}

@@ -1,0 +1,48 @@
+scalar DateTime
+
+type User {
+    id: ID!
+    username: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+input RegisterInput {
+    username: String!
+    email: String!
+    password: String!
+}
+
+type RegisterResponse {
+    success: Boolean!
+}
+
+input LoginInput {
+    usernameOrEmail: String!
+    password: String!
+}
+
+type LoginResponse {
+    success: Boolean!
+    token: String!
+    user: User!
+}
+
+input MALOauthInput {
+    code: String!
+    state: String!
+}
+
+type Query {
+    me: User
+    malLinkOauth: String!
+    malLoginOauth:  String!
+}
+
+type Mutation {
+    register(input: RegisterInput!): RegisterResponse
+    login(input: LoginInput!): LoginResponse
+    malLogin(input: MALOauthInput!): LoginResponse
+    logout: Boolean
+    malLink(input: MALOauthInput!): Boolean
+}

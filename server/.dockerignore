@@ -1,0 +1,4 @@
+**/application-development.properties
+build
+.idea
+.gradle
