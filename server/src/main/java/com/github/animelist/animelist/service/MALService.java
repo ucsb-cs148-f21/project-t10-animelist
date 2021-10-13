@@ -1,9 +1,9 @@
 package com.github.animelist.animelist.service;
 
 import com.github.animelist.animelist.config.mal.MALConfigProperties;
+import com.github.animelist.animelist.entity.MALToken;
 import com.github.animelist.animelist.entity.User;
 import com.github.animelist.animelist.model.mal.MALOauth2Token;
-import com.github.animelist.animelist.entity.MALToken;
 import com.github.animelist.animelist.model.mal.MALUsers;
 import com.github.animelist.animelist.repository.MALTokenRepository;
 import org.slf4j.Logger;
@@ -19,7 +19,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Component
@@ -118,7 +117,6 @@ public class MALService {
                 .map(MALUsers::id);
     }
 
-    @Transactional
     public Optional<User> getUser(final Integer malId) {
         return malTokenRepository.findByMalId(malId)
                 .map(MALToken::getUser);

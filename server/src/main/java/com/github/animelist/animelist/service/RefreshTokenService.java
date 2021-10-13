@@ -46,7 +46,7 @@ public class RefreshTokenService {
             final DecodedJWT decodedJWT = refreshTokenVerifier.verify(token);
             final String userId = decodedJWT.getSubject();
             final int tokenVersion = decodedJWT.getClaim("tokenVersion").asInt();
-            final Optional<User> userOptional = userRepository.findById(UUID.fromString(userId));
+            final Optional<User> userOptional = userRepository.findById(userId);
 
             return userOptional
                     .filter(user -> tokenVersion == user.getTokenVersion());

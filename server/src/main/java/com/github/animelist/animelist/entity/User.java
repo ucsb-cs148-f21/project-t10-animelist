@@ -1,40 +1,27 @@
 package com.github.animelist.animelist.entity;
 
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.UUID;
 
-@Entity
-@Table(name = "users")
+@Document("users")
 public class User extends DateAudit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private String id;
 
-    @Column(unique = true)
-    @Size(min = 3, max = 20)
     private String username;
 
-    @Column(unique = true)
-    @Size(min = 3, max = 255)
     private String email;
 
-    @Column
-    @Size(min = 6)
     private String password;
 
-    @Column
-    @Min(1)
     private int tokenVersion = 1;
 
     public User(
-            final UUID id,
+            final String id,
             final String username,
             final String email,
             final String password
@@ -48,11 +35,11 @@ public class User extends DateAudit {
     public User() {
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(final UUID id) {
+    public void setId(final String id) {
         this.id = id;
     }
 
@@ -121,12 +108,12 @@ public class User extends DateAudit {
 
     public static final class Builder {
 
-        private UUID id;
+        private String id;
         private String username;
         private String email;
         private String password;
 
-        public Builder id(final UUID id) {
+        public Builder id(final String id) {
             this.id = id;
             return this;
         }

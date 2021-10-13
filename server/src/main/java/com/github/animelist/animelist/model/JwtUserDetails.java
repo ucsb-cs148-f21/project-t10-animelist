@@ -11,13 +11,13 @@ import java.util.UUID;
 
 public class JwtUserDetails implements UserDetails {
 
-    private final UUID id;
+    private final String id;
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
 
     public JwtUserDetails(
-            final UUID id,
+            final String id,
             final String username,
             final String password,
             final Collection<? extends GrantedAuthority> authorities
@@ -63,7 +63,7 @@ public class JwtUserDetails implements UserDetails {
         return true;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
@@ -95,12 +95,12 @@ public class JwtUserDetails implements UserDetails {
 
     public static class Builder {
 
-        private UUID id;
+        private String id;
         private String username;
         private String password;
         private Collection<? extends GrantedAuthority> authorities;
 
-        public Builder id(UUID id) {
+        public Builder id(String id) {
             this.id = id;
             return this;
         }

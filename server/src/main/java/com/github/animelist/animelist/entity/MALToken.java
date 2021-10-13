@@ -1,43 +1,31 @@
 package com.github.animelist.animelist.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-import java.util.Objects;
-import java.util.UUID;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "maltokens")
+import java.util.Objects;
+
+@Document("maltokens")
 public class MALToken extends DateAudit {
 
     @Id
-    private UUID id;
+    private String id;
 
-    @Column(unique = true)
     private Integer malId;
 
-    @Lob
     private String refreshToken;
 
-    @Lob
     private String accessToken;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @PrimaryKeyJoinColumn
-    @MapsId
+    @DBRef
     private User user;
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

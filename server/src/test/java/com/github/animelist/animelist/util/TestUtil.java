@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public final class TestUtil {
 
-    public static final UUID TEST_ID = UUID.randomUUID();
+    public static final String TEST_ID = UUID.randomUUID().toString();
     public static final String TEST_USERNAME = "testUsername";
     public static final String TEST_EMAIL = "testEmail";
     public static final String TEST_PASSWORD = "testPassword";

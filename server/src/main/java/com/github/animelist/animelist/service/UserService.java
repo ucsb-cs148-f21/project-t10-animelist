@@ -5,11 +5,10 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.github.animelist.animelist.entity.MALToken;
-import com.github.animelist.animelist.repository.UserRepository;
 import com.github.animelist.animelist.config.jwt.JwtConfigProperties;
-import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.entity.User;
+import com.github.animelist.animelist.model.JwtUserDetails;
+import com.github.animelist.animelist.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import java.sql.Date;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 public class UserService {
@@ -58,7 +56,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUser(final UUID id) {
+    public Optional<User> getUser(final String id) {
         return userRepository.findById(id);
     }
 
@@ -71,7 +69,7 @@ public class UserService {
             final DecodedJWT decoded = accessTokenVerifier.verify(token);
 
             final JwtUserDetails userDetails = JwtUserDetails.builder()
-                    .id(UUID.fromString(decoded.getClaim("userId").asString()))
+                    .id(decoded.getClaim("userId").asString())
                     .username(decoded.getSubject())
                     .build();
 
