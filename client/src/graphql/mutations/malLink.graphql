@@ -1,0 +1,3 @@
+mutation MALLink ($input: MALOauthInput!){
+    malLink(input: $input)
+}

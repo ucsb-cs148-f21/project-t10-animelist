@@ -1,0 +1,22 @@
+services:
+  web:
+    build: ./client
+    ports:
+      - "3000:3000"
+    environment:
+      - BASE_API_URL=http://localhost:8080
+  api:
+    build: ./server
+    ports:
+      - "8080:8080"
+    environment:
+      - ACCESS_TOKEN_SECRET=superdupernotsecret
+      - REFRESH_TOKEN_SECRET=superdupernotsecret
+      - JWT_ISSUER=spring-react-nextjs
+      - CORS_ORIGIN=http://localhost:3000
+      - MONGODB_URI=mongodb+srv://<username>:<password>@localhost/myDb
+      - MONGODB_DATABASE=myDb
+      - MAL_CLIENT_ID=<client_id>
+      - MAL_CLIENT_SECRET=<client_secret>
+      - MAL_LINK_REDIRECT=http://localhost:3000/mallink
+      - MAL_LOGIN_REDIRECT=http://localhost:3000/mallogin
