@@ -23,7 +23,7 @@ const Home: React.FC<{}> = () => {
         direction={'column'}
         align={'center'}
       >
-        <Button as="a" href="https://github.com/jvoucsb/cs148-helloworld" leftIcon={<FaGithub />}>
+        <Button as="a" href="https://github.com/ucsb-cs148-f21/project-t10-animelist" leftIcon={<FaGithub />}>
           GitHub
         </Button>
       </Stack>
