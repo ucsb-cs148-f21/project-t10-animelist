@@ -14,10 +14,10 @@ const Home: React.FC<{}> = () => {
       maxW="3xl"
     >
       <Heading>
-        cs148-helloworld
+        Anime List App
       </Heading>
       <Text>
-        This is my hello world web app for cs148 animelist team.
+        This is the current anime list web app (currently in development) for team 10 in CS148-F21 
       </Text>
       <Stack
         direction={'column'}
