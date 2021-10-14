@@ -14,16 +14,16 @@ const Home: React.FC<{}> = () => {
       maxW="3xl"
     >
       <Heading>
-        cs148-helloworld
+        Anime List App
       </Heading>
       <Text>
-        This is my hello world web app for cs148 animelist team.
+        This is the current anime list web app (currently in development) for team 10 in CS148-F21 
       </Text>
       <Stack
         direction={'column'}
         align={'center'}
       >
-        <Button as="a" href="https://github.com/jvoucsb/cs148-helloworld" leftIcon={<FaGithub />}>
+        <Button as="a" href="https://github.com/ucsb-cs148-f21/project-t10-animelist" leftIcon={<FaGithub />}>
           GitHub
         </Button>
       </Stack>
