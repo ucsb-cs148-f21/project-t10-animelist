@@ -8,6 +8,7 @@ import { User } from "../generated/graphql";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import ProfileMenu from "./profiles/ProfileMenu";
 
+import Head from "next/head";
 interface HeaderProps extends FlexProps {
   user?: Pick<User, 'id' | 'username'>
 }
@@ -30,6 +31,12 @@ const Header: React.FC<HeaderProps> = (props) => {
           <Link href="/">T10-AnimeList</Link>
         </Heading>
       </Flex>
+
+      <div>
+      <Head>
+        <title>T10-AnimeList</title>
+      </Head>
+      </div>
 
       <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
         {isOpen ? <CloseIcon /> : <HamburgerIcon />}
