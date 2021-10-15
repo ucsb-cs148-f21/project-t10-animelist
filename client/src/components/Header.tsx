@@ -25,9 +25,9 @@ const Header: React.FC<HeaderProps> = (props) => {
       padding={3}
       {...props}
     >
-      <Flex align="center" mr={5}>
+      <Flex align="center" mr={5} color = "blue">
         <Heading size="lg" letterSpacing={"tighter"}>
-          <Link href="/">cs148-helloworld</Link>
+          <Link href="/">T10-AnimeList</Link>
         </Heading>
       </Flex>
 
