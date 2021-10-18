@@ -15,7 +15,7 @@ const Search: React.FC<{}> = () => {
     })
     const graphQlQuery = gql`
       query {
-        Media(search: "Violet Evergarden") {
+        Media(search: "${title}") {
           id
           title {
             romaji
