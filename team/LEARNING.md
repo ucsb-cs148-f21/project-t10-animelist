@@ -21,3 +21,6 @@
 - Alberto will look into the resources spreadsheet over the next two weeks. Rowan will also do some pair programming once we start implementing issues to share some knowledge on that.
 - Chris will watch tutorials and pair with Justin.
 - Hardy will watch online courses on React and Spring Boot and will try to get some help from friends on learning the language. If needed, Rowan will also do some pair programming with Hardy.
+
+## Articles Documenttion
+Christopher Barnett (10/18): I shared https://www.git-tower.com/learn/git/commands/git-restore in the git_articles Slack channel. It touches on the git restore command, which helped one of our team members correct having mistakenly added files to his PR.
