@@ -1,9 +1,13 @@
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
-import { Box, Button, Heading, Input, Stack } from "@chakra-ui/react";
+import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import * as React from 'react';
 
 const Search: React.FC<{}> = () => {
-
+  const [animes, setAnimes] = React.useState([ 
+    { id: 1, title: { romaji: "Your Name" } },  
+    { id: 2, title: { romaji: "Violet Evergarden" } },
+    { id: 3, title: { romaji: "Ergo Proxy" } }
+  ])
   const [title, setTitle] = React.useState("")
   const handleChange = (event) => setTitle(event.target.value)
   async function searchAnime(e) {
@@ -14,21 +18,27 @@ const Search: React.FC<{}> = () => {
       cache: new InMemoryCache()
     })
     const graphQlQuery = gql`
-      query {
-        Media(search: "${title}") {
-          id
-          title {
-            romaji
-          }
-          coverImage {
-            medium
+      query SearchAnime ($search: String!) {
+        Page {
+          media(search: $search type: ANIME) {
+            id
+            title {
+              romaji
+            }
+            coverImage {
+              large
+            }
+            siteUrl
           }
         }
       }
     `
 
     const data = await apolloClient.query({
-      query: graphQlQuery
+      query: graphQlQuery,
+      variables: {
+        search: title
+      }
     });
 
     console.log(data);
@@ -55,6 +65,13 @@ const Search: React.FC<{}> = () => {
       <Button onClick={searchAnime}>
         Search
       </Button>
+      {
+        animes.map(anime => {
+          return (
+            <Text>{anime.title.romaji}</Text>
+          )
+        })
+      }
     </Stack>
   );
 };
