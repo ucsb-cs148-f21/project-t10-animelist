@@ -1,20 +1,39 @@
+import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
+import { Box, Button, Heading, Input, Stack } from "@chakra-ui/react";
 import * as React from 'react';
-import { Box, Button, Heading, Stack, Text, Link } from "@chakra-ui/react"
-import { FaGithub } from 'react-icons/fa';
-import { useMeQuery } from '../generated/graphql';
-import router from 'next/router';
-import { Input } from "@chakra-ui/react";
 
 const Search: React.FC<{}> = () => {
 
   const [title, setTitle] = React.useState("")
   const handleChange = (event) => setTitle(event.target.value)
-
-  function handleClick(e) {
+  async function searchAnime(e) {
     e.preventDefault();
-    console.log(title);
+
+    const apolloClient = new ApolloClient({
+      uri: "https://graphql.anilist.co",
+      cache: new InMemoryCache()
+    })
+    const graphQlQuery = gql`
+      query {
+        Media(search: "Violet Evergarden") {
+          id
+          title {
+            romaji
+          }
+          coverImage {
+            medium
+          }
+        }
+      }
+    `
+
+    const data = await apolloClient.query({
+      query: graphQlQuery
+    });
+
+    console.log(data);
   }
-  
+
 
   return (
     <Stack
@@ -28,13 +47,13 @@ const Search: React.FC<{}> = () => {
       <Heading>
         Search For an Anime!
       </Heading>
-      <Input  
-        value = {title}
-        onChange = {handleChange}
+      <Input
+        value={title}
+        onChange={handleChange}
         placeholder="Type an anime"
       />
-      <Button onClick={handleClick}>
-          Search
+      <Button onClick={searchAnime}>
+        Search
       </Button>
     </Stack>
   );
