@@ -7,7 +7,7 @@ import router from 'next/router';
 const Home: React.FC<{}> = () => {
   const { data, } = useMeQuery();
 
-  if (data.me) {
+  if (data && data.me) {
     router.push("/list");
     return (<div />);
   }
