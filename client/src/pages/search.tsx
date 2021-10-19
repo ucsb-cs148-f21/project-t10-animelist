@@ -34,14 +34,14 @@ const Search: React.FC<{}> = () => {
       }
     `
 
-    const data = await apolloClient.query({
+    const response = await apolloClient.query({
       query: graphQlQuery,
       variables: {
         search: title
       }
     });
 
-    console.log(data);
+    console.log(response);
   }
 
 
