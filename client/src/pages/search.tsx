@@ -1,13 +1,12 @@
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
-import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
+import { Badge, Box, Button, Container, Heading, HStack, Image, Input, Stack, Text } from "@chakra-ui/react";
 import * as React from 'react';
 
 const Search: React.FC<{}> = () => {
   const [animes, setAnimes] = React.useState([])
   const [title, setTitle] = React.useState("")
   const handleChange = (event) => setTitle(event.target.value)
-
-
   async function searchAnime(e) {
     e.preventDefault();
 
@@ -18,14 +17,15 @@ const Search: React.FC<{}> = () => {
     const graphQlQuery = gql`
       query SearchAnime ($search: String!) {
         Page {
-          media(search: $search type: ANIME) {
+          media(search: $search type: ANIME isAdult: false) {
             id
             title {
               romaji
             }
             coverImage {
-              large
+              medium
             }
+            genres
             siteUrl
           }
         }
@@ -47,28 +47,60 @@ const Search: React.FC<{}> = () => {
 
   return (
     <Stack
-      as={Box}
+      as={Container}
       textAlign="center"
       spacing={{ base: 8, md: 14 }}
       py={{ base: 20, md: 36 }}
       px={{ base: 10 }}
-      maxW="3xl"
+      maxW="6xl"
     >
-      <Heading>
+      <Heading
+        width="100%"
+      >
         Search For an Anime!
       </Heading>
-      <Input
-        value={title}
-        onChange={handleChange}
-        placeholder="Type an anime"
-      />
-      <Button onClick={searchAnime}>
-        Search
-      </Button>
+      <HStack>
+        <Input
+          value={title}
+          onChange={handleChange}
+          placeholder="Type an anime"
+        />
+        <Button onClick={searchAnime}>
+          Search
+        </Button>
+      </HStack>
       {
         animes.map(anime => {
           return (
-            <Text>{anime.title.romaji}</Text>
+            <HStack>
+              <Image src={anime.coverImage.medium} />
+              <Stack
+                height="100%"
+                alignItems="flex-start"
+              >
+                <Text>{anime.title.romaji}</Text>
+                <HStack
+                  alignItems="center"
+                >
+                  <Text>Genres:</Text>
+                  {
+                    anime.genres.map(genre => (
+                      <Badge
+                        key={genre}
+                      >
+                        {genre}
+                      </Badge>
+                    ))
+                  }
+                </HStack>
+                <div style={{ flexGrow: 1 }}/>
+                <Button
+                  size={"sm"}
+                >
+                  Add Anime
+                </Button>
+              </Stack>
+            </HStack>
           )
         })
       }
