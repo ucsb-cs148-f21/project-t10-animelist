@@ -48,7 +48,6 @@ const Search: React.FC<{}> = () => {
   return (
     <Stack
       as={Container}
-      textAlign="center"
       spacing={{ base: 8, md: 14 }}
       py={{ base: 20, md: 36 }}
       px={{ base: 10 }}
@@ -81,6 +80,7 @@ const Search: React.FC<{}> = () => {
                 <Text>{anime.title.romaji}</Text>
                 <HStack
                   alignItems="center"
+                  flexWrap="wrap"
                 >
                   <Text>Genres:</Text>
                   {
