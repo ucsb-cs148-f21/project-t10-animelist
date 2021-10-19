@@ -3,13 +3,11 @@ import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
 import * as React from 'react';
 
 const Search: React.FC<{}> = () => {
-  const [animes, setAnimes] = React.useState([ 
-    { id: 1, title: { romaji: "Your Name" } },  
-    { id: 2, title: { romaji: "Violet Evergarden" } },
-    { id: 3, title: { romaji: "Ergo Proxy" } }
-  ])
+  const [animes, setAnimes] = React.useState([])
   const [title, setTitle] = React.useState("")
   const handleChange = (event) => setTitle(event.target.value)
+
+
   async function searchAnime(e) {
     e.preventDefault();
 
@@ -41,7 +39,9 @@ const Search: React.FC<{}> = () => {
       }
     });
 
-    console.log(response);
+    setAnimes(response.data.Page.media)
+
+    console.log(response.data.Page.media);
   }
 
 
