@@ -1,20 +1,25 @@
 import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import { AddIcon } from "@chakra-ui/icons";
-import { Badge, Box, Button, Container, FormControl, Heading, HStack, Image, Input, Stack, Text } from "@chakra-ui/react";
-import { Form } from "formik";
+import { Badge, Box, Button, Center, Container, FormControl, Heading, HStack, Image, Input, Spinner, Stack, Text } from "@chakra-ui/react";
+import { useFormik } from "formik";
 import * as React from 'react';
+import { createApolloAnilist } from "../../utils/createApolloAnilist";
+import SearchList from "../list/SearchList";
+import Loading from "../Loading";
 
 const SearchForm: React.FC<{}> = () => {
   const [animes, setAnimes] = React.useState([])
-  const [title, setTitle] = React.useState("")
-  const handleChange = (event) => setTitle(event.target.value)
-  async function searchAnime(e) {
-    e.preventDefault();
+  const formik = useFormik({
+    initialValues: {
+      title: ""
+    },
+    onSubmit: async ({ title }) => {
+      await searchAnime(title);
+    }
+  });
 
-    const apolloClient = new ApolloClient({
-      uri: "https://graphql.anilist.co",
-      cache: new InMemoryCache()
-    })
+  async function searchAnime(title) {
+    const apolloClient = createApolloAnilist();
     const graphQlQuery = gql`
       query SearchAnime ($search: String!) {
         Page {
@@ -33,78 +38,40 @@ const SearchForm: React.FC<{}> = () => {
       }
     `
 
-    const response = await apolloClient.query({
+    const { data } = await apolloClient.query({
       query: graphQlQuery,
       variables: {
         search: title
       }
     });
 
-    setAnimes(response.data.Page.media)
+    const medias = data.Page.media;
 
-    console.log(response.data.Page.media);
+    setAnimes(medias);
   }
-  
+
   return (
     <Stack
-    as={Container}
-    spacing={{ base: 8, md: 14 }}
-    py={{ base: 20, md: 36 }}
-    px={{ base: 10 }}
-    maxW="6xl"
-  >
-    <Heading
-      width="100%"
+      spacing={{ base: 8, md: 14 }}
+      py={{ base: 10 }}
+      width="full"
+      maxW="6xl"
     >
-      Search For an Anime!
-    </Heading>
-    <HStack>
-      <Input
-        value={title}
-        onChange={handleChange}
-        placeholder="Type an anime"
-      />
-      <Button onClick={searchAnime}>
-        Search
-      </Button>
-    </HStack>
-    {
-      animes.map(anime => {
-        return (
-          <HStack>
-            <Image src={anime.coverImage.medium} />
-            <Stack
-              height="100%"
-              alignItems="flex-start"
-            >
-              <Text>{anime.title.romaji}</Text>
-              <HStack
-                alignItems="center"
-                flexWrap="wrap"
-              >
-                <Text>Genres:</Text>
-                {
-                  anime.genres.map(genre => (
-                    <Badge
-                      key={genre}
-                    >
-                      {genre}
-                    </Badge>
-                  ))
-                }
-              </HStack>
-              <div style={{ flexGrow: 1 }}/>
-              <Button
-                size={"sm"}
-              >
-                Add Anime
-              </Button>
-            </Stack>
-          </HStack>
-        )
-      })
-    }
-  </Stack>
+      <Heading
+        width="100%"
+      >
+        Search For an Anime!
+      </Heading>
+      <form onSubmit={formik.handleSubmit}>
+        <HStack>
+          <Input id="title" {...formik.getFieldProps("title")} placeholder="Type an anime"/>
+          <Button type="submit" isLoading={formik.isSubmitting}>
+            Search
+          </Button>
+        </HStack>
+      </form>
+      { formik.isSubmitting ? <Spinner alignSelf="center"/> : <SearchList medias={animes} /> }
+    </Stack>
   );
 };
 
