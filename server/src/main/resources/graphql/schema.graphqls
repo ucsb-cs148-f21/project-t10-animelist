@@ -14,6 +14,12 @@ type UserListEntry {
     rating: Float!
 }
 
+input UserListEntryInput {
+    mediaID: Int!
+    rated: Boolean!
+    rating: Float!
+}
+
 input RegisterInput {
     username: String!
     email: String!
@@ -52,4 +58,5 @@ type Mutation {
     malLogin(input: MALOauthInput!): LoginResponse
     logout: Boolean
     malLink(input: MALOauthInput!): Boolean
+    addListEntry(input: UserListEntryInput!): Boolean
 }

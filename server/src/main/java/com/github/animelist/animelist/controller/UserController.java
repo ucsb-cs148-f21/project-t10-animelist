@@ -8,6 +8,8 @@ import com.github.animelist.animelist.model.input.LoginInput;
 import com.github.animelist.animelist.model.input.RegisterInput;
 import com.github.animelist.animelist.model.response.LoginResponse;
 import com.github.animelist.animelist.model.response.RegisterResponse;
+import com.github.animelist.animelist.model.user.UserListEntry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +96,13 @@ public class UserController {
     @MutationMapping
     public void logout() {
         refreshTokenService.setRefreshTokenCookie(response, null);
+    }
+
+    @MutationMapping
+    public boolean addListEntry(@Argument("input") final UserListEntry input) {
+        User currentUser = me();
+        currentUser.addUserListEntry(input);
+        userService.updateUser(currentUser);
+        return true;
     }
 }
