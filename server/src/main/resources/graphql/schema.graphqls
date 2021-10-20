@@ -3,8 +3,21 @@ scalar DateTime
 type User {
     id: ID!
     username: String!
+    userList: [UserListEntry!]!
     createdAt: DateTime!
     updatedAt: DateTime!
+}
+
+type UserListEntry {
+    mediaID: Int!
+    rated: Boolean!
+    rating: Float!
+}
+
+input UserListEntryInput {
+    mediaID: Int!
+    rated: Boolean!
+    rating: Float!
 }
 
 input RegisterInput {
@@ -45,4 +58,5 @@ type Mutation {
     malLogin(input: MALOauthInput!): LoginResponse
     logout: Boolean
     malLink(input: MALOauthInput!): Boolean
+    addListEntry(input: UserListEntryInput!): Boolean
 }
