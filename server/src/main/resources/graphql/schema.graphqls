@@ -3,8 +3,15 @@ scalar DateTime
 type User {
     id: ID!
     username: String!
+    userList: [UserListEntry!]!
     createdAt: DateTime!
     updatedAt: DateTime!
+}
+
+type UserListEntry {
+    mediaID: Int!
+    rated: Boolean!
+    rating: Float!
 }
 
 input RegisterInput {
