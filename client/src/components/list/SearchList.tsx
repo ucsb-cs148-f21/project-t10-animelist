@@ -1,4 +1,4 @@
-import { HStack, Stack, Badge, Button, Image, Text } from '@chakra-ui/react';
+import { HStack, Stack, Badge, Button, Image, Text, Heading } from '@chakra-ui/react';
 import * as React from 'react';
 
 interface SearchListProps {
@@ -11,13 +11,13 @@ const SearchList: React.FC<SearchListProps> = ({ medias }) => {
       {
         medias.map(anime => {
           return (
-            <HStack>
+            <HStack key={anime.id}>
               <Image src={anime.coverImage.medium} />
               <Stack
                 height="100%"
                 alignItems="flex-start"
               >
-                <Text>{anime.title.romaji}</Text>
+                <Heading size={"sm"}>{anime.title.romaji}</Heading>
                 <HStack
                   alignItems="center"
                   flexWrap="wrap"
