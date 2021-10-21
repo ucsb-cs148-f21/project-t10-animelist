@@ -1,11 +1,9 @@
-import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
-import { AddIcon } from "@chakra-ui/icons";
-import { Badge, Box, Button, Center, Container, FormControl, Heading, HStack, Image, Input, Spinner, Stack, Text } from "@chakra-ui/react";
+import { gql } from "@apollo/client";
+import { Button, Heading, HStack, Input, Spinner, Stack } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as React from 'react';
 import { createApolloAnilist } from "../../utils/createApolloAnilist";
 import SearchList from "../list/SearchList";
-import Loading from "../Loading";
 
 const SearchForm: React.FC<{}> = () => {
   const [animes, setAnimes] = React.useState([])
