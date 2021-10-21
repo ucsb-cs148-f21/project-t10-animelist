@@ -53,25 +53,19 @@ const SearchForm: React.FC<{}> = () => {
   return (
     <Stack
       spacing={{ base: 8 }}
-      py={{ base: 10 }}
-      px={{ base: 10, xl: 0 }}
-      width="full"
-      maxW="6xl"
     >
-      <Heading
-        width="100%"
-      >
+      <Heading>
         Search For an Anime!
       </Heading>
       <form onSubmit={formik.handleSubmit}>
         <HStack>
-          <Input id="title" {...formik.getFieldProps("title")} autoComplete="off" placeholder="Type an anime"/>
+          <Input id="title" {...formik.getFieldProps("title")} autoComplete="off" placeholder="Type an anime" />
           <Button type="submit" isLoading={formik.isSubmitting}>
             Search
           </Button>
         </HStack>
       </form>
-      { formik.isSubmitting ? <Spinner alignSelf="center"/> : <SearchList medias={animes} /> }
+      {formik.isSubmitting ? <Spinner alignSelf="center" /> : <SearchList medias={animes} />}
     </Stack>
   );
 };
