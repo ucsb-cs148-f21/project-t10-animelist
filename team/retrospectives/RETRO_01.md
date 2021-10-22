@@ -12,11 +12,15 @@
 - Change: make it part of standup to evaluate if we need an additional meeting before our next scheduled class meeting. if so, schedule a Zoom meeting and use that to work as a team. also make more use of Slack to relay updates immediately
 - Measurement: number of meetings we have per sprint, (informally) how much we feel like we're communicating
 
+- **Update 10/22**: We started using Slack more frequently to communicate updates on our progress towards issues, and updates when we make PRs. This helped increase the overall level of communication within our team and increase the visibility on PRs, allowing us to review and ultimately merge them more quickly.
+
 ### Ramp Up Development
 
 - Goal: get everyone set up to start working on code towards our MVP
 - Change: everyone should spend some time setting up their local development environment. check in with everyone over next few days to make sure that they're set up
 - Measurement: number of set-up development environments and number of code PRs being submitted
+
+- **Update 10/22**: All members of the team are now set up to run the application locally, so we are able to develop locally with a quick development cycle.
 
 ## Additional Things to Remember
 
