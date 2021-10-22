@@ -35,11 +35,17 @@ export type MalOauthInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addListEntry?: Maybe<Scalars['Boolean']>;
   login?: Maybe<LoginResponse>;
   logout?: Maybe<Scalars['Boolean']>;
   malLink?: Maybe<Scalars['Boolean']>;
   malLogin?: Maybe<LoginResponse>;
   register?: Maybe<RegisterResponse>;
+};
+
+
+export type MutationAddListEntryArgs = {
+  input: UserListEntryInput;
 };
 
 
@@ -85,8 +91,29 @@ export type User = {
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   updatedAt: Scalars['DateTime'];
+  userList: Array<UserListEntry>;
   username: Scalars['String'];
 };
+
+export type UserListEntry = {
+  __typename?: 'UserListEntry';
+  mediaID: Scalars['Int'];
+  rated: Scalars['Boolean'];
+  rating: Scalars['Float'];
+};
+
+export type UserListEntryInput = {
+  mediaID: Scalars['Int'];
+  rated: Scalars['Boolean'];
+  rating: Scalars['Float'];
+};
+
+export type AddListEntryMutationVariables = Exact<{
+  input: UserListEntryInput;
+}>;
+
+
+export type AddListEntryMutation = { __typename?: 'Mutation', addListEntry?: Maybe<boolean> };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -137,6 +164,37 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string }> };
 
 
+export const AddListEntryDocument = gql`
+    mutation AddListEntry($input: UserListEntryInput!) {
+  addListEntry(input: $input)
+}
+    `;
+export type AddListEntryMutationFn = Apollo.MutationFunction<AddListEntryMutation, AddListEntryMutationVariables>;
+
+/**
+ * __useAddListEntryMutation__
+ *
+ * To run a mutation, you first call `useAddListEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddListEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addListEntryMutation, { data, loading, error }] = useAddListEntryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddListEntryMutation(baseOptions?: Apollo.MutationHookOptions<AddListEntryMutation, AddListEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddListEntryMutation, AddListEntryMutationVariables>(AddListEntryDocument, options);
+      }
+export type AddListEntryMutationHookResult = ReturnType<typeof useAddListEntryMutation>;
+export type AddListEntryMutationResult = Apollo.MutationResult<AddListEntryMutation>;
+export type AddListEntryMutationOptions = Apollo.BaseMutationOptions<AddListEntryMutation, AddListEntryMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {

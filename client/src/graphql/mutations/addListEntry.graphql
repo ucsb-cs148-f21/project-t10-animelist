@@ -1,0 +1,3 @@
+mutation AddListEntry($input: UserListEntryInput!) {
+	addListEntry(input: $input) 
+}
