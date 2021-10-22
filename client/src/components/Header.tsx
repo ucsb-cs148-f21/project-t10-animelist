@@ -1,6 +1,6 @@
-import { CloseIcon, ExternalLinkIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { CloseIcon, ExternalLinkIcon, HamburgerIcon, SearchIcon } from "@chakra-ui/icons";
 import {
-  Box, Button, ButtonGroup, Flex, FlexProps, Heading, Link as StyledLink, Stack, useDisclosure
+  Box, Button, ButtonGroup, Flex, FlexProps, Heading, IconButton, Link as StyledLink, Stack, useDisclosure
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
@@ -33,9 +33,9 @@ const Header: React.FC<HeaderProps> = (props) => {
       </Flex>
 
       <div>
-      <Head>
-        <title>T10-AnimeList</title>
-      </Head>
+        <Head>
+          <title>T10-AnimeList</title>
+        </Head>
       </div>
 
       <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
@@ -59,6 +59,14 @@ const Header: React.FC<HeaderProps> = (props) => {
         display={{ base: isOpen ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
       >
+        <Link href="/search">
+          <IconButton
+            onClick={onClose}
+            variant="ghost"
+            aria-label="Search"
+            icon={<SearchIcon />}
+          />
+        </Link>
         {
           !props.user ? (
             <ButtonGroup variant="outline">
