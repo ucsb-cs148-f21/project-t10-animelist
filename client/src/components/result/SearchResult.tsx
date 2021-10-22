@@ -1,4 +1,4 @@
-import { HStack, Stack, Badge, Button, Image, Text, Heading } from '@chakra-ui/react';
+import { HStack, Stack, Badge, Button, Image, Text, Heading, Link } from '@chakra-ui/react';
 import * as React from 'react';
 import { useAddListEntryMutation, useMeQuery } from '../../generated/graphql';
 
@@ -55,7 +55,13 @@ const SearchResult: React.FC<SearchResultProps> = ({ anime }) => {
               </Button>
             ) :
             (
-              <div/>
+              <Link href="/signup">
+                <Button
+                  size={"sm"}
+                >
+                  Add Anime
+                </Button>
+              </Link>
             )
         }
       </Stack>
