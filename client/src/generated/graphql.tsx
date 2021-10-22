@@ -35,11 +35,17 @@ export type MalOauthInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addListEntry?: Maybe<Scalars['Boolean']>;
   login?: Maybe<LoginResponse>;
   logout?: Maybe<Scalars['Boolean']>;
   malLink?: Maybe<Scalars['Boolean']>;
   malLogin?: Maybe<LoginResponse>;
   register?: Maybe<RegisterResponse>;
+};
+
+
+export type MutationAddListEntryArgs = {
+  input: UserListEntryInput;
 };
 
 
@@ -85,7 +91,21 @@ export type User = {
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   updatedAt: Scalars['DateTime'];
+  userList: Array<UserListEntry>;
   username: Scalars['String'];
+};
+
+export type UserListEntry = {
+  __typename?: 'UserListEntry';
+  mediaID: Scalars['Int'];
+  rated: Scalars['Boolean'];
+  rating: Scalars['Float'];
+};
+
+export type UserListEntryInput = {
+  mediaID: Scalars['Int'];
+  rated: Scalars['Boolean'];
+  rating: Scalars['Float'];
 };
 
 export type LoginMutationVariables = Exact<{
@@ -135,6 +155,11 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string }> };
+
+export type UserListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserListQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', userList: Array<{ __typename?: 'UserListEntry', mediaID: number, rated: boolean, rating: number }> }> };
 
 
 export const LoginDocument = gql`
@@ -406,3 +431,41 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const UserListDocument = gql`
+    query UserList {
+  me {
+    userList {
+      mediaID
+      rated
+      rating
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserListQuery__
+ *
+ * To run a query within a React component, call `useUserListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserListQuery(baseOptions?: Apollo.QueryHookOptions<UserListQuery, UserListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserListQuery, UserListQueryVariables>(UserListDocument, options);
+      }
+export function useUserListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserListQuery, UserListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserListQuery, UserListQueryVariables>(UserListDocument, options);
+        }
+export type UserListQueryHookResult = ReturnType<typeof useUserListQuery>;
+export type UserListLazyQueryHookResult = ReturnType<typeof useUserListLazyQuery>;
+export type UserListQueryResult = Apollo.QueryResult<UserListQuery, UserListQueryVariables>;
