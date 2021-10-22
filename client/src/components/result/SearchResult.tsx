@@ -22,7 +22,7 @@ const SearchResult: React.FC<SearchResultProps> = ({ anime }) => {
     });
   }
   return (
-    <HStack key={anime.id}>
+    <HStack>
       <Image src={anime.coverImage.medium} />
       <Stack
         height="100%"

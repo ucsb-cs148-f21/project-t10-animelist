@@ -12,7 +12,7 @@ const SearchList: React.FC<SearchListProps> = ({ medias }) => {
       {
         medias.map(anime => {
           return (
-            <SearchResult anime={anime}/>
+            <SearchResult key={anime.id} anime={anime}/>
           )
         })
       }
