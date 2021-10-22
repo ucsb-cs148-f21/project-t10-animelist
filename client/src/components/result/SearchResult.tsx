@@ -1,14 +1,16 @@
 import { HStack, Stack, Badge, Button, Image, Text, Heading } from '@chakra-ui/react';
 import * as React from 'react';
-import { useAddListEntryMutation } from '../../generated/graphql';
+import { useAddListEntryMutation, useMeQuery } from '../../generated/graphql';
 
 interface SearchResultProps {
   anime: any
 }
 
 const SearchResult: React.FC<SearchResultProps> = ({ anime }) => {
+  const { data, loading } = useMeQuery();
   const [addListEntry] = useAddListEntryMutation();
-  function onclick() {
+  const isLoggedIn = !loading && data;
+  function onClick() {
     addListEntry({
       variables: {
         input: {
@@ -43,11 +45,19 @@ const SearchResult: React.FC<SearchResultProps> = ({ anime }) => {
           }
         </HStack>
         <div style={{ flexGrow: 1 }} />
-        <Button onClick={onclick}
-          size={"sm"}
-        >
-          Add Anime
-        </Button>
+        {
+          isLoggedIn ?
+            (
+              <Button onClick={onClick}
+                size={"sm"}
+              >
+                Add Anime
+              </Button>
+            ) :
+            (
+              <div/>
+            )
+        }
       </Stack>
     </HStack>
   );
