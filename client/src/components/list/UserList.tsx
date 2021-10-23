@@ -1,15 +1,5 @@
-import { Avatar, Heading, Link, VStack } from "@chakra-ui/react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from "@chakra-ui/react"
-import { Button, ButtonGroup } from "@chakra-ui/react"
+import { Avatar, Button, Heading, Table, TableCaption, Tbody, Td, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import Link from "next/link";
 import * as React from "react";
 import { User } from "../../generated/graphql";
 
@@ -46,7 +36,6 @@ const UserList: React.FC<Props> = ({ user }) => {
           </Tr>
         </Tbody>
       </Table>
-
       <Link href="/search">
         <Button
           colorScheme="blue"
@@ -54,7 +43,6 @@ const UserList: React.FC<Props> = ({ user }) => {
           Add Anime
         </Button>
       </Link>
-
     </VStack>
   );
 };
