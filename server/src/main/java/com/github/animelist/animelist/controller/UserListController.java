@@ -25,7 +25,7 @@ public class UserListController {
 
     @MutationMapping
     @PreAuthorize("isAuthenticated()")
-    public UserListEntry rateUserListEntry(@Argument("input") final UserListEntryInput input){
+    public UserListEntry updateUserListEntry(@Argument("input") final UserListEntryInput input){
         JwtUserDetails userDetails = getUserDetails();
 
         boolean succeeded = userListService.updateUserListEntry(userDetails.getId(), input);
