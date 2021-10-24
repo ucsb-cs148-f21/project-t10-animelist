@@ -1,16 +1,6 @@
 import { ApolloClient, gql, NormalizedCacheObject } from "@apollo/client";
-import { Avatar, Heading, VStack } from "@chakra-ui/react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-} from "@chakra-ui/react";
-import { Button, ButtonGroup } from "@chakra-ui/react";
+import { Avatar, Button, Heading, Table, TableCaption, Tbody, Td, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import Link from "next/link";
 import * as React from "react";
 import { UserListEntry } from "../../generated/graphql";
 import { createApolloAnilist } from "../../utils/createApolloAnilist";
@@ -95,7 +85,9 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
           )}
         </Tbody>
       </Table>
-      <Button colorScheme="blue">Add Anime</Button>
+      <Link href="/search">
+        <Button colorScheme="blue">Add Anime</Button>
+      </Link>
     </VStack>
   )
 };

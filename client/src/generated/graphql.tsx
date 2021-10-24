@@ -108,6 +108,13 @@ export type UserListEntryInput = {
   rating: Scalars['Float'];
 };
 
+export type AddListEntryMutationVariables = Exact<{
+  input: UserListEntryInput;
+}>;
+
+
+export type AddListEntryMutation = { __typename?: 'Mutation', addListEntry?: Maybe<boolean> };
+
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
@@ -162,6 +169,37 @@ export type UserListQueryVariables = Exact<{ [key: string]: never; }>;
 export type UserListQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', userList: Array<{ __typename?: 'UserListEntry', mediaID: number, rated: boolean, rating: number }> }> };
 
 
+export const AddListEntryDocument = gql`
+    mutation AddListEntry($input: UserListEntryInput!) {
+  addListEntry(input: $input)
+}
+    `;
+export type AddListEntryMutationFn = Apollo.MutationFunction<AddListEntryMutation, AddListEntryMutationVariables>;
+
+/**
+ * __useAddListEntryMutation__
+ *
+ * To run a mutation, you first call `useAddListEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddListEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addListEntryMutation, { data, loading, error }] = useAddListEntryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddListEntryMutation(baseOptions?: Apollo.MutationHookOptions<AddListEntryMutation, AddListEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddListEntryMutation, AddListEntryMutationVariables>(AddListEntryDocument, options);
+      }
+export type AddListEntryMutationHookResult = ReturnType<typeof useAddListEntryMutation>;
+export type AddListEntryMutationResult = Apollo.MutationResult<AddListEntryMutation>;
+export type AddListEntryMutationOptions = Apollo.BaseMutationOptions<AddListEntryMutation, AddListEntryMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {
