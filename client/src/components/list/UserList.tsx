@@ -13,11 +13,11 @@ import { Button, ButtonGroup } from "@chakra-ui/react";
 import * as React from "react";
 import { UserListEntry } from "../../generated/graphql";
 
-interface Props {
+interface UserListProps {
   list: UserListEntry[];
 }
 
-const UserList: React.FC<Props> = ({ list }) => {
+const UserList: React.FC<UserListProps> = ({ list }) => {
   return (
     <VStack width="full" p={6} maxWidth="6xl">
       <Table>
@@ -29,24 +29,18 @@ const UserList: React.FC<Props> = ({ list }) => {
           </Tr>
         </Thead>
         <Tbody>
+        {list.map(anime =>
           <Tr>
-            <Td>Your name</Td>
-            <Td>10</Td>
+            <Td>{anime.mediaID}</Td>
+            <Td>{anime.rating}</Td>
           </Tr>
-          <Tr>
-            <Td>Stein's Gate</Td>
-            <Td>9</Td>
-          </Tr>
-          <Tr>
-            <Td>Your Lie in April </Td>
-            <Td>8</Td>
-          </Tr>
-        </Tbody>
+        )}
+          </Tbody>
       </Table>
-
       <Button colorScheme="blue">Add Anime</Button>
     </VStack>
-  );
+  )
+          
 };
 
 export default UserList;
