@@ -1,5 +1,7 @@
-import { Td, Tr } from "@chakra-ui/table";
 import * as React from "react";
+import Icon from "@chakra-ui/icon";
+import { BsDash } from "react-icons/bs";
+import { Td, Tr } from "@chakra-ui/table";
 import { UserListEntry } from "../../generated/graphql";
 
 interface UserListEntryExtended extends UserListEntry {
@@ -15,7 +17,7 @@ const UserListRow: React.FC<UserListRowProps> = ({ entryData }) => {
   return (
     <Tr>
       <Td>{entryData.title}</Td>
-      <Td>{entryData.rating}</Td>
+      <Td>{entryData.rated ? entryData.rating : <Icon as={BsDash} />}</Td>
     </Tr>
   )
 };
