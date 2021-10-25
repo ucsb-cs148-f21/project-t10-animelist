@@ -18,14 +18,15 @@ interface EditAnimeModalProps{
 }
 
 const EditAnimeModal: React.FC<EditAnimeModalProps> = ({entryData, isOpen, onClose}) =>{
-	return(
+	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>{entryData.title}</ModalHeader>
           <ModalCloseButton />
+
           <ModalBody>
-			  hello
+            hello
           </ModalBody>
 
           <ModalFooter>
@@ -36,8 +37,7 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({entryData, isOpen, onClo
           </ModalFooter>
         </ModalContent>
       </Modal>
-	)
+	);
 }
-
 
 export default EditAnimeModal;
