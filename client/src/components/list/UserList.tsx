@@ -73,16 +73,19 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {list.map(anime => 
-            <UserListRow 
+          {list.map(anime => {
+            // check if media is defined in case media ID wasn't in anilist database
+            const media = medias.get(anime.mediaID);
+
+            return <UserListRow 
               key={anime.mediaID}
               entryData={{
                 ...anime,
-                title: medias.get(anime.mediaID).title.romaji,
-                coverImage: medias.get(anime.mediaID).coverImage.medium
+                title: (media ? media.title.romaji : "Unknown Title"),
+                coverImage: (media ? media.coverImage.medium : "")
               }}
             />
-          )}
+          })}
         </Tbody>
       </Table>
       <Link href="/search">
