@@ -18,7 +18,7 @@ const List: React.FC<{}> = () => {
   }
 
   return (
-    <VStack py={{ base: 20, md: 36 }} width="full">
+    <VStack py={{ base: 10 }} width="full">
       <UserList list={data.me.userList} />
     </VStack>
   );

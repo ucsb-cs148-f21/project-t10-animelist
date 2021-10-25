@@ -14,12 +14,12 @@ import { UserListEntryExtended } from "./UserListRow";;
 interface EditAnimeModalProps{
 	entryData: UserListEntryExtended,
 	isOpen: boolean,
-	onClose: Function
+	onClose: () => void
 }
 
 const EditAnimeModal: React.FC<EditAnimeModalProps> = ({entryData, isOpen, onClose}) =>{
 	return(
-		<Modal isOpen={isOpen} onClose={()=>onClose()}>
+		<Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Modal Title</ModalHeader>
