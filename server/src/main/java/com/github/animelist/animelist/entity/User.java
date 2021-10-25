@@ -1,14 +1,12 @@
 package com.github.animelist.animelist.entity;
 
+import com.github.animelist.animelist.model.user.UserListEntry;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-
-import com.github.animelist.animelist.model.user.UserListEntry;
 
 @Document("users")
 public class User extends DateAudit {

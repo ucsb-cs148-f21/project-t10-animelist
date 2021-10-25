@@ -59,4 +59,5 @@ type Mutation {
     logout: Boolean
     malLink(input: MALOauthInput!): Boolean
     addListEntry(input: UserListEntryInput!): Boolean
+    updateUserListEntry(input: UserListEntryInput!): UserListEntry
 }
