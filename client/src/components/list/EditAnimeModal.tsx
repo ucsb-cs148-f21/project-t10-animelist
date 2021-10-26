@@ -8,8 +8,18 @@ import {
 	ModalBody,
 	ModalCloseButton,
 	Button,
+  FormControl,
+  FormLabel,
+  Input,
+  NumberInput,
+  NumberInputField,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInputStepper,
   } from "@chakra-ui/react"
-import { UserListEntryExtended } from "./UserListRow";;
+import { UserListEntryExtended } from "./UserListRow";import { useFormik } from "formik";
+import EditAnimeModalForm from "./EditAnimeModalForm";
+;
 
 interface EditAnimeModalProps{
 	entryData: UserListEntryExtended,
@@ -26,14 +36,10 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({entryData, isOpen, onClo
           <ModalCloseButton />
 
           <ModalBody>
-            hello
+            <EditAnimeModalForm entryData={entryData} />
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} >
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
