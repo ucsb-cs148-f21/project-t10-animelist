@@ -29,7 +29,7 @@ interface EditAnimeModalProps{
 
 const EditAnimeModal: React.FC<EditAnimeModalProps> = ({entryData, isOpen, onClose}) =>{
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{entryData.title}</ModalHeader>
