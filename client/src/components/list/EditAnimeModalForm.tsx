@@ -14,6 +14,9 @@ interface EditAnimeModalFormProps {
 
 const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) => {
   const [updateUserListEntry] = useUpdateUserListEntryMutation();
+  function refreshPage() {
+		window.location.reload();
+	}
   const formik = useFormik({
     initialValues: {
       score: entryData.rated ? entryData.rating : ''
@@ -38,6 +41,7 @@ const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) =>
           }
         }
       });
+      refreshPage();
     }
   });
 
