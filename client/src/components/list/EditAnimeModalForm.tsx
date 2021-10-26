@@ -5,7 +5,7 @@ import { Formik, useFormik } from "formik";
 import { valueScaleCorrection } from "framer-motion/types/render/dom/projection/scale-correction";
 import { values } from "lodash";
 import * as React from "react";
-import { useMeQuery, useUpdateUserListEntryMutation } from "../../generated/graphql";
+import { useMeQuery, UserListEntryInput, useUpdateUserListEntryMutation } from "../../generated/graphql";
 import { UserListEntryExtended } from "./UserListRow";
 
 interface EditAnimeModalFormProps {
@@ -19,18 +19,14 @@ const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) =>
       score: entryData.rated ? entryData.rating : ''
     },
     onSubmit: values => {
-      const updatedEntry = {
+      const updatedEntry: UserListEntryInput = {
         mediaID: entryData.mediaID,
         rated: (values.score !== ''),
         rating: (values.score !== '') ? Number(values.score) : 0
       };
       updateUserListEntry({
         variables: {
-          input: {
-            mediaID: updatedEntry.mediaID,
-            rated: true,
-            rating: updatedEntry.rating
-          }
+          input: updatedEntry
         }
       });
       window.location.reload();
