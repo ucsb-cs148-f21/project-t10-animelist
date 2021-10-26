@@ -5,9 +5,28 @@ on:
       - main
     paths-ignore:
       - '**.md'
+concurrency: 
+  group: cd-${{ github.head_ref }}
+  cancel-in-progress: true
 jobs:
-  test:
-    name: Test
+  clientTest:
+    name: Frontend Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Run yarn
+        working-directory: ./client
+        run: yarn
+      - name: Run yarn test
+        working-directory: ./client
+        run: yarn test:ci
+  serverTest:
+    name: Backend Unit Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -24,7 +43,7 @@ jobs:
         run: ./gradlew build
   deploy:
     name: Deploy
-    needs: [test]
+    needs: [clientTest, serverTest]
     runs-on: ubuntu-latest
     environment:
       name: beta
