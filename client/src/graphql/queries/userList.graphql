@@ -1,0 +1,9 @@
+query UserList {
+  me {
+    userList {
+      mediaID
+      rated
+      rating
+    }
+  }
+}

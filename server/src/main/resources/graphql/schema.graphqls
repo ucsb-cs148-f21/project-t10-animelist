@@ -1,63 +1,63 @@
 scalar DateTime
 
 type User {
-    id: ID!
-    username: String!
-    userList: [UserListEntry!]!
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  username: String!
+  userList: [UserListEntry!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserListEntry {
-    mediaID: Int!
-    rated: Boolean!
-    rating: Float!
+  mediaID: Int!
+  rated: Boolean!
+  rating: Float!
 }
 
 input UserListEntryInput {
-    mediaID: Int!
-    rated: Boolean!
-    rating: Float!
+  mediaID: Int!
+  rated: Boolean!
+  rating: Float!
 }
 
 input RegisterInput {
-    username: String!
-    email: String!
-    password: String!
+  username: String!
+  email: String!
+  password: String!
 }
 
 type RegisterResponse {
-    success: Boolean!
+  success: Boolean!
 }
 
 input LoginInput {
-    usernameOrEmail: String!
-    password: String!
+  usernameOrEmail: String!
+  password: String!
 }
 
 type LoginResponse {
-    success: Boolean!
-    token: String!
-    user: User!
+  success: Boolean!
+  token: String!
+  user: User!
 }
 
 input MALOauthInput {
-    code: String!
-    state: String!
+  code: String!
+  state: String!
 }
 
 type Query {
-    me: User
-    malLinkOauth: String!
-    malLoginOauth:  String!
+  me: User
+  malLinkOauth: String!
+  malLoginOauth: String!
 }
 
 type Mutation {
-    register(input: RegisterInput!): RegisterResponse
-    login(input: LoginInput!): LoginResponse
-    malLogin(input: MALOauthInput!): LoginResponse
-    logout: Boolean
-    malLink(input: MALOauthInput!): Boolean
-    addListEntry(input: UserListEntryInput!): Boolean
-    updateUserListEntry(input: UserListEntryInput!): UserListEntry
+  register(input: RegisterInput!): RegisterResponse
+  login(input: LoginInput!): LoginResponse
+  malLogin(input: MALOauthInput!): LoginResponse
+  logout: Boolean
+  malLink(input: MALOauthInput!): Boolean
+  addListEntry(input: UserListEntryInput!): Boolean
+  updateUserListEntry(input: UserListEntryInput!): UserListEntry
 }
