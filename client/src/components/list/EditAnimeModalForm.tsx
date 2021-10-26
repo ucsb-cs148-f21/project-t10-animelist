@@ -15,18 +15,13 @@ interface EditAnimeModalFormProps {
 const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) => {
   const [updateUserListEntry] = useUpdateUserListEntryMutation();
   function refreshPage() {
-		window.location.reload();
-	}
+    window.location.reload();
+  }
   const formik = useFormik({
     initialValues: {
       score: entryData.rated ? entryData.rating : ''
     },
     onSubmit: values => {
-      // TODO: integrate this to send a GraphQL query to backend
-      // be aware that score is stored as a string, not a number,
-      // so you should convert to a number first. also the score 
-      // value of '' indicates empty field/no rating
-
       const updatedEntry = {
         mediaID: entryData.mediaID,
         rated: (values.score !== ''),
