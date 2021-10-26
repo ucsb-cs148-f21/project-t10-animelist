@@ -42,7 +42,7 @@ const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) =>
         <FormErrorMessage>{formik.errors.score}</FormErrorMessage>
       </FormControl>
 
-      <Button type="submit" colorScheme="blue" mr={3} >
+      <Button type="submit" colorScheme="blue" mt={3} >
         Save 
       </Button>
     </form>
