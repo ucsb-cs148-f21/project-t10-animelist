@@ -18,13 +18,13 @@ const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) =>
     initialValues: {
       score: entryData.rated ? entryData.rating : ''
     },
-    onSubmit: values => {
+    onSubmit: async values => {
       const updatedEntry: UserListEntryInput = {
         mediaID: entryData.mediaID,
         rated: (values.score !== ''),
         rating: (values.score !== '') ? Number(values.score) : 0
       };
-      updateUserListEntry({
+      await updateUserListEntry({
         variables: {
           input: updatedEntry
         }
