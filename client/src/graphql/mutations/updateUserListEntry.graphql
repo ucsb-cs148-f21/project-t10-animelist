@@ -1,0 +1,7 @@
+mutation UpdateUserListEntry($input: UserListEntryInput!) {
+  updateUserListEntry(input: $input) {
+    mediaID
+    rated
+    rating
+  }
+}

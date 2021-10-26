@@ -41,6 +41,7 @@ export type Mutation = {
   malLink?: Maybe<Scalars['Boolean']>;
   malLogin?: Maybe<LoginResponse>;
   register?: Maybe<RegisterResponse>;
+  updateUserListEntry?: Maybe<UserListEntry>;
 };
 
 
@@ -66,6 +67,11 @@ export type MutationMalLoginArgs = {
 
 export type MutationRegisterArgs = {
   input: RegisterInput;
+};
+
+
+export type MutationUpdateUserListEntryArgs = {
+  input: UserListEntryInput;
 };
 
 export type Query = {
@@ -147,6 +153,13 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register?: Maybe<{ __typename?: 'RegisterResponse', success: boolean }> };
+
+export type UpdateUserListEntryMutationVariables = Exact<{
+  input: UserListEntryInput;
+}>;
+
+
+export type UpdateUserListEntryMutation = { __typename?: 'Mutation', updateUserListEntry?: Maybe<{ __typename?: 'UserListEntry', mediaID: number, rated: boolean, rating: number }> };
 
 export type MalLinkOauthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -370,6 +383,41 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateUserListEntryDocument = gql`
+    mutation UpdateUserListEntry($input: UserListEntryInput!) {
+  updateUserListEntry(input: $input) {
+    mediaID
+    rated
+    rating
+  }
+}
+    `;
+export type UpdateUserListEntryMutationFn = Apollo.MutationFunction<UpdateUserListEntryMutation, UpdateUserListEntryMutationVariables>;
+
+/**
+ * __useUpdateUserListEntryMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserListEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserListEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserListEntryMutation, { data, loading, error }] = useUpdateUserListEntryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserListEntryMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserListEntryMutation, UpdateUserListEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserListEntryMutation, UpdateUserListEntryMutationVariables>(UpdateUserListEntryDocument, options);
+      }
+export type UpdateUserListEntryMutationHookResult = ReturnType<typeof useUpdateUserListEntryMutation>;
+export type UpdateUserListEntryMutationResult = Apollo.MutationResult<UpdateUserListEntryMutation>;
+export type UpdateUserListEntryMutationOptions = Apollo.BaseMutationOptions<UpdateUserListEntryMutation, UpdateUserListEntryMutationVariables>;
 export const MalLinkOauthDocument = gql`
     query MALLinkOauth {
   malLinkOauth

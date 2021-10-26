@@ -3,7 +3,9 @@ import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/form-contro
 import { NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper } from "@chakra-ui/number-input";
 import { Formik, useFormik } from "formik";
 import { valueScaleCorrection } from "framer-motion/types/render/dom/projection/scale-correction";
+import { values } from "lodash";
 import * as React from "react";
+import { useMeQuery, UserListEntryInput, useUpdateUserListEntryMutation } from "../../generated/graphql";
 import { UserListEntryExtended } from "./UserListRow";
 
 interface EditAnimeModalFormProps {
@@ -11,24 +13,23 @@ interface EditAnimeModalFormProps {
 }
 
 const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) => {
+  const [updateUserListEntry] = useUpdateUserListEntryMutation();
   const formik = useFormik({
     initialValues: {
       score: entryData.rated ? entryData.rating : ''
     },
     onSubmit: values => {
-      // TODO: integrate this to send a GraphQL query to backend
-      // be aware that score is stored as a string, not a number,
-      // so you should convert to a number first. also the score 
-      // value of '' indicates empty field/no rating
-
-      const updatedEntry = {
+      const updatedEntry: UserListEntryInput = {
         mediaID: entryData.mediaID,
         rated: (values.score !== ''),
         rating: (values.score !== '') ? Number(values.score) : 0
       };
-
-      // TODO: delete this
-      alert(JSON.stringify(updatedEntry));
+      updateUserListEntry({
+        variables: {
+          input: updatedEntry
+        }
+      });
+      window.location.reload();
     }
   });
 
@@ -37,7 +38,7 @@ const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) =>
       <FormControl>
         <FormLabel htmlFor="score">Score</FormLabel>
 
-        <NumberInput 
+        <NumberInput
           {...formik.getFieldProps("score")} id="score" min={0}
           onChange={(stringValue, _) => formik.setFieldValue("score", stringValue)}
         >
@@ -52,7 +53,7 @@ const EditAnimeModalForm: React.FC<EditAnimeModalFormProps> = ({ entryData }) =>
       </FormControl>
 
       <Button type="submit" colorScheme="blue" mt={3} >
-        Save 
+        Save
       </Button>
     </form>
   );
