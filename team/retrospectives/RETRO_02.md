@@ -19,3 +19,9 @@
 ## Optional
 
 * Start to review PRs more, keep learning, keep asking questions
+
+## Retro Assessment
+
+* We use the Start/Stop/Continue process on a GitHub projetc board.
+* The retro went well. We've identified some things to change and things to start doing to make our development process smoother. I felt more people are participating than last retro
+* For next retro, actively continue to encourage participation. This can be done by addressing members directly in a positive manner in order to make them feel included and heard.
