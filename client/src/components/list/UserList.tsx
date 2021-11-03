@@ -21,7 +21,7 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
 
     return () => apolloClient.stop();
   }, [list]);
-  
+
   async function fetchAnimeInfo(apolloClient: ApolloClient<NormalizedCacheObject>) {
     const query = gql`
       query FetchAnimeInfo($ids: [Int]!) {
@@ -68,6 +68,7 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
         <TableCaption>This is my animelist</TableCaption>
         <Thead>
           <Tr>
+            <Th></Th> {/* empty column for Cover Image */}
             <Th>Anime title</Th>
             <Th>Score</Th>
             <Th></Th> {/* empty column for Edit button */}
@@ -78,7 +79,7 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
             // check if media is defined in case media ID wasn't in anilist database
             const media = medias.get(anime.mediaID);
 
-            return <UserListRow 
+            return <UserListRow
               key={anime.mediaID}
               entryData={{
                 ...anime,

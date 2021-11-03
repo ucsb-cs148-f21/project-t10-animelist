@@ -26,7 +26,7 @@ const UserListRow: React.FC<UserListRowProps> = ({ entryData }) => {
 
   return (
     <Tr>
-      <Image src={entryData.coverImage} />
+      <Image src={entryData.coverImage}/>
       <Td>{entryData.title}</Td>
       <Td>{entryData.rated ? entryData.rating : <Icon as={BsDash} />}</Td>
       <Td><Button onClick={onOpen}> Edit </Button></Td>
@@ -36,4 +36,4 @@ const UserListRow: React.FC<UserListRowProps> = ({ entryData }) => {
 }
 
 export default UserListRow;
-export type {UserListEntryExtended};
+export type { UserListEntryExtended };
