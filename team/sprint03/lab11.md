@@ -20,6 +20,7 @@
 
 - Since last meeting, I read somedesigned  document, and I assign some issues on the kanban board.For today just discuss some products issues, and hopefully we can finish them.
 
+## Hardy
 - Since last meeting, I read some toturial about javascript. For today, I will work on the testing requirement for lab05. By next meeting, I will assigned a user story issue for the kanban board.
 
 ## Rowan
