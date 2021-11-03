@@ -26,7 +26,7 @@ const UserListRow: React.FC<UserListRowProps> = ({ entryData }) => {
 
   return (
     <Tr>
-      <Image src={entryData.coverImage}/>
+      <Td><Image src={entryData.coverImage}/></Td>
       <Td>{entryData.title}</Td>
       <Td>{entryData.rated ? entryData.rating : <Icon as={BsDash} />}</Td>
       <Td><Button onClick={onOpen}> Edit </Button></Td>
