@@ -68,7 +68,7 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
         <TableCaption>This is my animelist</TableCaption>
         <Thead>
           <Tr>
-            <Th></Th> {/* empty column for Cover Image */}
+            <Th>Image</Th>
             <Th>Anime title</Th>
             <Th>Score</Th>
             <Th></Th> {/* empty column for Edit button */}
