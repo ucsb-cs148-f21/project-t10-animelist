@@ -80,4 +80,32 @@ describe('User list', () => {
     const table = screen.getByRole('table');
     expect(table.firstChild).toHaveTextContent('Dragon Ball Z');
   });
+
+  it('displays score for rated anime', () => {
+
+  });
+
+  it('displays icon instead of score for unrated anime', () => {
+
+  });
+
+  it('displays edit button for each anime', () => {
+
+  });
+
+  it('opens edit modal after pressing edit button', () => {
+
+  });
+  
+  it('shows score in edit modal for rated anime', () => {
+
+  });
+
+  it('shows add anime button', () => {
+
+  });
+
+  it('redirects to search page after clicking add anime button', () => {
+
+  });
 });
