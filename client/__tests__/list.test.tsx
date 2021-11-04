@@ -4,20 +4,18 @@ import { findByRole, getByRole, render, screen, waitFor } from '@testing-library
 import { setupServer, SetupServerApi } from 'msw/node';
 import { graphql } from 'msw';
 import { ANILIST_GRAPHQL_ENDPOINT } from '../src/utils/createApolloAnilist';
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client';
-import fetch from 'cross-fetch';
+import { ApolloClient, ApolloProvider, createHttpLink,  InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import router from 'next/router';
 
-const FAKE_BACKEND_ENDPOINT = '/graphql';
-const backend = graphql.link(FAKE_BACKEND_ENDPOINT);
+import 'cross-fetch/polyfill';
+import '@testing-library/jest-dom'
+
+const FAKE_BACKEND_ENDPOINT = 'https://localhost/graphql';
 const anilist = graphql.link(ANILIST_GRAPHQL_ENDPOINT);
 
-const WrappedListPage: React.FC = (props) => {
-  const apolloClient = new ApolloClient({
-    link: new HttpLink({ uri: FAKE_BACKEND_ENDPOINT, fetch: fetch }),
-    cache: new InMemoryCache(),
-  });
+var apolloClient: ApolloClient<NormalizedCacheObject>;
 
+const WrappedListPage: React.FC = (props) => {
   return (
     <ApolloProvider client={apolloClient}>
       <List />
@@ -27,8 +25,13 @@ const WrappedListPage: React.FC = (props) => {
 
 var server: SetupServerApi;
 beforeAll(() => {
+  apolloClient = new ApolloClient({
+    link: createHttpLink({ uri: FAKE_BACKEND_ENDPOINT }),
+    cache: new InMemoryCache(),
+  });
+
   server = setupServer(
-    backend.query('UserList', (req, res, ctx) => {
+    graphql.query('UserList', (req, res, ctx) => {
       return res(
         ctx.data({
           me: {
@@ -64,11 +67,14 @@ beforeAll(() => {
     })
   );
 
-  server.listen();
+  server.listen({
+    onUnhandledRequest: 'warn'
+  });
 });
 
 afterEach(() => {
   server.resetHandlers();
+  apolloClient.cache.reset();
 });
 
 afterAll(() => {
@@ -78,8 +84,8 @@ afterAll(() => {
 describe('User list', () => {
   it('redirects to login page when not logged in', async () => {
     server.use(
-      backend.query('UserList', (req, res, ctx) => {
-        return res(ctx.data(null));
+      graphql.query('UserList', (req, res, ctx) => {
+        return res(ctx.data(undefined));
       })
     );
     router.push = jest.fn();
