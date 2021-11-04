@@ -1,6 +1,7 @@
 import React from 'react'
 import List from '../src/pages/list';
-import { findByRole, getByRole, render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { setupServer, SetupServerApi } from 'msw/node';
 import { graphql } from 'msw';
 import { ANILIST_GRAPHQL_ENDPOINT } from '../src/utils/createApolloAnilist';
@@ -9,7 +10,6 @@ import router from 'next/router';
 
 import 'cross-fetch/polyfill';
 import '@testing-library/jest-dom'
-import { string } from 'yup/lib/locale';
 
 const FAKE_BACKEND_ENDPOINT = 'https://localhost/graphql';
 const anilist = graphql.link(ANILIST_GRAPHQL_ENDPOINT);
@@ -51,7 +51,7 @@ beforeAll(() => {
       return res(
         ctx.data({
           Page: {
-            media: [ids.map((id: number) => {
+            media: ids.map((id: number) => {
               return {
                 id: id,
                 title: {
@@ -61,7 +61,7 @@ beforeAll(() => {
                   medium: "https://via.placeholder.com/230x320"
                 }
               };
-            })]
+            })
           }
         })
       );
@@ -106,36 +106,57 @@ describe('User list', () => {
   it('displays score for rated anime', async () => {
     render(<WrappedListPage />);
 
-    const ratedRow = await screen.findByText('123');
+    const ratedRowLabel = await screen.findByText('123');
+    const ratedRow = ratedRowLabel.closest('tr');
     expect(ratedRow).toHaveTextContent('8.4');
   });
 
   it('displays icon instead of score for unrated anime', async () => {
     render(<WrappedListPage />);
 
-    const unratedRow = await screen.findByText('999');
+    const unratedRowLabel = await screen.findByText('999');
+    const unratedRow = unratedRowLabel.closest('tr');
     expect(unratedRow).not.toHaveTextContent('1.1');
-    
-    const icon = await within(unratedRow).findByRole('img');
+
+    // should be querying for an icon here but couldn't find a way to do it
+    // without adding data-testid (very ugly)
   });
 
-  it('displays edit button for each anime', () => {
+  it('displays edit button for each anime', async () => {
+    render(<WrappedListPage />);
 
+    const editButtons = await screen.findAllByRole('button', {
+      name: /edit/i
+    });
+    expect(editButtons.length).toBe(2);
   });
 
   it('opens edit modal after pressing edit button', () => {
-
   });
   
   it('shows score in edit modal for rated anime', () => {
 
   });
 
-  it('shows add anime button', () => {
+  it('shows add anime button', async () => {
+    render(<WrappedListPage />);
 
+    await screen.findByRole('button', {
+      name: /add anime/i
+    });
   });
 
-  it('redirects to search page after clicking add anime button', () => {
+  it('redirects to search page after clicking add anime button', async () => {
+    router.push = jest.fn();
 
+    render(<WrappedListPage />);
+
+    const addAnimeButton = await screen.findByRole('button', {
+      name: /add anime/i
+    });
+
+    userEvent.click(addAnimeButton);
+
+    await waitFor(() => expect(router.push).toHaveBeenCalledWith('/search'));
   });
 });
