@@ -1,17 +1,34 @@
 import React from 'react'
 import List from '../src/pages/list';
-import { render, screen } from '@testing-library/react';
+import { findByRole, getByRole, render, screen, waitFor } from '@testing-library/react';
 import { setupServer, SetupServerApi } from 'msw/node';
 import { graphql } from 'msw';
 import { ANILIST_GRAPHQL_ENDPOINT } from '../src/utils/createApolloAnilist';
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client';
+import fetch from 'cross-fetch';
 import router from 'next/router';
+
+const FAKE_BACKEND_ENDPOINT = '/graphql';
+const backend = graphql.link(FAKE_BACKEND_ENDPOINT);
+const anilist = graphql.link(ANILIST_GRAPHQL_ENDPOINT);
+
+const WrappedListPage: React.FC = (props) => {
+  const apolloClient = new ApolloClient({
+    link: new HttpLink({ uri: FAKE_BACKEND_ENDPOINT, fetch: fetch }),
+    cache: new InMemoryCache(),
+  });
+
+  return (
+    <ApolloProvider client={apolloClient}>
+      <List />
+    </ApolloProvider>
+  )
+}
 
 var server: SetupServerApi;
 beforeAll(() => {
-  const anilist = graphql.link(ANILIST_GRAPHQL_ENDPOINT);
-
   server = setupServer(
-    graphql.query('UserList', (req, res, ctx) => {
+    backend.query('UserList', (req, res, ctx) => {
       return res(
         ctx.data({
           me: {
@@ -59,35 +76,49 @@ afterAll(() => {
 });
 
 describe('User list', () => {
-  it('redirects to login page when not logged in', () => {
+  it('redirects to login page when not logged in', async () => {
     server.use(
-      graphql.query('UserList', (req, res, ctx) => {
+      backend.query('UserList', (req, res, ctx) => {
         return res(ctx.data(null));
       })
     );
-    jest.mock('next/router', () => {
-      push: jest.fn()
-    });
+    router.push = jest.fn();
 
-    render(<List />);
+    render(<WrappedListPage />);
 
-    expect(router.push).toHaveBeenCalledWith("/login");
+    await waitFor(() => expect(router.push).toHaveBeenCalledWith("/login"));
   });
 
-  it('displays two rows given two user list entries', () => {
-    render(<List />);
+  it('displays two rows given two user list entries', async () => {
+    render(<WrappedListPage />);
 
-    const table = screen.getByRole('table');
-    expect(table.firstChild).toHaveTextContent('Dragon Ball Z');
+    const rows = await screen.findAllByRole('row');
+    expect(rows.length).toBe(2);
   });
 
-  it('displays score for rated anime', () => {
+  it('displays score for rated anime', async () => {
+    render(<WrappedListPage />);
 
+    const rows = await screen.findAllByRole('row');
+    expect(rows[0]).toHaveTextContent('8.4');
   });
 
-  it('displays icon instead of score for unrated anime', () => {
+  it('displays icon instead of score for unrated anime', async () => {
+    render(<WrappedListPage />);
 
+    const rows = await screen.findAllByRole('row');
+    expect(rows[1]).not.toHaveTextContent('1.1');
+    
+    const icon = await findByRole(rows[1], 'img');
   });
+
+  it('displays correct anime titles', async () => {
+    render(<WrappedListPage />);
+
+    const rows = await screen.findAllByRole('row');
+    expect(rows[0]).toHaveTextContent('Dragon Ball Z');
+    expect(rows[1]).toHaveTextContent('Dragon Ball Z');
+  })
 
   it('displays edit button for each anime', () => {
 
