@@ -1,6 +1,6 @@
 import React from 'react'
 import List from '../src/pages/list';
-import { findByRole, getByRole, render, screen, waitFor } from '@testing-library/react';
+import { findByRole, getByRole, render, screen, waitFor, within } from '@testing-library/react';
 import { setupServer, SetupServerApi } from 'msw/node';
 import { graphql } from 'msw';
 import { ANILIST_GRAPHQL_ENDPOINT } from '../src/utils/createApolloAnilist';
@@ -9,6 +9,7 @@ import router from 'next/router';
 
 import 'cross-fetch/polyfill';
 import '@testing-library/jest-dom'
+import { string } from 'yup/lib/locale';
 
 const FAKE_BACKEND_ENDPOINT = 'https://localhost/graphql';
 const anilist = graphql.link(ANILIST_GRAPHQL_ENDPOINT);
@@ -50,11 +51,11 @@ beforeAll(() => {
       return res(
         ctx.data({
           Page: {
-            media: [ids.map(id => {
+            media: [ids.map((id: number) => {
               return {
                 id: id,
                 title: {
-                  romaji: "Dragon Ball Z"
+                  romaji: id.toString()
                 },
                 coverImage: {
                   medium: "https://via.placeholder.com/230x320"
@@ -95,36 +96,28 @@ describe('User list', () => {
     await waitFor(() => expect(router.push).toHaveBeenCalledWith("/login"));
   });
 
-  it('displays two rows given two user list entries', async () => {
+  it('displays two rows + header row given two user list entries', async () => {
     render(<WrappedListPage />);
 
     const rows = await screen.findAllByRole('row');
-    expect(rows.length).toBe(2);
+    expect(rows.length).toBe(3);
   });
 
   it('displays score for rated anime', async () => {
     render(<WrappedListPage />);
 
-    const rows = await screen.findAllByRole('row');
-    expect(rows[0]).toHaveTextContent('8.4');
+    const ratedRow = await screen.findByText('123');
+    expect(ratedRow).toHaveTextContent('8.4');
   });
 
   it('displays icon instead of score for unrated anime', async () => {
     render(<WrappedListPage />);
 
-    const rows = await screen.findAllByRole('row');
-    expect(rows[1]).not.toHaveTextContent('1.1');
+    const unratedRow = await screen.findByText('999');
+    expect(unratedRow).not.toHaveTextContent('1.1');
     
-    const icon = await findByRole(rows[1], 'img');
+    const icon = await within(unratedRow).findByRole('img');
   });
-
-  it('displays correct anime titles', async () => {
-    render(<WrappedListPage />);
-
-    const rows = await screen.findAllByRole('row');
-    expect(rows[0]).toHaveTextContent('Dragon Ball Z');
-    expect(rows[1]).toHaveTextContent('Dragon Ball Z');
-  })
 
   it('displays edit button for each anime', () => {
 
