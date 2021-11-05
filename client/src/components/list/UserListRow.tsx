@@ -4,7 +4,7 @@ import { BsDash } from "react-icons/bs";
 import { Td, Tr } from "@chakra-ui/table";
 import { UserListEntry } from "../../generated/graphql";
 import { Button } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/react"
+import { useDisclosure, Image } from "@chakra-ui/react"
 import EditAnimeModal from "./EditAnimeModal";
 
 interface UserListEntryExtended extends UserListEntry {
@@ -26,6 +26,7 @@ const UserListRow: React.FC<UserListRowProps> = ({ entryData }) => {
 
   return (
     <Tr>
+      <Td><Image src={entryData.coverImage} width="67px" height="100px" objectFit="cover"/></Td>
       <Td>{entryData.title}</Td>
       <Td>{entryData.rated ? entryData.rating : <Icon as={BsDash} />}</Td>
       <Td><Button onClick={onOpen}> Edit </Button></Td>
@@ -35,4 +36,4 @@ const UserListRow: React.FC<UserListRowProps> = ({ entryData }) => {
 }
 
 export default UserListRow;
-export type {UserListEntryExtended};
+export type { UserListEntryExtended };
