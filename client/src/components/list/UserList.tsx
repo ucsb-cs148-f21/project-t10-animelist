@@ -7,6 +7,8 @@ import { createApolloAnilist } from "../../utils/createApolloAnilist";
 import Loading from "../Loading";
 import UserListRow from "./UserListRow";
 
+const pageSize = 20 ;
+
 interface UserListProps {
   list: UserListEntry[];
 }
@@ -14,18 +16,39 @@ interface UserListProps {
 const UserList: React.FC<UserListProps> = ({ list }) => {
   const [medias, setMedias] = React.useState(new Map());
   const [mediasFetched, setMediasFetched] = React.useState(false);
+  const [pages, setPages] = React.useState(1);
+
+  const totalPages =Math.ceil(list.length/pageSize);
+  const observer = React.useRef(
+    new IntersectionObserver(
+        (entries) => {
+            const first = entries[0];
+            if (first.isIntersecting) {
+                setPages((no) => no + 1);
+            }
+        }
+        )
+  );
 
   React.useEffect(() => {
+    
     const apolloClient = createApolloAnilist();
     fetchAnimeInfo(apolloClient);
 
     return () => apolloClient.stop();
-  }, [list]);
+  }, [list,pages]);
   
   async function fetchAnimeInfo(apolloClient: ApolloClient<NormalizedCacheObject>) {
     const query = gql`
       query FetchAnimeInfo($ids: [Int]!) {
         Page {
+          pageInfo {
+            total
+            currentPage
+            lastPage
+            hasNextPage
+            perPage
+          }
           media(id_in: $ids, type: ANIME, isAdult: false) {
             id
             title {
@@ -39,10 +62,13 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
       }
     `;
 
-    const { data } = await apolloClient.query({
+    const lastPage = list.slice((pages - 1) * pageSize, pages * pageSize);
+    const lastPageIds = lastPage.map(anime => anime.mediaID);
+
+    const { data: newMedias }  = await apolloClient.query({
       query,
       variables: {
-        ids: list.map(anime => anime.mediaID)
+        ids: lastPageIds
       }
     });
 
@@ -50,11 +76,13 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
     // is the media ID and second value is the entire media object,
     // then convert the array of pairs into a Map so that we can fetch
     // media data by media ID.
-    const dataMap = new Map(data.Page.media.map(
+    const newMediasMap = new Map(newMedias.Page.media.map(
       (media: any) => [media.id, media]
     ));
 
-    setMedias(dataMap);
+    const mergedMediasMap = new Map([...Array.from(medias), ...Array.from(newMediasMap)])
+
+    setMedias(mergedMediasMap);
     setMediasFetched(true);
   }
 
@@ -62,6 +90,8 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
     return <Loading />;
   }
 
+  const displayedList = list.slice(0,pageSize*pages);
+  
   return (
     <VStack width="full" p={6} maxWidth="6xl">
       <Table>
@@ -74,7 +104,7 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {list.map(anime => {
+          {displayedList.map(anime => {
             // check if media is defined in case media ID wasn't in anilist database
             const media = medias.get(anime.mediaID);
 
@@ -92,6 +122,9 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
       <Link href="/search">
         <Button colorScheme="blue">Add Anime</Button>
       </Link>
+      <div>
+        {pages}
+      </div>
     </VStack>
   )
 };
