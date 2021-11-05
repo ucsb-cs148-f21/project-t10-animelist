@@ -8,7 +8,7 @@
 - [x] Alberto
 - [x] Rowan
 - [x] Justin
-- [ ] Hardy
+- [x] Hardy
 
 ## Team updates
 
@@ -30,3 +30,7 @@ I hope to make PRs for both issues today. By next meeting, I will look into requ
 
 - Since last meeting, I was busy with other classwork and didn't get much done. Today I will work on rating system data structure issue with alberto. By next meeting,
 that issue will be done by and I will add deployment instructions.
+
+## Hardy
+- Since last meeting I worked with Rowan to work on pagination issue. For today I will ocntinue working on the issue to finish it. Before next meeting, I will work
+on profile system design.
