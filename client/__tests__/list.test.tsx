@@ -1,6 +1,6 @@
 import React from 'react'
 import List from '../src/pages/list';
-import { render, screen, waitFor } from '@testing-library/react';
+import { findByRole, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer, SetupServerApi } from 'msw/node';
 import { graphql } from 'msw';
@@ -11,6 +11,7 @@ import clientRouter from 'next/dist/client/router';
 
 import 'cross-fetch/polyfill';
 import '@testing-library/jest-dom'
+import { assert } from 'console';
 
 const FAKE_BACKEND_ENDPOINT = 'https://localhost/graphql';
 const anilist = graphql.link(ANILIST_GRAPHQL_ENDPOINT);
@@ -132,11 +133,17 @@ describe('User list', () => {
     expect(editButtons.length).toBe(2);
   });
 
-  it('opens edit modal after pressing edit button', () => {
-  });
-  
-  it('shows score in edit modal for rated anime', () => {
+  it('shows score in edit modal for rated anime', async () => {
+    render(<WrappedListPage />);
+    const ratedRowLabel = await screen.findByText('123');
+    const ratedRow = ratedRowLabel.closest('tr');
+    const editButton = await findByRole(ratedRow, 'button', {
+      name: /edit/i
+    });
+    userEvent.click(editButton);
 
+    const scoreField = await screen.findByLabelText(/score/i);
+    expect(scoreField).toHaveDisplayValue('8.4');
   });
 
   it('shows add anime button', async () => {
@@ -145,17 +152,5 @@ describe('User list', () => {
     await screen.findByRole('button', {
       name: /add anime/i
     });
-  });
-
-  it('redirects to search page after clicking add anime button', async () => {
-    clientRouter.push = jest.fn();
-
-    render(<WrappedListPage />);
-    const addAnimeButton = await screen.findByRole('button', {
-      name: /add anime/i
-    });
-    userEvent.click(addAnimeButton);
-
-    await waitFor(() => expect(clientRouter.push).toHaveBeenCalledWith('/search'));
   });
 });
