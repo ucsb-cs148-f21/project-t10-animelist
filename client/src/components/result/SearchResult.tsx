@@ -23,7 +23,7 @@ const SearchResult: React.FC<SearchResultProps> = ({ anime }) => {
   }
   return (
     <HStack>
-      <Image src={anime.coverImage.medium} height="150"/>
+      <Image src={anime.coverImage.medium} width="67px" height="100px" objectFit="cover"/>
       <Stack
         height="100%"
         alignItems="flex-start"
