@@ -36,4 +36,52 @@ public class DiscreteRatingSystem extends RatingSystem {
     public int hashCode() {
         return Objects.hash(super.hashCode(), getLabels());
     }
+
+    public static DiscreteRatingSystem.Builder builder() {
+        return new DiscreteRatingSystem.Builder();
+    }
+
+    public static class Builder {
+
+        private String id;
+        private String name;
+        private String ownerId;
+        private Integer size;
+        private List<SubRating> subRatings;
+        private List<String> labels;
+
+        public Builder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder ownerId(String ownerId) {
+            this.ownerId = ownerId;
+            return this;
+        }
+
+        public Builder size(Integer size) {
+            this.size = size;
+            return this;
+        }
+
+        public Builder subRatings(List<SubRating> subRatings) {
+            this.subRatings = subRatings;
+            return this;
+        }
+
+        public Builder labels(List<String> labels) {
+            this.labels = labels;
+            return this;
+        }
+
+        public DiscreteRatingSystem build() {
+            return new DiscreteRatingSystem(id, name, ownerId, size, subRatings, labels);
+        }
+    }
 }
