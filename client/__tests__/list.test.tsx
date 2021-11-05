@@ -7,6 +7,7 @@ import { graphql } from 'msw';
 import { ANILIST_GRAPHQL_ENDPOINT } from '../src/utils/createApolloAnilist';
 import { ApolloClient, ApolloProvider, createHttpLink,  InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import router from 'next/router';
+import clientRouter from 'next/dist/client/router';
 
 import 'cross-fetch/polyfill';
 import '@testing-library/jest-dom'
@@ -147,16 +148,14 @@ describe('User list', () => {
   });
 
   it('redirects to search page after clicking add anime button', async () => {
-    router.push = jest.fn();
+    clientRouter.push = jest.fn();
 
     render(<WrappedListPage />);
-
     const addAnimeButton = await screen.findByRole('button', {
       name: /add anime/i
     });
-
     userEvent.click(addAnimeButton);
 
-    await waitFor(() => expect(router.push).toHaveBeenCalledWith('/search'));
+    await waitFor(() => expect(clientRouter.push).toHaveBeenCalledWith('/search'));
   });
 });
