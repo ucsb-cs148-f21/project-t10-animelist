@@ -1,4 +1,4 @@
-package com.github.animelist.animelist.entity;
+package com.github.animelist.animelist.model.ratingsystem;
 
 import java.util.Objects;
 
@@ -7,6 +7,9 @@ public class SubRating {
     private Integer id;
 
     private String name;
+
+    private Float weight;
+
 
     public SubRating(Integer id, String name, Float weight) {
         this.id = id;
@@ -51,5 +54,4 @@ public class SubRating {
         this.weight = weight;
     }
 
-    private Float weight;
 }
