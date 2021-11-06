@@ -18,25 +18,44 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
   const [mediasFetched, setMediasFetched] = React.useState(false);
   const [pages, setPages] = React.useState(1);
 
-  const totalPages =Math.ceil(list.length/pageSize);
+  const [lastElement, setLastElement] = React.useState(null);
+  const lastElementRef = React.useCallback(node => {
+    console.log("in lastelementref");
+    if (node !== null) {
+      setLastElement(node);
+    }
+  }, []);
+
+  const totalPages = Math.ceil(list.length / pageSize);
   const observer = React.useRef(
     new IntersectionObserver(
-        (entries) => {
-            const first = entries[0];
-            if (first.isIntersecting) {
-                setPages((no) => no + 1);
-            }
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && pages < totalPages) {
+          setPages((pages) => pages + 1);
         }
-        )
+      }
+    )
   );
 
   React.useEffect(() => {
-    
     const apolloClient = createApolloAnilist();
     fetchAnimeInfo(apolloClient);
 
     return () => apolloClient.stop();
   }, [list,pages]);
+
+  React.useEffect(() => {
+    if (lastElement) {
+      observer.current.observe(lastElement);
+    }
+
+    return () => {
+      if (lastElement) {
+        observer.current.unobserve(lastElement);
+      }
+    };
+  }, [lastElement]);
   
   async function fetchAnimeInfo(apolloClient: ApolloClient<NormalizedCacheObject>) {
     const query = gql`
@@ -105,27 +124,24 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {displayedList.map(anime => {
+          {displayedList.map((anime, i) => {
             // check if media is defined in case media ID wasn't in anilist database
             const media = medias.get(anime.mediaID);
-
-            return <UserListRow
+            return (<UserListRow
               key={anime.mediaID}
+              ref={i === (displayedList.length - 1) ? lastElementRef : null}
               entryData={{
                 ...anime,
                 title: (media ? media.title.romaji : "Unknown Title"),
                 coverImage: (media ? media.coverImage.medium : "")
               }}
-            />
+            />);
           })}
         </Tbody>
       </Table>
       <Link href="/search">
         <Button colorScheme="blue">Add Anime</Button>
       </Link>
-      <div>
-        {pages}
-      </div>
     </VStack>
   )
 };
