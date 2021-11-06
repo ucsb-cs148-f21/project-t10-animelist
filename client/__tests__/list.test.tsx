@@ -73,6 +73,16 @@ beforeAll(() => {
   server.listen({
     onUnhandledRequest: 'warn'
   });
+
+  // https://stackoverflow.com/a/62148101
+  // IntersectionObserver isn't available in test environment
+  const mockIntersectionObserver = jest.fn();
+  mockIntersectionObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null
+  });
+  window.IntersectionObserver = mockIntersectionObserver;
 });
 
 afterEach(() => {
