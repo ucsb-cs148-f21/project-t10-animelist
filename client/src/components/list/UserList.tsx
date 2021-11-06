@@ -18,15 +18,17 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
   const [mediasFetched, setMediasFetched] = React.useState(false);
   const [pages, setPages] = React.useState(1);
 
+  const totalPages = Math.ceil(list.length / pageSize);
+
+  // need to use a callback function instead of useRef because updating
+  // the ref won't trigger a re-render. see https://reactjs.org/docs/refs-and-the-dom.html
   const [lastElement, setLastElement] = React.useState(null);
   const lastElementRef = React.useCallback(node => {
-    console.log("in lastelementref");
     if (node !== null) {
       setLastElement(node);
     }
   }, []);
 
-  const totalPages = Math.ceil(list.length / pageSize);
   const observer = React.useRef(
     new IntersectionObserver(
       (entries) => {
@@ -43,7 +45,7 @@ const UserList: React.FC<UserListProps> = ({ list }) => {
     fetchAnimeInfo(apolloClient);
 
     return () => apolloClient.stop();
-  }, [list,pages]);
+  }, [list, pages]);
 
   React.useEffect(() => {
     if (lastElement) {
