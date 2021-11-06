@@ -54,4 +54,33 @@ public class SubRating {
         this.weight = weight;
     }
 
+    public static SubRating.Builder builder() {
+        return new SubRating.Builder();
+    }
+
+    public static class Builder {
+
+        private Integer id;
+        private String name;
+        private Float weight;
+
+        public Builder id(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder weight(Float weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public SubRating build() {
+            return new SubRating(id, name, weight);
+        }
+    }
 }

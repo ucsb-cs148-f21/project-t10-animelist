@@ -18,7 +18,6 @@ import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -38,7 +37,7 @@ public class RatingSystemServiceTest {
                 .ownerId("TestOwnerID")
                 .size(10)
                 .offset(1)
-                .subRatings(Collections.singletonList(new SubRating(0, "score", 1f)))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
                 .build();
         final RatingSystem expected = ContinuousRatingSystem.builder()
                 .id("000000000000000000000000")
@@ -46,7 +45,7 @@ public class RatingSystemServiceTest {
                 .ownerId("TestOwnerID")
                 .size(10)
                 .offset(1)
-                .subRatings(Collections.singletonList(new SubRating(0, "score", 1f)))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
                 .build();
 
         when(mongoTemplate.insert(input)).thenReturn(expected);
@@ -62,7 +61,7 @@ public class RatingSystemServiceTest {
                 .name("Test")
                 .ownerId("TestOwnerID")
                 .size(10)
-                .subRatings(Collections.singletonList(new SubRating(0, "score", 1f)))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
                 .labels(IntStream.range(1, 11).mapToObj(String::valueOf).collect(Collectors.toList()))
                 .build();
         final RatingSystem expected = DiscreteRatingSystem.builder()
@@ -70,7 +69,7 @@ public class RatingSystemServiceTest {
                 .name("Test")
                 .ownerId("TestOwnerID")
                 .size(10)
-                .subRatings(Collections.singletonList(new SubRating(0, "score", 1f)))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
                 .labels(IntStream.range(1, 11).mapToObj(String::valueOf).collect(Collectors.toList()))
                 .build();
 
@@ -89,7 +88,7 @@ public class RatingSystemServiceTest {
                 .ownerId("TestOwnerID")
                 .size(10)
                 .offset(1)
-                .subRatings(Collections.singletonList(new SubRating(0, "score", 1f)))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
                 .build();
 
         when(mongoTemplate.findById(eq(new ObjectId(expected.getId())), eq(RatingSystem.class))).thenReturn(expected);
