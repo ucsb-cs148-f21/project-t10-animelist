@@ -46,10 +46,10 @@ public class UserListService {
 
     public boolean updateItem(final String listId, final String ownerId, final UserListItem item) {
         final var query = getListQuery(listId, ownerId);
-        // query.addCriteria(where("items.mediaID").is(item.getMediaID()));
+        query.addCriteria(where("items.mediaID").is(item.getMediaID()));
 
         final Update update = new Update();
-        // update.set("items.$.rating", item.getRating());
+        update.set("items.$.rating", item.getRating());
 
         return verifyOneUpdated(mongoTemplate.updateFirst(query, update, UserList.class));
     }
