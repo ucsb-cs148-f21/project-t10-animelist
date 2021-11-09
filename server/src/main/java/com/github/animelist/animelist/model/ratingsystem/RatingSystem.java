@@ -1,5 +1,6 @@
 package com.github.animelist.animelist.model.ratingsystem;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,13 +17,13 @@ public abstract class RatingSystem {
     private String name;
 
     @Indexed
-    private String ownerId;
+    private ObjectId ownerId;
 
     private Integer size;
 
     private List<SubRating> subRatings;
 
-    public RatingSystem(String id, String name, String ownerId, Integer size, List<SubRating> subRatings) {
+    public RatingSystem(String id, String name, ObjectId ownerId, Integer size, List<SubRating> subRatings) {
         this.id = id;
         this.name = name;
         this.ownerId = ownerId;
@@ -59,11 +60,11 @@ public abstract class RatingSystem {
         this.name = name;
     }
 
-    public String getOwnerId() {
+    public ObjectId getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(ObjectId ownerId) {
         this.ownerId = ownerId;
     }
 
