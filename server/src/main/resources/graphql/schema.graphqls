@@ -14,6 +14,26 @@ type UserListEntry {
   rating: Float!
 }
 
+union RatingSystem = DiscreteRatingSystem | ContinuousRatingSystem
+
+type DiscreteRatingSystem {
+  id: ID!
+  name: String!
+  ownerId: ID!
+  size: Int!
+  subRatings: [SubRating!]!
+  labels: [String!]!
+}
+
+type ContinuousRatingSystem {
+  id: ID!
+  name: String!
+  ownerId: ID!
+  size: Int!
+  offset: Int!
+  subRatings: [SubRating!]!
+}
+
 input UserListEntryInput {
   mediaID: Int!
   rated: Boolean!
