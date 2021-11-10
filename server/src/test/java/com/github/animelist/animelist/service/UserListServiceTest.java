@@ -102,7 +102,8 @@ public class UserListServiceTest {
                 .build();
 
         var expectedQuery = new Query()
-                .addCriteria(where("_id").is(expectedUserListId).and("ownerId").is(expectedOwnerId));
+                .addCriteria(where("_id").is(expectedUserListId).and("ownerId").is(expectedOwnerId))
+                .addCriteria(where("items.mediaID").ne(expectedUserListItem.getMediaID()));
 
         var expectedUpdate = new Update()
                 .push("items").value(expectedUserListItem);

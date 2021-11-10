@@ -37,6 +37,7 @@ public class UserListService {
 
     public boolean addItem(final String listId, final String ownerId, final UserListItem item) {
         final var query = getListQuery(listId, ownerId);
+        query.addCriteria(where("items.mediaID").ne(item.getMediaID()));
 
         final Update update = new Update();
         update.push("items").value(item);
