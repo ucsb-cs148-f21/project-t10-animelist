@@ -1,5 +1,6 @@
 package com.github.animelist.animelist.model.ratingsystem;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public class ContinuousRatingSystem extends RatingSystem {
 
     private Integer offset;
 
-    public ContinuousRatingSystem(String id, String name, String ownerId, Integer size, List<SubRating> subRatings, Integer offset) {
+    public ContinuousRatingSystem(String id, String name, ObjectId ownerId, Integer size, List<SubRating> subRatings, Integer offset) {
         super(id, name, ownerId, size, subRatings);
         this.offset = offset;
     }
@@ -45,7 +46,7 @@ public class ContinuousRatingSystem extends RatingSystem {
 
         private String id;
         private String name;
-        private String ownerId;
+        private ObjectId ownerId;
         private Integer size;
         private List<SubRating> subRatings;
         private Integer offset;
@@ -60,7 +61,7 @@ public class ContinuousRatingSystem extends RatingSystem {
             return this;
         }
 
-        public Builder ownerId(String ownerId) {
+        public Builder ownerId(ObjectId ownerId) {
             this.ownerId = ownerId;
             return this;
         }
