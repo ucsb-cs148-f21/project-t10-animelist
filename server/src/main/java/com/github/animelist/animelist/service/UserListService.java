@@ -56,7 +56,7 @@ public class UserListService {
 
     private Query getListQuery(final String listId, final String ownerId) {
         final Query query = new Query();
-        query.addCriteria(where("_id").is(listId).and("ownerId").is(ownerId));
+        query.addCriteria(where("_id").is(new ObjectId(listId)).and("ownerId").is(new ObjectId(ownerId)));
 
         return query;
     }

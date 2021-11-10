@@ -93,8 +93,8 @@ public class UserListServiceTest {
 
     @Test
     public void addItem_happy() {
-        final var expectedUserListId = new ObjectId().toString();
-        final var expectedOwnerId = new ObjectId().toString();
+        final var expectedUserListId = new ObjectId();
+        final var expectedOwnerId = new ObjectId();
 
         final var expectedUserListItem = UserListItem.builder()
                 .mediaID(1234)
@@ -113,7 +113,7 @@ public class UserListServiceTest {
         when(mongoTemplate.updateFirst(any(), any(), eq(UserList.class)))
                 .thenReturn(updateResult);
 
-        boolean expected = userListService.addItem(expectedUserListId, expectedOwnerId, expectedUserListItem);
+        boolean expected = userListService.addItem(expectedUserListId.toString(), expectedOwnerId.toString(), expectedUserListItem);
 
         verify(mongoTemplate, times(1)).updateFirst(eq(expectedQuery), eq(expectedUpdate), eq(UserList.class));
         assertThat(expected, is(true));
@@ -121,8 +121,8 @@ public class UserListServiceTest {
 
     @Test
     public void updateItem_happy() {
-        final var expectedUserListId = new ObjectId().toString();
-        final var expectedOwnerId = new ObjectId().toString();
+        final var expectedUserListId = new ObjectId();
+        final var expectedOwnerId = new ObjectId();
 
         final var expectedUserListItem = UserListItem.builder()
                 .mediaID(1234)
@@ -141,7 +141,7 @@ public class UserListServiceTest {
 
         when(mongoTemplate.updateFirst(any(), any(), eq(UserList.class))).thenReturn(updateResult);
 
-        boolean expected = userListService.updateItem(expectedUserListId, expectedOwnerId, expectedUserListItem);
+        boolean expected = userListService.updateItem(expectedUserListId.toString(), expectedOwnerId.toString(), expectedUserListItem);
 
         verify(mongoTemplate, times(1)).updateFirst(eq(expectedQuery), eq(expectedUpdate), eq(UserList.class));
         assertThat(expected, is(true));
