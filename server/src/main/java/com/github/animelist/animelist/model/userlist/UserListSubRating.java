@@ -77,7 +77,7 @@ public class UserListSubRating {
             return this;
         }
 
-        public UserListSubRating createUserListSubRating() {
+        public UserListSubRating build() {
             return new UserListSubRating(id, displayRating, rating);
         }
     }

@@ -95,7 +95,7 @@ public class UserListRating {
             return this;
         }
 
-        public UserListRating createUserListRating() {
+        public UserListRating build() {
             return new UserListRating(id, displayRating, rating, subRatings);
         }
     }

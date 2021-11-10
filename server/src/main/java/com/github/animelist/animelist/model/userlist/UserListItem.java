@@ -60,7 +60,7 @@ public class UserListItem {
             return this;
         }
 
-        public UserListItem createUserListItem() {
+        public UserListItem build() {
             return new UserListItem(mediaID, rating);
         }
     }

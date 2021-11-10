@@ -1,7 +1,7 @@
 package com.github.animelist.animelist.model.userlist;
 
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
-import com.github.animelist.animelist.model.ratingsystem.SubRating;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,7 +14,7 @@ public class UserList {
     @Id
     private String id;
 
-    private String ownerId;
+    private ObjectId ownerId;
 
     private String name;
 
@@ -22,7 +22,7 @@ public class UserList {
 
     private List<UserListItem> items;
 
-    public UserList(String id, String ownerId, String name, RatingSystem ratingSystem, List<UserListItem> items) {
+    public UserList(String id, ObjectId ownerId, String name, RatingSystem ratingSystem, List<UserListItem> items) {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
@@ -51,11 +51,11 @@ public class UserList {
         this.id = id;
     }
 
-    public String getOwnerId() {
+    public ObjectId getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(String ownerId) {
+    public void setOwnerId(ObjectId ownerId) {
         this.ownerId = ownerId;
     }
 
@@ -89,7 +89,7 @@ public class UserList {
 
     public static class Builder {
         private String id;
-        private String ownerId;
+        private ObjectId ownerId;
         private String name;
         private RatingSystem ratingSystem;
         private List<UserListItem> items;
@@ -99,7 +99,7 @@ public class UserList {
             return this;
         }
 
-        public Builder ownerId(String ownerId) {
+        public Builder ownerId(ObjectId ownerId) {
             this.ownerId = ownerId;
             return this;
         }
