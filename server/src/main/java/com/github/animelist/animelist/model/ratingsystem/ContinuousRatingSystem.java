@@ -2,6 +2,7 @@ package com.github.animelist.animelist.model.ratingsystem;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +18,7 @@ public class ContinuousRatingSystem extends RatingSystem {
     public ContinuousRatingSystem(String id, String name, ObjectId ownerId, Integer size, List<SubRating> subRatings, Integer offset) {
         super(id, name, ownerId, size, subRatings);
         this.offset = offset;
+        Assert.isTrue(offset >= 0, "the offset must be equal or greater than 0");
     }
 
     public Integer getOffset() {

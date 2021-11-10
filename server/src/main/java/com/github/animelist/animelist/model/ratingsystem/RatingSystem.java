@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,10 @@ public abstract class RatingSystem {
         this.ownerId = ownerId;
         this.size = size;
         this.subRatings = subRatings;
+        Assert.isTrue(size >= 2, "Size must be at least 2");
+        Assert.isTrue(subRatings.size()>=1, "subRatings size must be at least 1");
+        Assert.isTrue(name != null,"string cannot be null");
+        Assert.isTrue(name.length()>=1 && name.length()<= 50, "name must be at least one character and less than 50 characters");
     }
 
     @Override
