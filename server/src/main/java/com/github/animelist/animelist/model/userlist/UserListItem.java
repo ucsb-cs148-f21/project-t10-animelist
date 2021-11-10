@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class UserListItem {
 
-    private String mediaID;
+    private Integer mediaID;
 
     private WatchStatus watchStatus;
 
@@ -23,17 +23,17 @@ public class UserListItem {
         return Objects.hash(getMediaID(), getWatchStatus(), getRating());
     }
 
-    public UserListItem(String mediaID, WatchStatus watchStatus, UserListRating rating) {
+    public UserListItem(Integer mediaID, WatchStatus watchStatus, UserListRating rating) {
         this.mediaID = mediaID;
         this.watchStatus = watchStatus;
         this.rating = rating;
     }
 
-    public String getMediaID() {
+    public Integer getMediaID() {
         return mediaID;
     }
 
-    public void setMediaID(String mediaID) {
+    public void setMediaID(Integer mediaID) {
         this.mediaID = mediaID;
     }
 
@@ -58,11 +58,11 @@ public class UserListItem {
     }
 
     public static class Builder {
-        private String mediaID;
+        private Integer mediaID;
         private WatchStatus watchStatus;
         private UserListRating rating;
 
-        public Builder mediaID(String mediaID) {
+        public Builder mediaID(Integer mediaID) {
             this.mediaID = mediaID;
             return this;
         }
