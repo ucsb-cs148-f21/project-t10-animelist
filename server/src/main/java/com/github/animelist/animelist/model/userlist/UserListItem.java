@@ -6,24 +6,27 @@ public class UserListItem {
 
     private String mediaID;
 
-    private UserListRating rating;
+    private WatchStatus watchStatus;
 
-    public UserListItem(String mediaID, UserListRating rating) {
-        this.mediaID = mediaID;
-        this.rating = rating;
-    }
+    private UserListRating rating;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof UserListItem)) return false;
         UserListItem that = (UserListItem) o;
-        return Objects.equals(mediaID, that.mediaID) && Objects.equals(rating, that.rating);
+        return Objects.equals(getMediaID(), that.getMediaID()) && getWatchStatus() == that.getWatchStatus() && Objects.equals(getRating(), that.getRating());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mediaID, rating);
+        return Objects.hash(getMediaID(), getWatchStatus(), getRating());
+    }
+
+    public UserListItem(String mediaID, WatchStatus watchStatus, UserListRating rating) {
+        this.mediaID = mediaID;
+        this.watchStatus = watchStatus;
+        this.rating = rating;
     }
 
     public String getMediaID() {
@@ -42,16 +45,30 @@ public class UserListItem {
         this.rating = rating;
     }
 
+    public WatchStatus getWatchStatus() {
+        return watchStatus;
+    }
+
+    public void setWatchStatus(WatchStatus watchStatus) {
+        this.watchStatus = watchStatus;
+    }
+
     public static UserListItem.Builder builder() {
         return new UserListItem.Builder();
     }
 
     public static class Builder {
         private String mediaID;
+        private WatchStatus watchStatus;
         private UserListRating rating;
 
         public Builder mediaID(String mediaID) {
             this.mediaID = mediaID;
+            return this;
+        }
+
+        public Builder watchStatus(WatchStatus watchStatus) {
+            this.watchStatus = watchStatus;
             return this;
         }
 
@@ -61,7 +78,7 @@ public class UserListItem {
         }
 
         public UserListItem build() {
-            return new UserListItem(mediaID, rating);
+            return new UserListItem(mediaID, watchStatus, rating);
         }
     }
 }
