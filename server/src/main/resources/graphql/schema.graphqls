@@ -14,6 +14,31 @@ type UserListEntry {
   rating: Float!
 }
 
+type UserList {
+  id: ID!
+  ownerId: String!
+  name: String!
+  items: [UserListItem]
+}
+
+type UserListItem {
+  mediaID: Int!
+  watchStatus: String!
+  rating: UserListRating
+}
+
+type UserListRating {
+  displayRating: Int!
+  rating: Int!
+  subRatings: [UserListSubRating]
+}
+
+type UserListSubRating {
+  id: Int!
+  displayRating: String
+  rating: Int!
+}
+
 input UserListEntryInput {
   mediaID: Int!
   rated: Boolean!
@@ -46,10 +71,21 @@ input MALOauthInput {
   state: String!
 }
 
+input CreateUserListInput {
+  name: String!
+}
+
+input UserListItemInput {
+  mediaID: Int!
+  watchStatus: String!
+  rating: UserListRating!
+}
+
 type Query {
   me: User
   malLinkOauth: String!
   malLoginOauth: String!
+  userList(listId: String!): UserList
 }
 
 type Mutation {
@@ -60,4 +96,7 @@ type Mutation {
   malLink(input: MALOauthInput!): Boolean
   addListEntry(input: UserListEntryInput!): Boolean
   updateUserListEntry(input: UserListEntryInput!): UserListEntry
+  createUserList(input: CreateUserListInput!): UserList
+  addUserListItem(input: UserListItemInput!): UserListItem
+  updateUserListItem(input: UserListItemInput!): UserListItem
 }
