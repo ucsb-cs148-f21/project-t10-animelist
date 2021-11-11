@@ -9,6 +9,8 @@ import org.springframework.util.Assert;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.nonNull;
+
 @Document("ratingSystems")
 public abstract class RatingSystem {
 
@@ -24,6 +26,10 @@ public abstract class RatingSystem {
 
     private List<SubRating> subRatings;
 
+    private static final float WEIGHT_SUM_EPSILON = 0.01f;
+
+    private static final float WEIGHT_SUM_EXPECTED = 1f;
+
     public RatingSystem(String id, String name, ObjectId ownerId, Integer size, List<SubRating> subRatings) {
         this.id = id;
         this.name = name;
@@ -32,10 +38,11 @@ public abstract class RatingSystem {
         this.subRatings = subRatings;
         Assert.isTrue(size >= 2, "Size must be at least 2");
         Assert.isTrue(subRatings.size()>=1, "subRatings size must be at least 1");
-        Assert.isTrue(name != null,"string cannot be null");
+        Assert.isTrue(nonNull(name) && !name.isBlank(),"string cannot be blank");
         Assert.isTrue(name.length()>=1 && name.length()<= 50, "name must be at least one character and less than 50 characters");
         var weightSum = subRatings.stream().mapToDouble(SubRating::getWeight).sum();
-        Assert.isTrue(weightSum >= 0 && weightSum <= 1, "subRatings weight sum must be between 0 and 1");
+        var difference = WEIGHT_SUM_EXPECTED - weightSum;
+        Assert.isTrue(difference >= 0 && difference <= WEIGHT_SUM_EPSILON, "subRatings weight sum must sum up to 1");
     }
 
     @Override
