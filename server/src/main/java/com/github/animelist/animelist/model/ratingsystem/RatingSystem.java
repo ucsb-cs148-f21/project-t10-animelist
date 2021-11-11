@@ -34,6 +34,8 @@ public abstract class RatingSystem {
         Assert.isTrue(subRatings.size()>=1, "subRatings size must be at least 1");
         Assert.isTrue(name != null,"string cannot be null");
         Assert.isTrue(name.length()>=1 && name.length()<= 50, "name must be at least one character and less than 50 characters");
+        var weightSum = subRatings.stream().mapToDouble(SubRating::getWeight).sum();
+        Assert.isTrue(weightSum >= 0 && weightSum <= 1, "subRatings weight sum must be between 0 and 1");
     }
 
     @Override

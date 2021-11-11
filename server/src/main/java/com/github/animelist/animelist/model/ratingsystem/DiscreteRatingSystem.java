@@ -7,6 +7,8 @@ import org.springframework.util.Assert;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.nonNull;
+
 @Document("ratingSystems")
 public class DiscreteRatingSystem extends RatingSystem {
 
@@ -16,6 +18,8 @@ public class DiscreteRatingSystem extends RatingSystem {
         super(id, name, ownerId, size, subRating);
         this.labels = labels;
         Assert.isTrue(labels.size() == size, "the number of labels should be equal to size" );
+        var nonNullNonBlankLabelsSize = labels.stream().filter(label -> nonNull(label) && label.isBlank()).count();
+        Assert.isTrue(nonNullNonBlankLabelsSize == labels. size(), "All labels should be non null and non blank");
     }
 
     public List<String> getLabels() {
