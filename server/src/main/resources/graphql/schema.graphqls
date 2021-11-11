@@ -34,6 +34,28 @@ type ContinuousRatingSystem {
   subRatings: [SubRating!]!
 }
 
+input RatingSystemInput {
+  name: String!
+  size: Int!
+  subRatings: [SubRating!]!
+  ratingSystemType: RatingSystemType!
+  discreteParam: DiscreteRatingSystemInput
+  continuousParam: ContinuousRatingSystemInput
+}
+
+enum RatingSystemType {
+    DISCRETE
+    CONTINUOUS
+}
+
+input DiscreteRatingSystemInput {
+  labels: [String!]!
+}
+
+input ContinuousRatingSystemInput {
+  offset: Int!
+}
+
 input UserListEntryInput {
   mediaID: Int!
   rated: Boolean!
@@ -70,6 +92,7 @@ type Query {
   me: User
   malLinkOauth: String!
   malLoginOauth: String!
+  getRatingSystem(ratingSystemID: String!): RatingSystem
 }
 
 type Mutation {
@@ -80,4 +103,5 @@ type Mutation {
   malLink(input: MALOauthInput!): Boolean
   addListEntry(input: UserListEntryInput!): Boolean
   updateUserListEntry(input: UserListEntryInput!): UserListEntry
+  createRatingSystem(input: RatingSystemInput!): RatingSystem
 }
