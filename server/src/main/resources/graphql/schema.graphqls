@@ -76,6 +76,7 @@ input CreateUserListInput {
 }
 
 input UserListItemInput {
+  listId: String!
   mediaID: Int!
   watchStatus: String!
   rating: UserListRating!

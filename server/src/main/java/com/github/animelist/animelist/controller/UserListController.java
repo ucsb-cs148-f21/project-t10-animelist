@@ -1,12 +1,20 @@
 package com.github.animelist.animelist.controller;
 
 import com.github.animelist.animelist.model.JwtUserDetails;
+import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UserListEntryInput;
+import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.user.UserListEntry;
+import com.github.animelist.animelist.model.userlist.UserList;
+import com.github.animelist.animelist.model.userlist.UserListItem;
+import com.github.animelist.animelist.model.userlist.WatchStatus;
 import com.github.animelist.animelist.service.UserListService;
+import com.github.animelist.animelist.util.AuthUtil;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
@@ -21,6 +29,57 @@ public class UserListController {
     public UserListController(
             final UserListService userListService) {
         this.userListService = userListService;
+    }
+
+    @QueryMapping
+    public UserList userList(@Argument("listId") final String listId) {
+        return userListService.getUserList(listId).orElseThrow();
+    }
+
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public UserList createUserList(@Argument("input") final CreateUserListInput input) {
+        final var userDetails = AuthUtil.getUserDetails();
+        final var userList = UserList.builder()
+                .name(input.name())
+                .ownerId(new ObjectId(userDetails.getId()))
+                .build();
+
+        return userListService.createUserList(userList);
+    }
+
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public UserListItem addUserListItem(@Argument("input") final UserListItemInput input) {
+        final var userDetails = AuthUtil.getUserDetails();
+        final var userListItem = UserListItem.builder()
+                .mediaID(input.mediaID())
+                .watchStatus(WatchStatus.valueOf(input.watchStatus().toUpperCase()))
+                .rating(input.rating())
+                .build();
+
+        if (!userListService.addItem(input.listId(), userDetails.getId(), userListItem)) {
+            throw new RuntimeException("Failed to add item. Item might already exist");
+        }
+
+        return userListItem;
+    }
+
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public UserListItem updateUserListItem(@Argument("input") final UserListItemInput input) {
+        final var userDetails = AuthUtil.getUserDetails();
+        final var userListItem = UserListItem.builder()
+                .mediaID(input.mediaID())
+                .watchStatus(WatchStatus.valueOf(input.watchStatus().toUpperCase()))
+                .rating(input.rating())
+                .build();
+
+        if (!userListService.updateItem(input.listId(), userDetails.getId(), userListItem)) {
+            throw new RuntimeException("Failed to update item");
+        }
+
+        return userListItem;
     }
 
     @MutationMapping
