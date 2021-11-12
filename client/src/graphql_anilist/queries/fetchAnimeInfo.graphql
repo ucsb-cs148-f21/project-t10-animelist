@@ -1,0 +1,20 @@
+query FetchAnimeInfo($ids: [Int]!) {
+  Page {
+    pageInfo {
+      total
+      currentPage
+      lastPage
+      hasNextPage
+      perPage
+    }
+    media(id_in: $ids, type: ANIME, isAdult: false) {
+      id
+      title {
+        romaji
+      }
+      coverImage {
+        medium
+      }
+    }
+  }
+}

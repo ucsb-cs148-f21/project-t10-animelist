@@ -6,6 +6,7 @@
     "start": "next start -p $PORT",
     "type-check": "tsc",
     "gen": "graphql-codegen --config codegen.yml",
+    "genanilist": "graphql-codegen --config codegen_anilist.yml",
     "test": "jest --watch",
     "test:ci": "jest --ci"
   },

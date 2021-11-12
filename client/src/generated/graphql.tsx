@@ -250,7 +250,7 @@ export type _UserListQueryVariables = Exact<{
 }>;
 
 
-export type _UserListQuery = { __typename?: 'Query', userList?: Maybe<{ __typename?: 'UserList', id: string, name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', rating: number, subRatings: Array<{ __typename?: 'UserListSubRating', id: number, rating: number }> }> }>>> }> };
+export type _UserListQuery = { __typename?: 'Query', userList?: Maybe<{ __typename?: 'UserList', id: string, ownerId: string, name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string, rating: number, subRatings: Array<{ __typename?: 'UserListSubRating', id: number, displayRating?: Maybe<string>, rating: number }> }> }>>> }> };
 
 export type MalLinkOauthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -513,14 +513,17 @@ export const _UserListDocument = gql`
     query _UserList($listId: String!) {
   userList(listId: $listId) {
     id
+    ownerId
     name
     items {
       mediaID
       watchStatus
       rating {
+        displayRating
         rating
         subRatings {
           id
+          displayRating
           rating
         }
       }

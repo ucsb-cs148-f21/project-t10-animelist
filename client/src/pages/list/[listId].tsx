@@ -1,6 +1,7 @@
 import { VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/dist/client/router';
 import * as React from 'react';
+import UserList from '../../components/list/_UserList';
 import { use_UserListQuery } from '../../generated/graphql';
 
 const ListPage: React.FC<{}> = () => {
@@ -23,9 +24,7 @@ const ListPage: React.FC<{}> = () => {
 
   return (
     <VStack py={{ base: 10 }} width="full">
-      {
-        data.userList.items.map(item => <div key={item.mediaID}>{ item.mediaID }: { item.watchStatus }</div>)
-      }
+      <UserList userlist={data.userList}/>
     </VStack>
   );
 };
