@@ -1,0 +1,17 @@
+query _UserList($listId: String!) {
+    userList(listId: $listId) {
+      id
+      name
+      items {
+          mediaID
+          watchStatus
+          rating {
+              rating
+              subRatings {
+                  id
+                  rating
+              }
+          }
+      }
+    }
+}

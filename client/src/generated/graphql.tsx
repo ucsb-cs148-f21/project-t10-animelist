@@ -16,6 +16,17 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AddUserListItemInput = {
+  listId: Scalars['String'];
+  mediaID: Scalars['Int'];
+  subRatings?: Maybe<Array<Maybe<UserListSubRatingInput>>>;
+  watchStatus: WatchStatus;
+};
+
+export type CreateUserListInput = {
+  name: Scalars['String'];
+};
+
 export type LoginInput = {
   password: Scalars['String'];
   usernameOrEmail: Scalars['String'];
@@ -36,17 +47,30 @@ export type MalOauthInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   addListEntry?: Maybe<Scalars['Boolean']>;
+  addUserListItem?: Maybe<UserListItem>;
+  createUserList?: Maybe<UserList>;
   login?: Maybe<LoginResponse>;
   logout?: Maybe<Scalars['Boolean']>;
   malLink?: Maybe<Scalars['Boolean']>;
   malLogin?: Maybe<LoginResponse>;
   register?: Maybe<RegisterResponse>;
   updateUserListEntry?: Maybe<UserListEntry>;
+  updateUserListItem?: Maybe<UserListItem>;
 };
 
 
 export type MutationAddListEntryArgs = {
   input: UserListEntryInput;
+};
+
+
+export type MutationAddUserListItemArgs = {
+  input: AddUserListItemInput;
+};
+
+
+export type MutationCreateUserListArgs = {
+  input: CreateUserListInput;
 };
 
 
@@ -74,11 +98,22 @@ export type MutationUpdateUserListEntryArgs = {
   input: UserListEntryInput;
 };
 
+
+export type MutationUpdateUserListItemArgs = {
+  input: UpdateUserListItemInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   malLinkOauth: Scalars['String'];
   malLoginOauth: Scalars['String'];
   me?: Maybe<User>;
+  userList?: Maybe<UserList>;
+};
+
+
+export type QueryUserListArgs = {
+  listId: Scalars['String'];
 };
 
 export type RegisterInput = {
@@ -92,6 +127,13 @@ export type RegisterResponse = {
   success: Scalars['Boolean'];
 };
 
+export type UpdateUserListItemInput = {
+  listId: Scalars['String'];
+  mediaID: Scalars['Int'];
+  subRatings: Array<Maybe<UserListSubRatingInput>>;
+  watchStatus: WatchStatus;
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -99,6 +141,14 @@ export type User = {
   updatedAt: Scalars['DateTime'];
   userList: Array<UserListEntry>;
   username: Scalars['String'];
+};
+
+export type UserList = {
+  __typename?: 'UserList';
+  id: Scalars['ID'];
+  items?: Maybe<Array<Maybe<UserListItem>>>;
+  name: Scalars['String'];
+  ownerId: Scalars['String'];
 };
 
 export type UserListEntry = {
@@ -113,6 +163,40 @@ export type UserListEntryInput = {
   rated: Scalars['Boolean'];
   rating: Scalars['Float'];
 };
+
+export type UserListItem = {
+  __typename?: 'UserListItem';
+  mediaID: Scalars['Int'];
+  rating?: Maybe<UserListRating>;
+  watchStatus: Scalars['String'];
+};
+
+export type UserListRating = {
+  __typename?: 'UserListRating';
+  displayRating: Scalars['String'];
+  rating: Scalars['Int'];
+  subRatings: Array<UserListSubRating>;
+};
+
+export type UserListSubRating = {
+  __typename?: 'UserListSubRating';
+  displayRating?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  rating: Scalars['Int'];
+};
+
+export type UserListSubRatingInput = {
+  id: Scalars['Int'];
+  rating: Scalars['Int'];
+};
+
+export enum WatchStatus {
+  Completed = 'COMPLETED',
+  Dropped = 'DROPPED',
+  OnHold = 'ON_HOLD',
+  PlanToWatch = 'PLAN_TO_WATCH',
+  Watching = 'WATCHING'
+}
 
 export type AddListEntryMutationVariables = Exact<{
   input: UserListEntryInput;
@@ -160,6 +244,13 @@ export type UpdateUserListEntryMutationVariables = Exact<{
 
 
 export type UpdateUserListEntryMutation = { __typename?: 'Mutation', updateUserListEntry?: Maybe<{ __typename?: 'UserListEntry', mediaID: number, rated: boolean, rating: number }> };
+
+export type _UserListQueryVariables = Exact<{
+  listId: Scalars['String'];
+}>;
+
+
+export type _UserListQuery = { __typename?: 'Query', userList?: Maybe<{ __typename?: 'UserList', id: string, name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', rating: number, subRatings: Array<{ __typename?: 'UserListSubRating', id: number, rating: number }> }> }>>> }> };
 
 export type MalLinkOauthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -418,6 +509,53 @@ export function useUpdateUserListEntryMutation(baseOptions?: Apollo.MutationHook
 export type UpdateUserListEntryMutationHookResult = ReturnType<typeof useUpdateUserListEntryMutation>;
 export type UpdateUserListEntryMutationResult = Apollo.MutationResult<UpdateUserListEntryMutation>;
 export type UpdateUserListEntryMutationOptions = Apollo.BaseMutationOptions<UpdateUserListEntryMutation, UpdateUserListEntryMutationVariables>;
+export const _UserListDocument = gql`
+    query _UserList($listId: String!) {
+  userList(listId: $listId) {
+    id
+    name
+    items {
+      mediaID
+      watchStatus
+      rating {
+        rating
+        subRatings {
+          id
+          rating
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __use_UserListQuery__
+ *
+ * To run a query within a React component, call `use_UserListQuery` and pass it any options that fit your needs.
+ * When your component renders, `use_UserListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = use_UserListQuery({
+ *   variables: {
+ *      listId: // value for 'listId'
+ *   },
+ * });
+ */
+export function use_UserListQuery(baseOptions: Apollo.QueryHookOptions<_UserListQuery, _UserListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<_UserListQuery, _UserListQueryVariables>(_UserListDocument, options);
+      }
+export function use_UserListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<_UserListQuery, _UserListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<_UserListQuery, _UserListQueryVariables>(_UserListDocument, options);
+        }
+export type _UserListQueryHookResult = ReturnType<typeof use_UserListQuery>;
+export type _UserListLazyQueryHookResult = ReturnType<typeof use_UserListLazyQuery>;
+export type _UserListQueryResult = Apollo.QueryResult<_UserListQuery, _UserListQueryVariables>;
 export const MalLinkOauthDocument = gql`
     query MALLinkOauth {
   malLinkOauth
