@@ -1,15 +1,11 @@
 package com.github.animelist.animelist.controller;
-import com.fasterxml.classmate.TypeResolver;
 import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.model.input.RatingSystemInput;
 import com.github.animelist.animelist.model.input.RatingSystemType;
 import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.DiscreteRatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
-import com.github.animelist.animelist.model.ratingsystem.SubRating;
 import com.github.animelist.animelist.service.RatingSystemService;
-import graphql.TypeResolutionEnvironment;
-import graphql.schema.GraphQLObjectType;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -17,10 +13,6 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-
-import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.github.animelist.animelist.util.AuthUtil.getUserDetails;
 
@@ -45,21 +37,21 @@ public class RatingSystemController {
         JwtUserDetails userDetails = getUserDetails();
 
         final RatingSystem ratingSystem;
-        if (input.ratingSystemType() == RatingSystemType.DISCRETE) {
+        if (input.getRatingSystemType() == RatingSystemType.DISCRETE) {
             ratingSystem = DiscreteRatingSystem.builder()
-                    .name(input.name())
+                    .name(input.getName())
                     .ownerId(new ObjectId(userDetails.getId()))
-                    .size(input.size())
-                    .subRatings(input.subRatings())
-                    .labels(input.discreteParam().labels())
+                    .size(input.getSize())
+                    .subRatings(input.getSubRatings())
+                    .labels(input.getDiscreteParam().labels())
                     .build();
         } else {
             ratingSystem = ContinuousRatingSystem.builder()
-                    .name(input.name())
+                    .name(input.getName())
                     .ownerId(new ObjectId(userDetails.getId()))
-                    .size(input.size())
-                    .offset(input.continuousParam().offset())
-                    .subRatings(input.subRatings())
+                    .size(input.getSize())
+                    .offset(input.getContinuousParam().offset())
+                    .subRatings(input.getSubRatings())
                     .build();
         }
         return ratingSystemService.createRatingSystem(ratingSystem);
