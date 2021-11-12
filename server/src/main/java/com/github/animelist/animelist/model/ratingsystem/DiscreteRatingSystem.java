@@ -18,7 +18,7 @@ public class DiscreteRatingSystem extends RatingSystem {
         super(id, name, ownerId, size, subRating);
         this.labels = labels;
         Assert.isTrue(labels.size() == size, "the number of labels should be equal to size" );
-        var nonNullNonBlankLabelsSize = labels.stream().filter(label -> nonNull(label) && label.isBlank()).count();
+        var nonNullNonBlankLabelsSize = labels.stream().filter(label -> nonNull(label) && !label.isBlank()).count();
         Assert.isTrue(nonNullNonBlankLabelsSize == labels. size(), "All labels should be non null and non blank");
     }
 
