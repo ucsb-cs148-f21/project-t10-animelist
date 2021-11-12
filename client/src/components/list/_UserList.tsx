@@ -1,4 +1,4 @@
-import { Badge, Icon, Table, TableCaption, Tbody, Td, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import { Badge, Button, Heading, Icon, Table, TableCaption, Tbody, Td, Th, Thead, Tr, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useState } from "react";
 import { UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
@@ -23,10 +23,11 @@ interface IListItem {
 
 const UserList: React.FC<UserListProps> = ({ userlist }) => {
   const [ listItems, setListItems ] = useState<IListItem[]>([])
-  const { loading } = useFetchAnimeInfoQuery({
+  const [page, setPages] = useState<number>(0);
+  const { loading, refetch } = useFetchAnimeInfoQuery({
     client: initializeApolloAnilist(),
     variables: {
-      ids: userlist.items.slice(0, pageSize).map(item => item.mediaID)
+      ids: userlist.items.slice(page * pageSize, (page + 1) * pageSize).map(item => item.mediaID)
     },
     onCompleted: data => {
 
@@ -36,13 +37,15 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
       }, {});
 
       setListItems(
-        data.Page.media.map(anilistMedia => ({
+        prev => prev.concat(data.Page.media.map(anilistMedia => ({
           id: anilistMedia.id,
           title: anilistMedia.title.romaji,
           watchStatus: items_map[anilistMedia.id].watchStatus,
           coverImage: anilistMedia.coverImage.medium
-        }))
+        })))
       );
+
+      setPages(page => page + 1)
     }
   });
 
@@ -51,7 +54,9 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
   }
 
   return (
-    <VStack width="full" p={6} maxWidth="6xl" alignItems="center">
+    <VStack width="full" p={6} maxWidth="6xl">
+      <Heading>{ userlist.name }</Heading>
+      <Button alignSelf="flex-end">Add Anime</Button>
       <Table>
         <Thead>
           <Tr>
