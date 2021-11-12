@@ -14,59 +14,6 @@ type UserListEntry {
   rating: Float!
 }
 
-interface RatingSystem {
-  id: ID!
-  name: String!
-  ownerId: ID!
-  size: Int!
-  subRatings: [SubRating!]!
-}
-
-type SubRating {
-  id: ID!
-  name: String!
-  weight: Float!
-}
-type DiscreteRatingSystem implements RatingSystem {
-  id: ID!
-  name: String!
-  ownerId: ID!
-  size: Int!
-  subRatings: [SubRating!]!
-  labels: [String!]!
-}
-
-type ContinuousRatingSystem implements RatingSystem {
-  id: ID!
-  name: String!
-  ownerId: ID!
-  size: Int!
-  offset: Int!
-  subRatings: [SubRating!]!
-}
-
-input RatingSystemInput {
-  name: String!
-  size: Int!
-  subRatings: [SubRating!]!
-  ratingSystemType: RatingSystemType!
-  discreteParam: DiscreteRatingSystemInput
-  continuousParam: ContinuousRatingSystemInput
-}
-
-enum RatingSystemType {
-    DISCRETE
-    CONTINUOUS
-}
-
-input DiscreteRatingSystemInput {
-  labels: [String!]!
-}
-
-input ContinuousRatingSystemInput {
-  offset: Int!
-}
-
 input UserListEntryInput {
   mediaID: Int!
   rated: Boolean!
