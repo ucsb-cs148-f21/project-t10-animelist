@@ -5,7 +5,6 @@ import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
-import com.github.animelist.animelist.model.userlist.UserListRating;
 import com.github.animelist.animelist.model.userlist.WatchStatus;
 import com.github.animelist.animelist.service.UserListService;
 import org.bson.types.ObjectId;
@@ -56,7 +55,7 @@ public class UserListControllerTest {
     void addUserListItem_happy() {
         mockAuthenticationPrincipal();
         final var listId = new ObjectId().toString();
-        final var input = new UserListItemInput(listId, 1234, WatchStatus.PLAN_TO_WATCH.toString(), null);
+        final var input = new UserListItemInput(listId, 1234, WatchStatus.PLAN_TO_WATCH, null);
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
@@ -73,7 +72,7 @@ public class UserListControllerTest {
     void addUserListItem_failAdd() {
         mockAuthenticationPrincipal();
         final var listId = new ObjectId().toString();
-        final var input = new UserListItemInput(listId, 1234, WatchStatus.PLAN_TO_WATCH.toString(), null);
+        final var input = new UserListItemInput(listId, 1234, WatchStatus.PLAN_TO_WATCH, null);
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
@@ -88,7 +87,7 @@ public class UserListControllerTest {
     void updateUserListItem_happy() {
         mockAuthenticationPrincipal();
         final var listId = new ObjectId().toString();
-        final var input = new UserListItemInput(listId, 1234, WatchStatus.PLAN_TO_WATCH.toString(), null);
+        final var input = new UserListItemInput(listId, 1234, WatchStatus.PLAN_TO_WATCH, null);
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
@@ -105,7 +104,7 @@ public class UserListControllerTest {
     void updateUserListItem_failUpdate() {
         mockAuthenticationPrincipal();
         final var listId = new ObjectId().toString();
-        final var input = new UserListItemInput(listId, 1234, WatchStatus.PLAN_TO_WATCH.toString(), null);
+        final var input = new UserListItemInput(listId, 1234, WatchStatus.PLAN_TO_WATCH, null);
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)

@@ -1,6 +1,9 @@
 package com.github.animelist.animelist.model.input;
 
-import com.github.animelist.animelist.model.userlist.UserListRating;
+import com.github.animelist.animelist.model.userlist.UserListSubRating;
+import com.github.animelist.animelist.model.userlist.WatchStatus;
 
-public record UserListItemInput(String listId, Integer mediaID, String watchStatus, UserListRating rating) {
+import java.util.List;
+
+public record UserListItemInput(String listId, Integer mediaID, WatchStatus watchStatus, List<UserListSubRating> subRatings) {
 }

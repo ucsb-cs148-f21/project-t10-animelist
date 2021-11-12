@@ -7,6 +7,7 @@ import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.user.UserListEntry;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
+import com.github.animelist.animelist.model.userlist.UserListRating;
 import com.github.animelist.animelist.model.userlist.WatchStatus;
 import com.github.animelist.animelist.service.UserListService;
 import com.github.animelist.animelist.util.AuthUtil;
@@ -52,10 +53,12 @@ public class UserListController {
     @PreAuthorize("isAuthenticated()")
     public UserListItem addUserListItem(@Argument("input") final UserListItemInput input) {
         final var userDetails = AuthUtil.getUserDetails();
+
+        // TODO: Put scoring algorithm to get correct UserListRating
         final var userListItem = UserListItem.builder()
                 .mediaID(input.mediaID())
-                .watchStatus(WatchStatus.valueOf(input.watchStatus().toUpperCase()))
-                .rating(input.rating())
+                .watchStatus(input.watchStatus())
+                .rating(UserListRating.builder().subRatings(input.subRatings()).build())
                 .build();
 
         if (!userListService.addItem(input.listId(), userDetails.getId(), userListItem)) {
@@ -69,10 +72,16 @@ public class UserListController {
     @PreAuthorize("isAuthenticated()")
     public UserListItem updateUserListItem(@Argument("input") final UserListItemInput input) {
         final var userDetails = AuthUtil.getUserDetails();
+
+        // TODO: Put scoring algorithm to get correct UserListRating
         final var userListItem = UserListItem.builder()
                 .mediaID(input.mediaID())
-                .watchStatus(WatchStatus.valueOf(input.watchStatus().toUpperCase()))
-                .rating(input.rating())
+                .watchStatus(input.watchStatus())
+                .rating(UserListRating.builder()
+                        .rating(0)
+                        .displayRating("This a test")
+                        .subRatings(input.subRatings())
+                        .build())
                 .build();
 
         if (!userListService.updateItem(input.listId(), userDetails.getId(), userListItem)) {
