@@ -58,7 +58,11 @@ public class UserListController {
         final var userListItem = UserListItem.builder()
                 .mediaID(input.mediaID())
                 .watchStatus(input.watchStatus())
-                .rating(UserListRating.builder().subRatings(input.subRatings()).build())
+                .rating(UserListRating.builder()
+                        .rating(0)
+                        .displayRating("This a test")
+                        .subRatings(input.subRatings())
+                        .build())
                 .build();
 
         if (!userListService.addItem(input.listId(), userDetails.getId(), userListItem)) {
