@@ -60,7 +60,7 @@ public class UserListController {
                 .watchStatus(input.watchStatus())
                 .rating(UserListRating.builder()
                         .rating(0)
-                        .displayRating("This a test")
+                        .displayRating("STUB")
                         .subRatings(input.subRatings())
                         .build())
                 .build();
@@ -83,7 +83,7 @@ public class UserListController {
                 .watchStatus(input.watchStatus())
                 .rating(UserListRating.builder()
                         .rating(0)
-                        .displayRating("This a test")
+                        .displayRating("STUB")
                         .subRatings(input.subRatings())
                         .build())
                 .build();

@@ -5,6 +5,7 @@ import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
+import com.github.animelist.animelist.model.userlist.UserListRating;
 import com.github.animelist.animelist.model.userlist.WatchStatus;
 import com.github.animelist.animelist.service.UserListService;
 import org.bson.types.ObjectId;
@@ -59,6 +60,11 @@ public class UserListControllerTest {
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
+                .rating(UserListRating.builder()
+                        .rating(0)
+                        .displayRating("STUB")
+                        .subRatings(input.subRatings())
+                        .build())
                 .build();
 
         when(userListService.addItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(true);
@@ -76,6 +82,11 @@ public class UserListControllerTest {
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
+                .rating(UserListRating.builder()
+                        .rating(0)
+                        .displayRating("STUB")
+                        .subRatings(input.subRatings())
+                        .build())
                 .build();
 
         when(userListService.addItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(false);
@@ -91,6 +102,11 @@ public class UserListControllerTest {
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
+                .rating(UserListRating.builder()
+                        .rating(0)
+                        .displayRating("STUB")
+                        .subRatings(input.subRatings())
+                        .build())
                 .build();
 
         when(userListService.updateItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(true);
@@ -108,11 +124,18 @@ public class UserListControllerTest {
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
+                .rating(UserListRating.builder()
+                        .rating(0)
+                        .displayRating("STUB")
+                        .subRatings(input.subRatings())
+                        .build())
                 .build();
 
-        when(userListService.updateItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(false);
+        when(userListService.updateItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(true);
 
-        assertThrows(RuntimeException.class, () -> userListController.updateUserListItem(input));
+        final var actual = userListController.updateUserListItem(input);
+
+        assertThrows(RuntimeException.class, () -> userListController.addUserListItem(input));
     }
 
     private void mockAuthenticationPrincipal() {
