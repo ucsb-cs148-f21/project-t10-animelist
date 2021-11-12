@@ -38,7 +38,7 @@ input CreateUserListInput {
 input AddUserListItemInput {
   listId: String!
   mediaID: Int!
-  watchStatus: String!
+  watchStatus: WatchStatus!
   subRatings: [UserListSubRatingInput]
 }
 

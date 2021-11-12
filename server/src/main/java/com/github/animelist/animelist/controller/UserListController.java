@@ -4,6 +4,7 @@ import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UserListEntryInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
+import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
 import com.github.animelist.animelist.model.user.UserListEntry;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
@@ -44,6 +45,7 @@ public class UserListController {
         final var userList = UserList.builder()
                 .name(input.name())
                 .ownerId(new ObjectId(userDetails.getId()))
+                .ratingSystem(ContinuousRatingSystem.TEN_POINT)
                 .build();
 
         return userListService.createUserList(userList);

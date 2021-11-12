@@ -3,6 +3,7 @@ package com.github.animelist.animelist.controller;
 import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
+import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
 import com.github.animelist.animelist.model.userlist.UserListRating;
@@ -43,6 +44,7 @@ public class UserListControllerTest {
         final UserList expectedUserList = UserList.builder()
                 .name("Test")
                 .ownerId(EXPECTED_OWNER_ID)
+                .ratingSystem(ContinuousRatingSystem.TEN_POINT)
                 .build();
 
         when(userListService.createUserList(expectedUserList)).thenReturn(expectedUserList);
