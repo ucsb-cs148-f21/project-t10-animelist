@@ -1,0 +1,55 @@
+type UserList {
+  id: ID!
+  ownerId: String!
+  name: String!
+  items: [UserListItem]
+}
+
+type UserListItem {
+  mediaID: Int!
+  watchStatus: String!
+  rating: UserListRating
+}
+
+type UserListRating {
+  displayRating: String!
+  rating: Int!
+  subRatings: [UserListSubRating!]!
+}
+
+enum WatchStatus {
+  PLAN_TO_WATCH
+  WATCHING
+  ON_HOLD
+  COMPLETED
+  DROPPED
+}
+
+type UserListSubRating {
+  id: Int!
+  displayRating: String
+  rating: Int!
+}
+
+input CreateUserListInput {
+  name: String!
+}
+
+input AddUserListItemInput {
+  listId: String!
+  mediaID: Int!
+  watchStatus: String!
+  subRatings: [UserListSubRatingInput]
+}
+
+input UpdateUserListItemInput {
+  listId: String!
+  mediaID: Int!
+  watchStatus: WatchStatus!
+  subRatings: [UserListSubRatingInput]!
+}
+
+input UserListSubRatingInput {
+  id: Int!
+  rating: Int!
+}
