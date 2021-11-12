@@ -14,9 +14,20 @@ type UserListEntry {
   rating: Float!
 }
 
-union RatingSystem = DiscreteRatingSystem | ContinuousRatingSystem
+interface RatingSystem {
+  id: ID!
+  name: String!
+  ownerId: ID!
+  size: Int!
+  subRatings: [SubRating!]!
+}
 
-type DiscreteRatingSystem {
+type SubRating {
+  id: ID!
+  name: String!
+  weight: Float!
+}
+type DiscreteRatingSystem implements RatingSystem {
   id: ID!
   name: String!
   ownerId: ID!
@@ -25,7 +36,7 @@ type DiscreteRatingSystem {
   labels: [String!]!
 }
 
-type ContinuousRatingSystem {
+type ContinuousRatingSystem implements RatingSystem {
   id: ID!
   name: String!
   ownerId: ID!
