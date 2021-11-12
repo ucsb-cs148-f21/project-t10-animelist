@@ -1,6 +1,7 @@
 package com.github.animelist.animelist.service;
 
 import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
+import com.github.animelist.animelist.model.ratingsystem.SubRating;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
 import com.github.animelist.animelist.model.userlist.WatchStatus;
@@ -14,6 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+
+import java.util.Collections;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
