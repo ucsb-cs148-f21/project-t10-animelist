@@ -23,7 +23,7 @@ public class DiscreteRatingSystemTest {
     @Test
     void DiscreteRatingSystemBuilder_happy() {
         final var builder = DiscreteRatingSystem.builder()
-                .name("Test")
+                .name("Test_is_good")
                 .ownerId(new ObjectId())
                 .size(3)
                 .labels(Arrays.asList("one", "two", "three"))
