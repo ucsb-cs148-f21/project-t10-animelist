@@ -25,3 +25,7 @@
 * We use the Start/Stop/Continue process on a GitHub projetc board.
 * The retro went well. We've identified some things to change and things to start doing to make our development process smoother. I felt more people are participating than last retro
 * For next retro, actively continue to encourage participation. This can be done by addressing members directly in a positive manner in order to make them feel included and heard.
+
+## Retro Outcome Assessment
+
+Our retro 2 experiment was to change to two week sprints and focus on design first then implementation. The metric we used for this is if we had reviewed design documents, cleaer PRs, stories, and tasks, and team feedback. The outcome was we had a mutual agreement on how to implement the RatingSystem and UserList features. We had a clear direction and criteria in order to make user storie, tasks, and what to implement. We're cementing this change moving forward as it provides a more clear direction if we quickly come up with an initial design that everyone agrees to. 

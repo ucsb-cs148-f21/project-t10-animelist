@@ -8,6 +8,7 @@ import java.util.Objects;
  * and the rating stored in the rating field. Otherwise, the rated field is
  * false and the value of the rating field is meaningless.
  */
+@Deprecated
 public class UserListEntry {
 
     private int mediaID;
