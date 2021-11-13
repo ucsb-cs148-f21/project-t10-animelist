@@ -20,7 +20,7 @@ public class ContinuousRatingSystemTest {
     @Test
     void createContinuousRatingSystemBuilder_happy() {
         final var builder = ContinuousRatingSystem.builder()
-                .name("Test")
+                .name("Test is good")
                 .ownerId(new ObjectId())
                 .size(10)
                 .offset(1)
