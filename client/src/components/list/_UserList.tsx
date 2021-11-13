@@ -1,13 +1,13 @@
-import { Badge, Button, Heading, Icon, Table, TableCaption, Tbody, Td, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import { Badge, Button, Heading, Icon, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react";
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
 import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
 import { createApolloAnilist, initializeApolloAnilist, useApolloAnilist } from "../../utils/createApolloAnilist";
 import { Image } from "@chakra-ui/react"
 import { BsDash } from "react-icons/bs";
 
-const pageSize = 20;
+const PAGE_SIZE = 10;
 
 interface UserListProps {
   userlist: UserListType;
@@ -22,12 +22,13 @@ interface IListItem {
 }
 
 const UserList: React.FC<UserListProps> = ({ userlist }) => {
+  const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
   const [ listItems, setListItems ] = useState<IListItem[]>([])
-  const [page, setPages] = useState<number>(0);
-  const { loading, refetch } = useFetchAnimeInfoQuery({
+  const [ page, setPage ] = useState<number>(1);
+  const { loading } = useFetchAnimeInfoQuery({
     client: initializeApolloAnilist(),
     variables: {
-      ids: userlist.items.slice(page * pageSize, (page + 1) * pageSize).map(item => item.mediaID)
+      ids: userlist.items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map(item => item.mediaID)
     },
     onCompleted: data => {
 
@@ -41,16 +42,28 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
           id: anilistMedia.id,
           title: anilistMedia.title.romaji,
           watchStatus: items_map[anilistMedia.id].watchStatus,
+          rating: items_map[anilistMedia.id].rating,
           coverImage: anilistMedia.coverImage.medium
         })))
       );
-
-      setPages(page => page + 1)
     }
   });
+  
+  const loader = useRef(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver((entities) => {
+      if (entities[0].isIntersecting) {
+        setPage(Math.min(MAX_PAGE, page + 1))
+      }
+    });
+    if (loader.current) {
+      observer.observe(loader.current)
+    }
+  }, [loading]);
 
-  if (loading) {
-    return <div />
+
+  if (loading && listItems.length == 0) {
+    return <div/>
   }
 
   return (
@@ -69,7 +82,6 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
         <Tbody>
           {
             listItems.map((item) => {
-              console.log(item)
               return (<Tr>
                 <Td><Image src={item.coverImage} width="67px" height="100px" objectFit="cover" /></Td>
                 <Td>{item.title}</Td>
@@ -80,6 +92,7 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
           }
         </Tbody>
       </Table>
+      { page < MAX_PAGE && <div ref={loader}/> }
     </VStack>
   )
 };
