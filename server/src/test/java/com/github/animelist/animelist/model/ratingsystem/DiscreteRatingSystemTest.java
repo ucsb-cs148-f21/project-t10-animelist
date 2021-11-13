@@ -23,10 +23,23 @@ public class DiscreteRatingSystemTest {
     @Test
     void DiscreteRatingSystemBuilder_happy() {
         final var builder = DiscreteRatingSystem.builder()
-                .name("Test_is_good")
+                .name("test")
                 .ownerId(new ObjectId())
                 .size(3)
                 .labels(Arrays.asList("one", "two", "three"))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
+
+        assertDoesNotThrow(builder::build);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "Test", "TEST", "1234", "Test123", "Test 1234", "TEST   1234", "TEST-1234-TEST TEST" })
+    void createContinuousRatingSystemBuilder_happyName(final String name) {
+        final var builder = ContinuousRatingSystem.builder()
+                .name(name)
+                .ownerId(new ObjectId())
+                .size(10)
+                .offset(1)
                 .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
 
         assertDoesNotThrow(builder::build);
@@ -58,7 +71,7 @@ public class DiscreteRatingSystemTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {"", "  ", "\n", "\t", "tj\n"})
+    @ValueSource(strings = {"", "  ", "\n", "\t", "tj\n", "  test", "test   ", "-test", "test-"})
     void DiscreteRatingSystemBuilder_badName(final String badName) {
         final var builder = DiscreteRatingSystem.builder()
                 .name(badName)

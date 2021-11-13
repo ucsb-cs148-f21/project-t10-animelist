@@ -38,12 +38,12 @@ public abstract class RatingSystem {
         this.subRatings = subRatings;
         Assert.isTrue(size >= 2, "Size must be at least 2");
         Assert.isTrue(subRatings.size()>=1, "subRatings size must be at least 1");
-        Assert.isTrue(nonNull(name) && !name.isBlank(),"string cannot be blank");
+        Assert.isTrue(nonNull(name) && !name.isBlank(),"name cannot be blank");
         Assert.isTrue(name.length()>=1 && name.length()<= 50, "name must be at least one character and less than 50 characters");
         var weightSum = subRatings.stream().mapToDouble(SubRating::getWeight).sum();
         var difference = WEIGHT_SUM_EXPECTED - weightSum;
         Assert.isTrue(difference >= 0 && difference <= WEIGHT_SUM_EPSILON, "subRatings weight sum must sum up to 1");
-        Assert.isTrue(name != null && name.matches("^[a-zA-Z0-9]+(?:[\\w -]*[a-zA-Z0-9]+)*$"),"Name must be AlphaNumeric");
+        Assert.isTrue(name.matches("^[a-zA-Z0-9]+(?:[\\w -]*[a-zA-Z0-9]+)*$"),"Name must be AlphaNumeric");
     }
 
     @Override
