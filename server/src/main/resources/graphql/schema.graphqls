@@ -50,6 +50,7 @@ type Query {
   me: User
   malLinkOauth: String!
   malLoginOauth: String!
+  userList(listId: String!): UserList
 }
 
 type Mutation {
@@ -60,4 +61,7 @@ type Mutation {
   malLink(input: MALOauthInput!): Boolean
   addListEntry(input: UserListEntryInput!): Boolean
   updateUserListEntry(input: UserListEntryInput!): UserListEntry
+  createUserList(input: CreateUserListInput!): UserList
+  addUserListItem(input: AddUserListItemInput!): UserListItem
+  updateUserListItem(input: UpdateUserListItemInput!): UserListItem
 }

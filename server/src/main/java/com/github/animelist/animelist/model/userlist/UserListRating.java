@@ -5,16 +5,13 @@ import java.util.Objects;
 
 public class UserListRating {
 
-    private Integer id;
-
     private String displayRating;
 
     private Integer rating;
 
     private List<UserListSubRating> subRatings;
 
-    public UserListRating(Integer id, String displayRating, Integer rating, List<UserListSubRating> subRatings) {
-        this.id = id;
+    public UserListRating(String displayRating, Integer rating, List<UserListSubRating> subRatings) {
         this.displayRating = displayRating;
         this.rating = rating;
         this.subRatings = subRatings;
@@ -25,20 +22,12 @@ public class UserListRating {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserListRating that = (UserListRating) o;
-        return Objects.equals(id, that.id) && Objects.equals(displayRating, that.displayRating) && Objects.equals(rating, that.rating) && Objects.equals(subRatings, that.subRatings);
+        return Objects.equals(displayRating, that.displayRating) && Objects.equals(rating, that.rating) && Objects.equals(subRatings, that.subRatings);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, displayRating, rating, subRatings);
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        return Objects.hash(displayRating, rating, subRatings);
     }
 
     public String getDisplayRating() {
@@ -70,15 +59,9 @@ public class UserListRating {
     }
 
     public static class Builder {
-        private Integer id;
         private String displayRating;
         private Integer rating;
         private List<UserListSubRating> subRatings;
-
-        public Builder id(Integer id) {
-            this.id = id;
-            return this;
-        }
 
         public Builder displayRating(String displayRating) {
             this.displayRating = displayRating;
@@ -96,7 +79,7 @@ public class UserListRating {
         }
 
         public UserListRating build() {
-            return new UserListRating(id, displayRating, rating, subRatings);
+            return new UserListRating(displayRating, rating, subRatings);
         }
     }
 }
