@@ -68,14 +68,20 @@ The rows and blocks will then naturally map to React components to allow us to d
 
 To allow editing the profile page, we need to support several distinct actions. Each following section will describe how we can implement one of those actions.
 
-#### 3.2.1. Adding a New Block
+To perform any of these actions, the user will click a button to enter a dedicated *editing mode.* While in this mode, blocks will display their metadata, rather than the actual content derived from their metadata, e.g. a user list block will show the name of the corresponding user list instead of the user list itself.
 
-To add a new block, we should have a 
+Upon exiting the editing mode, we will send a request to the backend to update the user's profile page based on the local state after completing editing, then do a request to fetch the profile page data again.
+
+#### 3.2.1. Adding a Block
+
+To add a new block, the user will click an "add block" button, choosing between the different types of blocks. After adding a block, they will be able to edit the fields for that block.
 
 #### 3.2.2. Removing a Block
 
-To remove a block, we will remove the corresponding block in the local array representation of the profile page. If removing the block leaves us with an empty row
+To remove a block, we will remove the corresponding block in the local array representation of the profile page. If removing the block leaves us with an empty row, we will automatically delete that row.
 
 #### 3.2.3. Rearranging Blocks
+
+To rearrange blocks, we will rearrange them in the internal array representation of the profile page. We should provide some drag-and-drop functionality or at the very least arrow buttons to move them up and down or left and right.
 
 ## 4. Data Structures
