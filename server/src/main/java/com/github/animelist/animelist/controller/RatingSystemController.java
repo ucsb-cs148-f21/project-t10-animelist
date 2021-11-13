@@ -37,21 +37,21 @@ public class RatingSystemController {
         JwtUserDetails userDetails = getUserDetails();
 
         final RatingSystem ratingSystem;
-        if (input.getRatingSystemType() == RatingSystemType.DISCRETE) {
+        if (input.ratingSystemType() == RatingSystemType.DISCRETE) {
             ratingSystem = DiscreteRatingSystem.builder()
-                    .name(input.getName())
+                    .name(input.name())
                     .ownerId(new ObjectId(userDetails.getId()))
-                    .size(input.getSize())
-                    .subRatings(input.getSubRatings())
-                    .labels(input.getDiscreteParam().labels())
+                    .size(input.size())
+                    .subRatings(input.subRatings())
+                    .labels(input.discreteParam().labels())
                     .build();
         } else {
             ratingSystem = ContinuousRatingSystem.builder()
-                    .name(input.getName())
+                    .name(input.name())
                     .ownerId(new ObjectId(userDetails.getId()))
-                    .size(input.getSize())
-                    .offset(input.getContinuousParam().offset())
-                    .subRatings(input.getSubRatings())
+                    .size(input.size())
+                    .offset(input.continuousParam().offset())
+                    .subRatings(input.subRatings())
                     .build();
         }
         return ratingSystemService.createRatingSystem(ratingSystem);
