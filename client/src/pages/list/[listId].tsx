@@ -12,7 +12,7 @@ const ListPage: React.FC<{}> = () => {
 
   if (loading) {
     return (
-      <div>Loading. . .</div>
+      <div/>
     )
   }
 

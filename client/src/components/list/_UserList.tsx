@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Icon, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import { Badge, Button, Heading, Icon, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
@@ -23,32 +23,38 @@ interface IListItem {
 
 const UserList: React.FC<UserListProps> = ({ userlist }) => {
   const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
-  const [ listItems, setListItems ] = useState<IListItem[]>([])
-  const [ page, setPage ] = useState<number>(1);
+  const [listItems, setListItems] = useState<IListItem[]>([])
+  const [page, setPage] = useState<number>(1);
   const { loading } = useFetchAnimeInfoQuery({
     client: initializeApolloAnilist(),
     variables: {
       ids: userlist.items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map(item => item.mediaID)
     },
     onCompleted: data => {
+      const indexOf = userlist.items.reduce((map, item, idx) => {
+        map[item.mediaID] = idx;
+        return map;
+      }, {});
 
-      const items_map: Record<number, UserListItem> = userlist.items.reduce((map, item) => {
+      const userListItemOf: Record<number, UserListItem> = userlist.items.reduce((map, item) => {
         map[item.mediaID] = item
         return map;
       }, {});
 
+      const listItems = data.Page.media.slice().sort((a, b) => indexOf[a.id] - indexOf[b.id]).map(anilistMedia => ({
+        id: anilistMedia.id,
+        title: anilistMedia.title.romaji,
+        watchStatus: userListItemOf[anilistMedia.id].watchStatus,
+        rating: userListItemOf[anilistMedia.id].rating,
+        coverImage: anilistMedia.coverImage.medium
+      }));
+
       setListItems(
-        prev => prev.concat(data.Page.media.map(anilistMedia => ({
-          id: anilistMedia.id,
-          title: anilistMedia.title.romaji,
-          watchStatus: items_map[anilistMedia.id].watchStatus,
-          rating: items_map[anilistMedia.id].rating,
-          coverImage: anilistMedia.coverImage.medium
-        })))
+        prev => prev.concat(listItems)
       );
     }
   });
-  
+
   const loader = useRef(null);
   useEffect(() => {
     const observer = new IntersectionObserver((entities) => {
@@ -61,14 +67,15 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
     }
   }, [loading]);
 
-
   if (loading && listItems.length == 0) {
-    return <div/>
+    return (
+      <div />
+    )
   }
 
   return (
     <VStack width="full" p={6} maxWidth="6xl">
-      <Heading>{ userlist.name }</Heading>
+      <Heading>{userlist.name}</Heading>
       <Button alignSelf="flex-end">Add Anime</Button>
       <Table>
         <Thead>
@@ -83,16 +90,16 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
           {
             listItems.map((item) => {
               return (<Tr>
-                <Td><Image src={item.coverImage} width="67px" height="100px" objectFit="cover" /></Td>
+                <Td><Image src={item.coverImage} minWidth="67px" width="67px" height="100px" objectFit="cover" /></Td>
                 <Td>{item.title}</Td>
                 <Td><Badge>{item.watchStatus}</Badge></Td>
-                <Td>{ item.rating ? item.rating.displayRating : <Icon as={BsDash}/> }</Td>
+                <Td>{item.rating ? item.rating.displayRating : <Icon as={BsDash} />}</Td>
               </Tr>);
             })
           }
         </Tbody>
       </Table>
-      { page < MAX_PAGE && <div ref={loader}/> }
+      {!loading && page < MAX_PAGE && <div ref={loader} />}
     </VStack>
   )
 };
