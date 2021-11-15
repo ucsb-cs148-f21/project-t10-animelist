@@ -1,0 +1,58 @@
+interface RatingSystem {
+  id: ID!
+  name: String!
+  ownerId: ID!
+  size: Int!
+  subRatings: [SubRating!]!
+}
+
+type SubRating {
+  id: ID!
+  name: String!
+  weight: Float!
+}
+type DiscreteRatingSystem implements RatingSystem {
+  id: ID!
+  name: String!
+  ownerId: ID!
+  size: Int!
+  subRatings: [SubRating!]!
+  labels: [String!]!
+}
+
+type ContinuousRatingSystem implements RatingSystem {
+  id: ID!
+  name: String!
+  ownerId: ID!
+  size: Int!
+  offset: Int!
+  subRatings: [SubRating!]!
+}
+
+input RatingSystemInput {
+  name: String!
+  size: Int!
+  subRatings: [SubRatingInput!]!
+  ratingSystemType: RatingSystemType!
+  discreteParam: DiscreteRatingSystemInput
+  continuousParam: ContinuousRatingSystemInput
+}
+
+input DiscreteRatingSystemInput {
+  labels: [String!]!
+}
+
+input ContinuousRatingSystemInput {
+  offset: Int!
+}
+
+input SubRatingInput {
+  id: ID!
+  name: String!
+  weight: Float!
+}
+
+enum RatingSystemType {
+    DISCRETE
+    CONTINUOUS
+}

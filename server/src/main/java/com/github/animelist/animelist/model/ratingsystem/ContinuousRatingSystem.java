@@ -3,8 +3,11 @@ package com.github.animelist.animelist.model.ratingsystem;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import static java.util.Collections.singletonList;
 
 @Document("ratingSystems")
 public class ContinuousRatingSystem extends RatingSystem {
@@ -85,4 +88,18 @@ public class ContinuousRatingSystem extends RatingSystem {
             return new ContinuousRatingSystem(id, name, ownerId, size, subRatings, offset);
         }
     }
+
+    public static final ContinuousRatingSystem TEN_POINT = ContinuousRatingSystem.builder()
+            .id("DEFAULT")
+            .name("10-Point Continuous")
+            .size(10)
+            .subRatings(singletonList(
+                    SubRating.builder()
+                            .id(0)
+                            .name("Score")
+                            .weight(1f)
+                            .build()
+            ))
+            .offset(1)
+            .build();
 }
