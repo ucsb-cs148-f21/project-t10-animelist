@@ -1,7 +1,7 @@
 import { Badge, Button, Heading, Icon, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
+import { useMeQuery, UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
 import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
 import { createApolloAnilist, initializeApolloAnilist, useApolloAnilist } from "../../utils/createApolloAnilist";
 import { Image } from "@chakra-ui/react"
@@ -22,6 +22,7 @@ interface IListItem {
 }
 
 const UserList: React.FC<UserListProps> = ({ userlist }) => {
+  const { data } = useMeQuery();
   const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
   const [listItems, setListItems] = useState<IListItem[]>([])
   const [page, setPage] = useState<number>(1);
