@@ -29,8 +29,8 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
 
     const validationSchema = Yup.object({
         name: Yup.string()
-          .min(3, 'Name must be at least 3 characters long')
-          .max(20, 'Name must be at most 20 characters long')
+          .min(1, 'Name must be at least 1 character long')
+          .max(50, 'Name must be at most 50 characters long')
           .required('Required'),
         type: Yup.string() // Either DISCRETE or CONTINUOUS
           .required('Required'),
@@ -91,15 +91,15 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
         </FormControl>
         
     
-        <FormControl isRequired>
+        <FormControl>
           <Stack spacing="24px">
             <Heading size="md">
             Customize the range</Heading>
           
             <FormLabel>Lower bound</FormLabel>
-            <Input id="lowerBound"placeholder="0"/>
+            <Input id="lowerBound" placeholder="0" isInvalid={formik.errors.lowerBound && formik.touched.lowerBound} isRequired/>
             <FormLabel>Upper bound</FormLabel>
-            <Input id="upperBound" placeholder="10"/>
+            <Input id="upperBound" placeholder="10" isInvalid={formik.errors.upperBound && formik.touched.upperBound} isRequired/>
           </Stack>
         </FormControl>
     

@@ -2,7 +2,7 @@ import { Heading, Container, Stack } from "@chakra-ui/react";
 import * as React from 'react';
 import CreateRatingSystemForm from "../components/ratingsystem/CreateRatingSystemForm";
 
-const Signup: React.FC<{}> = () => {
+const CreateRatingSystem: React.FC<{}> = () => {
 
   return (
     <Stack
@@ -19,4 +19,4 @@ const Signup: React.FC<{}> = () => {
   );
 };
 
-export default Signup;
+export default CreateRatingSystem;
