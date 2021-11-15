@@ -1,14 +1,16 @@
 import { 
     Input, 
     Radio, 
-    Stack, 
+    Stack,
+    VStack,
     Button,
     Heading,
     FormControl, 
     FormLabel,
     FormErrorMessage,
     FormHelperText,
-    RadioGroup
+    RadioGroup,
+    Center
 } from "@chakra-ui/react";
 
 import * as React from 'react';
@@ -62,28 +64,38 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
       }
     });
 
+    const [value, setValue] = React.useState("1");
+    const [value2, setValue2] = React.useState("1");
+
     return(
 
       <form onSubmit={formik.handleSubmit} id="createRatingSystem">
-
+        <Stack
+          spacing={{ base: 8, md: 8 }}
+        >
         <FormControl isInvalid={formik.errors.name && formik.touched.name} isRequired>
           <FormLabel>Name</FormLabel>
           <Input placeholder="MyRatingSystem" id="name"/>
         </FormControl>
     
         <FormControl isInvalid={formik.errors.type && formik.touched.type} isRequired>
-          <FormLabel>Type of rating system</FormLabel>
-          <RadioGroup>
-            <Stack>
-              <Radio id="CONTINUOUS">Continuous</Radio>
-              <Radio id="DISCRETE">Discrete</Radio>
-            </Stack>
-          </RadioGroup>
+          <Stack spacing="24px">
+            <FormLabel>Type of rating system</FormLabel>
+            <RadioGroup onChange={setValue} value={value}>
+              <Stack spacing="24px">
+                <Radio value="1" id="CONTINUOUS">Continuous</Radio>
+                <Radio value="2" id="DISCRETE">Discrete</Radio>
+              </Stack>
+            </RadioGroup>
+          </Stack>
         </FormControl>
+        
     
         <FormControl isRequired>
-          <Heading>Customize the range</Heading>
-          <Stack>
+          <Stack spacing="24px">
+            <Heading size="md">
+            Customize the range</Heading>
+          
             <FormLabel>Lower bound</FormLabel>
             <Input id="lowerBound"placeholder="0"/>
             <FormLabel>Upper bound</FormLabel>
@@ -92,26 +104,29 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
         </FormControl>
     
         <FormControl isRequired>
-          <FormLabel>Create your own subratings</FormLabel>
-          <RadioGroup>
+          <FormLabel>Create your own subratings?</FormLabel>
+          <RadioGroup onChange={setValue2} value={value2}>
             <Stack>
-              <Radio>Yes
+              <Radio value="1">Yes
                 <FormHelperText>(Must create at least 2)</FormHelperText>
               </Radio>
-              <Radio>No
+              <Radio value="2">No
                 <FormHelperText>(One will be created for you)</FormHelperText>
               </Radio>
             </Stack>
           </RadioGroup>
         </FormControl>
 
-        <Button
-          mt={6}
-          isLoading={formik.isSubmitting}
-          type="submit"
-        >
-        Create Rating System
-        </Button>
+        <Center>
+          <Button
+            mt={6}
+            isLoading={formik.isSubmitting}
+            type="submit"
+          >
+          Create Rating System
+          </Button>
+        </Center>
+        </Stack>
       </form>
     );
 };

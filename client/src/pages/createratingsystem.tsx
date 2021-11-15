@@ -8,7 +8,7 @@ const Signup: React.FC<{}> = () => {
     <Stack
       as={Container}
       spacing={{ base: 8, md: 14 }}
-      py={{ base: 20, md: 36 }}
+      py={{ base: 20, md: 20 }}
       maxWidth="3xl"
     >
       <Heading>
