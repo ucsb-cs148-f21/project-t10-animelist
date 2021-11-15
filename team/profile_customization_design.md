@@ -94,9 +94,11 @@ The input types exist in GraphQL-land and are how the objects will be stored in 
 
 **ProfilePageInput:**
 
+The profile page input defines only one field: a two-dimensional array of blocks, where the first level is an array of rows and the second level is an array of blocks within the row.
+
 ```graphql
 input ProfilePageInput {
-  blocks: [[BlockInput!]!]
+  blocks: [[BlockInput!]!]!
 }
 ```
 
@@ -131,12 +133,11 @@ input UserListBlockInput {
 input TextBlockInput {
   text: String!
 }
-
 ```
 
 ### 4.2. Output Types
 
-These output types are similar to the input types. However, rather than having a single type for all blocks, we have a Block interface that each specific block implements. 
+These output types are similar to the input types. However, rather than having a single type for all blocks, we have a Block interface that each specific block implements. To handle queries for the profile page, our backend should read the `type` field on each block and return the appropriate `Block` type while adding any additional fields as necessary, such as the `userList` field for a UserListBlock.
 
 ```graphql
 interface Block {
@@ -160,6 +161,8 @@ type TextBlock implements Block {
 type StatisticsBlock implements Block {
   width: Width!
   type: BlockType!
+  entries: Int!
+  avgRating: Int!
 }
 
 type SpacerBlock implements Block {
