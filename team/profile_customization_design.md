@@ -46,7 +46,7 @@ To support this, we should create a new GraphQL query that allows querying vario
 
 For simplicity, the initial implementation can have fixed statistics displayed, but future implementations could allow customizing the display order of the statistics themselves, as well as which ones are displayed.
 
-Metadata for this block typcde (initial implementation):
+Metadata for this block type (initial implementation):
 
 * None
 
@@ -74,7 +74,7 @@ Upon exiting the editing mode, we will send a request to the backend to update t
 
 #### 3.2.1. Adding a Block
 
-To add a new block, the user will click an "add block" button, choosing between the different types of blocks. After adding a block, they will be able to edit the fields for that block.
+To add a new block, the user will click an "add block" button, choosing between the different types of blocks. After adding a block, they will be able to view and edit the corresponding metadata fields for that block.
 
 #### 3.2.2. Removing a Block
 
@@ -85,3 +85,89 @@ To remove a block, we will remove the corresponding block in the local array rep
 To rearrange blocks, we will rearrange them in the internal array representation of the profile page. We should provide some drag-and-drop functionality or at the very least arrow buttons to move them up and down or left and right.
 
 ## 4. Data Structures
+
+The blocks require a fairly complex set of data structures to represent them. These will be split into *input types* and *output types*, which will each be explained.
+
+### 4.1. Input Types
+
+The input types exist in GraphQL-land and are how the objects will be stored in the database.
+
+**ProfilePageInput:**
+
+```graphql
+input ProfilePageInput {
+  blocks: [[BlockInput!]!]
+}
+```
+
+**Block Inputs:**
+
+The input types use an enum to indicate the type of the block, then provide the block-specific details as an optional nested object. This is due to limitations of the current GraphQL input typing system (no input unions or interfaces, so the input needs to be a single type.)
+
+```graphql
+input BlockInput {
+  width: Width!
+  type: BlockType!
+  userListBlockInput: UserListBlockInput
+  textBlockInput: TextBlockInput
+}
+
+enum Width {
+  FULL
+}
+
+enum BlockType {
+  USERLIST
+  TEXT
+  STATISTICS
+  SPACER
+}
+
+input UserListBlockInput {
+  listId: ID!
+  maxEntries: Int
+}
+
+input TextBlockInput {
+  text: String!
+}
+
+```
+
+### 4.2. Output Types
+
+These output types are similar to the input types. However, rather than having a single type for all blocks, we have a Block interface that each specific block implements. 
+
+```graphql
+interface Block {
+  width: Width!
+  type: BlockType!
+}
+
+type UserListBlock implements Block {
+  width: Width!
+  type: BlockType!
+  userListBlockInput: UserListBlockInput!
+  userList: UserList!
+}
+
+type TextBlock implements Block {
+  width: Width!
+  type: BlockType!
+  textBlockInput: TextBlockInput!
+}
+
+type StatisticsBlock implements Block {
+  width: Width!
+  type: BlockType!
+}
+
+type SpacerBlock implements Block {
+  width: Width!
+  type: BlockType!
+}
+```
+
+Note that each block contains all of the information necessary to display it. For example, the UserListBlock contains the actual user list data, not just the ID of the user list it corresponds to.
+
+Each block also contains the same `type` field as a BlockInput. This information is redundant in these output types since the GraphQL type now also encodes the block type information. For example, any statistics block will be returned as a StatisticsBlock, so we can tell it's a statistics block based on the type name. However, keeping this `type` field allows us to reuse the queried "output" blocks as block inputs, without needing to readd the type field.
