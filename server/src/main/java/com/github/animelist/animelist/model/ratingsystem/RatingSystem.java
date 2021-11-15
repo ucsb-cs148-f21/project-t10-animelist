@@ -1,5 +1,8 @@
 package com.github.animelist.animelist.model.ratingsystem;
 
+import com.github.animelist.animelist.model.userlist.UserListItem;
+import com.github.animelist.animelist.model.userlist.UserListRating;
+import com.github.animelist.animelist.model.userlist.UserListSubRating;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -8,6 +11,9 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Objects.nonNull;
 
@@ -44,6 +50,17 @@ public abstract class RatingSystem {
         var difference = WEIGHT_SUM_EXPECTED - weightSum;
         Assert.isTrue(difference >= 0 && difference <= WEIGHT_SUM_EPSILON, "subRatings weight sum must sum up to 1");
         Assert.isTrue(name.matches("^[a-zA-Z0-9]+(?:[\\w -]*[a-zA-Z0-9]+)*$"),"Name must be AlphaNumeric");
+    }
+
+    public abstract UserListRating score(final List<UserListSubRating> userListSubRatings);
+
+    protected double scoreInternal(final List<UserListSubRating> userListSubRatings) {
+        Assert.isTrue(userListSubRatings.size() == this.subRatings.size(), "Amount of subratings does not match");
+        userListSubRatings.forEach(item -> Assert.isTrue(item.getRating() >= 0 && item.getRating() <= this.size, "Subratings have out of range ratings"));
+
+        // 1-to-1 mapping by the indexes instead of using ids
+        return IntStream.range(0, this.subRatings.size()).boxed()
+                .reduce(0d, (total, idx) -> total + this.subRatings.get(idx).getWeight() * userListSubRatings.get(idx).getRating(), Double::sum);
     }
 
     @Override
@@ -96,6 +113,9 @@ public abstract class RatingSystem {
     }
 
     public void setSubRatings(List<SubRating> subRatings) {
+        // assign each to an id corresponding to list indexes
+        IntStream.range(0, subRatings.size())
+                .forEach(idx -> subRatings.get(idx).setId(idx));
         this.subRatings = subRatings;
     }
 

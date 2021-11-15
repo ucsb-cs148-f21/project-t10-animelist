@@ -13,7 +13,7 @@ type UserListItem {
 
 type UserListRating {
   displayRating: String!
-  rating: Int!
+  rating: Float!
   subRatings: [UserListSubRating!]!
 }
 

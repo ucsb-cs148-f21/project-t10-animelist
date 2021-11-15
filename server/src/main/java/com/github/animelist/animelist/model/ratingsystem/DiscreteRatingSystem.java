@@ -1,11 +1,15 @@
 package com.github.animelist.animelist.model.ratingsystem;
 
+import com.github.animelist.animelist.model.userlist.UserListRating;
+import com.github.animelist.animelist.model.userlist.UserListSubRating;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Objects.nonNull;
 
@@ -28,6 +32,30 @@ public class DiscreteRatingSystem extends RatingSystem {
 
     public void setLabels(List<String> labels) {
         this.labels = labels;
+    }
+
+    @Override
+    public UserListRating score(List<UserListSubRating> userListSubRatings) {
+        final double internal = this.scoreInternal(userListSubRatings);
+        int discreteInternalScore = (int) Math.round(internal);
+        final String label = labels.get(discreteInternalScore);
+
+        var subRatings = IntStream.range(0, userListSubRatings.size())
+                .boxed().map(idx -> {
+                    var userListSubRating = userListSubRatings.get(idx);
+
+                    return UserListSubRating.builder()
+                            .id(idx)
+                            .displayRating(labels.get(userListSubRating.getRating()))
+                            .rating(userListSubRating.getRating())
+                            .build();
+                }).collect(Collectors.toList());
+
+        return UserListRating.builder()
+                .rating(internal)
+                .displayRating(label)
+                .subRatings(subRatings)
+                .build();
     }
 
     @Override

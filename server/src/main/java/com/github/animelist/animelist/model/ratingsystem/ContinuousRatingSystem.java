@@ -1,12 +1,18 @@
 package com.github.animelist.animelist.model.ratingsystem;
 
+import com.github.animelist.animelist.model.userlist.UserListRating;
+import com.github.animelist.animelist.model.userlist.UserListSubRating;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Collections.singletonList;
 
@@ -27,6 +33,31 @@ public class ContinuousRatingSystem extends RatingSystem {
 
     public void setOffset(Integer offset) {
         this.offset = offset;
+    }
+
+    @Override
+    public UserListRating score(List<UserListSubRating> userListSubRatings) {
+        final double internal = this.scoreInternal(userListSubRatings);
+
+        final var decimalFormat = new DecimalFormat("0.00");
+        decimalFormat.setRoundingMode(RoundingMode.UP);
+
+        var subRatings = IntStream.range(0, userListSubRatings.size())
+                .boxed().map(idx -> {
+                    var userListSubRating = userListSubRatings.get(idx);
+
+                    return UserListSubRating.builder()
+                            .id(idx)
+                            .displayRating(String.valueOf(userListSubRating.getRating() + offset))
+                            .rating(userListSubRating.getRating())
+                            .build();
+                }).collect(Collectors.toList());
+
+        return UserListRating.builder()
+                .rating(internal)
+                .displayRating(decimalFormat.format(internal + offset))
+                .subRatings(subRatings)
+                .build();
     }
 
     @Override
