@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.nonNull;
 
 @Document("ratingSystems")
@@ -119,4 +121,18 @@ public class DiscreteRatingSystem extends RatingSystem {
             return new DiscreteRatingSystem(id, name, ownerId, size, subRatings, labels);
         }
     }
+
+    public static final DiscreteRatingSystem TEN_POINT = DiscreteRatingSystem.builder()
+            .id("DEFAULT")
+            .name("10-Point Discrete")
+            .size(10)
+            .subRatings(singletonList(
+                    SubRating.builder()
+                            .id(0)
+                            .name("Score")
+                            .weight(1f)
+                            .build()
+            ))
+            .labels(asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+            .build();
 }
