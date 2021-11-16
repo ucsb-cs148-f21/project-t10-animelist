@@ -12,7 +12,7 @@ const CreateRatingSystem: React.FC<{}> = () => {
       maxWidth="3xl"
     >
       <Heading>
-        Create a Rating System
+        Create Your Own Rating System
       </Heading>
       <CreateRatingSystemForm/>
     </Stack>

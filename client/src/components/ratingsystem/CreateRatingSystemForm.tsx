@@ -10,7 +10,12 @@ import {
     FormErrorMessage,
     FormHelperText,
     RadioGroup,
-    Center
+    Center,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper
 } from "@chakra-ui/react";
 
 import * as React from 'react';
@@ -24,6 +29,30 @@ import * as Yup from 'yup';
 // labels: [String!]!
 // subrating: String!
 // subratings: [Subrating!]!
+
+function showLabels(){
+  // For Discrete Rating System
+  var x = document.getElementById("labels") as HTMLElement;
+  x.style.display = "block";
+}
+
+function hideLabels(){
+  // For Continuous Rating System
+  var x = document.getElementById("labels") as HTMLElement;
+    x.style.display = "none";
+}
+
+function showSubratings(){
+  // For Discrete Rating System
+  var x = document.getElementById("subratings") as HTMLElement;
+  x.style.display = "block";
+}
+
+function hideSubratings(){
+  // For Continuous Rating System
+  var x = document.getElementById("subratings") as HTMLElement;
+    x.style.display = "none";
+}
 
 const CreateRatingSystemForm: React.FC<{}> = () => {
 
@@ -64,8 +93,9 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
       }
     });
 
-    const [value, setValue] = React.useState("1");
-    const [value2, setValue2] = React.useState("1");
+    // Temp values for radios
+    const [valueType, setValueType] = React.useState("1");
+    const [valueSub, setValueSub] = React.useState("1");
 
     return(
 
@@ -73,23 +103,39 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
         <Stack
           spacing={{ base: 8, md: 8 }}
         >
-        <FormControl isInvalid={formik.errors.name && formik.touched.name} isRequired>
+        <FormControl isRequired>
           <FormLabel>Name</FormLabel>
           <Input placeholder="MyRatingSystem" id="name"/>
         </FormControl>
     
-        <FormControl isInvalid={formik.errors.type && formik.touched.type} isRequired>
-          <Stack spacing="24px">
+        <FormControl>
+          <Stack
+            spacing="16px"
+            maxW="lg"
+          >
             <FormLabel>Type of rating system</FormLabel>
-            <RadioGroup onChange={setValue} value={value}>
-              <Stack spacing="24px">
-                <Radio value="1" id="CONTINUOUS">Continuous</Radio>
-                <Radio value="2" id="DISCRETE">Discrete</Radio>
+            <RadioGroup id="type" onChange={setValueType} value={valueType}>
+              <Stack spacing="16px">
+                <Radio
+                  size="lg" 
+                  onChange={hideLabels} 
+                  value="1" 
+                  name="CONTINUOUS"
+                >
+                  Continuous
+                </Radio>
+                <Radio 
+                  size="lg" 
+                  onChange={showLabels} 
+                  value="2" 
+                  name="DISCRETE"
+                >
+                  Discrete
+                </Radio>
               </Stack>
             </RadioGroup>
           </Stack>
         </FormControl>
-        
     
         <FormControl>
           <Stack spacing="24px">
@@ -97,25 +143,92 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
             Customize the range</Heading>
           
             <FormLabel>Lower bound</FormLabel>
-            <Input id="lowerBound" placeholder="0" isInvalid={formik.errors.lowerBound && formik.touched.lowerBound} isRequired/>
+            <NumberInput
+              defaultValue="0"
+              id="lowerBound"
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+
             <FormLabel>Upper bound</FormLabel>
-            <Input id="upperBound" placeholder="10" isInvalid={formik.errors.upperBound && formik.touched.upperBound} isRequired/>
+            <NumberInput
+              defaultValue="10"
+              id="upperBound"
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
           </Stack>
         </FormControl>
+
+        <Stack 
+          id="labels"
+          spacing={{ base: 4, md: 4 }}
+          style={{display: "none"}}
+        >
+          <Heading size="md"> Assign labels to your discrete rating system</Heading>
+          <Button
+            mt={6}
+            type="button"
+            maxW="200px"
+            padding="15px"
+          >
+            Assign Labels
+          </Button>
+        </Stack>
     
-        <FormControl isRequired>
-          <FormLabel>Create your own subratings?</FormLabel>
-          <RadioGroup onChange={setValue2} value={value2}>
-            <Stack>
-              <Radio value="1">Yes
-                <FormHelperText>(Must create at least 2)</FormHelperText>
-              </Radio>
-              <Radio value="2">No
-                <FormHelperText>(One will be created for you)</FormHelperText>
-              </Radio>
-            </Stack>
-          </RadioGroup>
+        <FormControl>
+          <Stack
+            spacing="16px"
+            maxW="lg"
+          >
+            <FormLabel>Create your own subratings?</FormLabel>
+            <RadioGroup onChange={setValueSub} value={valueSub}>
+              <Stack>
+                <Radio 
+                  value="1"
+                  size="lg" 
+                  onChange={hideSubratings}
+                >
+                  No
+                </Radio>
+                <FormHelperText px={{ md: 7 }}>(One will be created for you)</FormHelperText>
+
+                <Radio 
+                  size="lg" 
+                  value="2"
+                  onChange={showSubratings}
+                >
+                  Yes
+                </Radio>
+                <FormHelperText px={{ md: 7 }}>(Must create at least 2)</FormHelperText>
+              </Stack>
+            </RadioGroup>
+          </Stack>
         </FormControl>
+
+        <Stack 
+          id="subratings"
+          spacing={{ base: 4, md: 4 }}
+          style={{display: "none"}}
+        >
+          <Heading size="md"> Create your own subratings</Heading>
+          <Button
+            mt={6}
+            type="button"
+            maxW="200px"
+            padding="15px"
+          >
+            Create Subratings
+          </Button>
+        </Stack>
 
         <Center>
           <Button
