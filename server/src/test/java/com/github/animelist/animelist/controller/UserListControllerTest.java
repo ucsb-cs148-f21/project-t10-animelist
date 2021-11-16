@@ -19,6 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Optional;
+
 import static com.github.animelist.animelist.util.TestUtil.TEST_USERNAME;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -69,7 +71,7 @@ public class UserListControllerTest {
                         .build())
                 .build();
 
-        when(userListService.addItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(true);
+        when(userListService.addItem(EXPECTED_OWNER_ID.toString(), input)).thenReturn(Optional.of(expected));
 
         final var actual = userListController.addUserListItem(input);
 
@@ -91,7 +93,7 @@ public class UserListControllerTest {
                         .build())
                 .build();
 
-        when(userListService.addItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(false);
+        when(userListService.addItem(EXPECTED_OWNER_ID.toString(), input)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> userListController.addUserListItem(input));
     }
@@ -104,14 +106,9 @@ public class UserListControllerTest {
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
-                .rating(UserListRating.builder()
-                        .rating(0)
-                        .displayRating("STUB")
-                        .subRatings(input.subRatings())
-                        .build())
                 .build();
 
-        when(userListService.updateItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(true);
+        when(userListService.updateItem(EXPECTED_OWNER_ID.toString(), input)).thenReturn(Optional.of(expected));
 
         final var actual = userListController.updateUserListItem(input);
 
@@ -126,16 +123,7 @@ public class UserListControllerTest {
         final var expected = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
-                .rating(UserListRating.builder()
-                        .rating(0)
-                        .displayRating("STUB")
-                        .subRatings(input.subRatings())
-                        .build())
                 .build();
-
-        when(userListService.updateItem(listId, EXPECTED_OWNER_ID.toString(), expected)).thenReturn(true);
-
-        final var actual = userListController.updateUserListItem(input);
 
         assertThrows(RuntimeException.class, () -> userListController.addUserListItem(input));
     }

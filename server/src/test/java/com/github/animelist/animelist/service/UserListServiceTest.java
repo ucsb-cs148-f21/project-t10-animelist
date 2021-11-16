@@ -1,5 +1,6 @@
 package com.github.animelist.animelist.service;
 
+import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.SubRating;
 import com.github.animelist.animelist.model.userlist.UserList;
@@ -17,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -117,6 +119,8 @@ public class UserListServiceTest {
         final var expectedUserListId = new ObjectId();
         final var expectedOwnerId = new ObjectId();
 
+        final var userListInput = new UserListItemInput(expectedUserListId.toString(), 1234, WatchStatus.PLAN_TO_WATCH, null);
+
         final var expectedUserListItem = UserListItem.builder()
                 .mediaID(1234)
                 .watchStatus(WatchStatus.PLAN_TO_WATCH)
@@ -132,19 +136,22 @@ public class UserListServiceTest {
         var updateResult = mock(UpdateResult.class);
         when(updateResult.getMatchedCount()).thenReturn(1L);
 
+        when(mongoTemplate.findById(expectedUserListId, UserList.class)).thenReturn(UserList.builder().ratingSystem(ContinuousRatingSystem.TEN_POINT).build());
         when(mongoTemplate.updateFirst(any(), any(), eq(UserList.class)))
                 .thenReturn(updateResult);
 
-        boolean expected = userListService.addItem(expectedUserListId.toString(), expectedOwnerId.toString(), expectedUserListItem);
+        final Optional<UserListItem> actual = userListService.addItem(expectedOwnerId.toString(), userListInput);
 
         verify(mongoTemplate, times(1)).updateFirst(eq(expectedQuery), eq(expectedUpdate), eq(UserList.class));
-        assertThat(expected, is(true));
+        assertThat(actual.get(), is(expectedUserListItem));
     }
 
     @Test
     public void updateItem_happy() {
         final var expectedUserListId = new ObjectId();
         final var expectedOwnerId = new ObjectId();
+
+        final var userListInput = new UserListItemInput(expectedUserListId.toString(), 1234, WatchStatus.PLAN_TO_WATCH, null);
 
         final var expectedUserListItem = UserListItem.builder()
                 .mediaID(1234)
@@ -161,11 +168,12 @@ public class UserListServiceTest {
         var updateResult = mock(UpdateResult.class);
         when(updateResult.getMatchedCount()).thenReturn(1L);
 
+        when(mongoTemplate.findById(expectedUserListId, UserList.class)).thenReturn(UserList.builder().ratingSystem(ContinuousRatingSystem.TEN_POINT).build());
         when(mongoTemplate.updateFirst(any(), any(), eq(UserList.class))).thenReturn(updateResult);
 
-        boolean expected = userListService.updateItem(expectedUserListId.toString(), expectedOwnerId.toString(), expectedUserListItem);
+        Optional<UserListItem> actual = userListService.updateItem(expectedOwnerId.toString(), userListInput);
 
         verify(mongoTemplate, times(1)).updateFirst(eq(expectedQuery), eq(expectedUpdate), eq(UserList.class));
-        assertThat(expected, is(true));
+        assertThat(actual.get(), is(expectedUserListItem));
     }
 }
