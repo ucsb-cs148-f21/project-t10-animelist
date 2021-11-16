@@ -10,26 +10,15 @@ import com.github.animelist.animelist.model.ratingsystem.DiscreteRatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.SubRating;
 import com.github.animelist.animelist.service.RatingSystemService;
-import com.github.animelist.animelist.service.RefreshTokenService;
-import com.github.animelist.animelist.service.UserService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import javax.validation.constraints.Null;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,8 +26,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.github.animelist.animelist.util.TestUtil.TEST_ID;
 import static com.github.animelist.animelist.util.TestUtil.TEST_USERNAME;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -74,14 +65,20 @@ public class RatingSystemControllerTest {
     void createDiscreteRatingSystem_happy() {
         mockAuthenticationPrincipal();
         final DiscreteRatingSystemInput discreteInput = new DiscreteRatingSystemInput(Arrays.asList("one","two","three"));
-        final RatingSystemInput input = new RatingSystemInput("Test",10,Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()), RatingSystemType.DISCRETE,discreteInput,null);
+        final RatingSystemInput input = new RatingSystemInput(
+                "Test",
+                3,
+                Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()),
+                RatingSystemType.DISCRETE,
+                discreteInput,
+                null);
         final RatingSystem expected = DiscreteRatingSystem.builder()
                 .id(new ObjectId().toString())
                 .name("Test")
                 .ownerId(new ObjectId())
-                .size(10)
+                .size(3)
                 .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
-                .labels(IntStream.range(1, 11).mapToObj(String::valueOf).collect(Collectors.toList()))
+                .labels(IntStream.range(1, 4).mapToObj(String::valueOf).collect(Collectors.toList()))
                 .build();
         when(ratingSystemService.createRatingSystem(any())).thenReturn(expected);
 
