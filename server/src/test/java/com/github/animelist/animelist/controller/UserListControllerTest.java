@@ -46,7 +46,7 @@ public class UserListControllerTest {
         final UserList expectedUserList = UserList.builder()
                 .name("Test")
                 .ownerId(EXPECTED_OWNER_ID)
-                .ratingSystem(ContinuousRatingSystem.TEN_POINT)
+                .ratingSystem(ContinuousRatingSystem.TEN_POINT())
                 .build();
 
         when(userListService.createUserList(expectedUserList)).thenReturn(expectedUserList);

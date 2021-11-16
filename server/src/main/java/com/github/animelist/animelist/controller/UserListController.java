@@ -45,7 +45,7 @@ public class UserListController {
         final var userList = UserList.builder()
                 .name(input.name())
                 .ownerId(new ObjectId(userDetails.getId()))
-                .ratingSystem(ContinuousRatingSystem.TEN_POINT)
+                .ratingSystem(ContinuousRatingSystem.TEN_POINT())
                 .build();
 
         return userListService.createUserList(userList);

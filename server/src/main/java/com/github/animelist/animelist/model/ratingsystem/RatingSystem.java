@@ -56,7 +56,7 @@ public abstract class RatingSystem {
 
     protected double scoreInternal(final List<UserListSubRating> userListSubRatings) {
         Assert.isTrue(userListSubRatings.size() == this.subRatings.size(), "Amount of subratings does not match");
-        userListSubRatings.forEach(item -> Assert.isTrue(item.getRating() >= 0 && item.getRating() <= this.size, "Subratings have out of range ratings"));
+        userListSubRatings.forEach(item -> Assert.isTrue(item.getRating() >= 0 && item.getRating() < this.size, "Subratings have out of range ratings"));
 
         // 1-to-1 mapping by the indexes instead of using ids
         return IntStream.range(0, this.subRatings.size()).boxed()

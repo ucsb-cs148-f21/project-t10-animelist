@@ -122,17 +122,19 @@ public class ContinuousRatingSystem extends RatingSystem {
         }
     }
 
-    public static final ContinuousRatingSystem TEN_POINT = ContinuousRatingSystem.builder()
-            .id("DEFAULT")
-            .name("10-Point Continuous")
-            .size(10)
-            .subRatings(singletonList(
-                    SubRating.builder()
-                            .id(0)
-                            .name("Score")
-                            .weight(1f)
-                            .build()
-            ))
-            .offset(1)
-            .build();
+    public static ContinuousRatingSystem TEN_POINT() {
+        return ContinuousRatingSystem.builder()
+                .id("DEFAULT")
+                .name("10-Point Continuous")
+                .size(10)
+                .subRatings(singletonList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("Score")
+                                .weight(1f)
+                                .build()
+                ))
+                .offset(1)
+                .build();
+    }
 }

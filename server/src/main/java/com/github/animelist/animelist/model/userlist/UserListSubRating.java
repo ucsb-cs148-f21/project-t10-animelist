@@ -10,6 +10,15 @@ public class UserListSubRating {
 
     private Integer rating;
 
+    @Override
+    public String toString() {
+        return "UserListSubRating{" +
+                "id=" + id +
+                ", displayRating='" + displayRating + '\'' +
+                ", rating=" + rating +
+                '}';
+    }
+
     public UserListSubRating(Integer id, String displayRating, Integer rating) {
         this.id = id;
         this.displayRating = displayRating;

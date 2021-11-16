@@ -136,7 +136,7 @@ public class UserListServiceTest {
         var updateResult = mock(UpdateResult.class);
         when(updateResult.getMatchedCount()).thenReturn(1L);
 
-        when(mongoTemplate.findById(expectedUserListId, UserList.class)).thenReturn(UserList.builder().ratingSystem(ContinuousRatingSystem.TEN_POINT).build());
+        when(mongoTemplate.findById(expectedUserListId, UserList.class)).thenReturn(UserList.builder().ratingSystem(ContinuousRatingSystem.TEN_POINT()).build());
         when(mongoTemplate.updateFirst(any(), any(), eq(UserList.class)))
                 .thenReturn(updateResult);
 
@@ -168,7 +168,7 @@ public class UserListServiceTest {
         var updateResult = mock(UpdateResult.class);
         when(updateResult.getMatchedCount()).thenReturn(1L);
 
-        when(mongoTemplate.findById(expectedUserListId, UserList.class)).thenReturn(UserList.builder().ratingSystem(ContinuousRatingSystem.TEN_POINT).build());
+        when(mongoTemplate.findById(expectedUserListId, UserList.class)).thenReturn(UserList.builder().ratingSystem(ContinuousRatingSystem.TEN_POINT()).build());
         when(mongoTemplate.updateFirst(any(), any(), eq(UserList.class))).thenReturn(updateResult);
 
         Optional<UserListItem> actual = userListService.updateItem(expectedOwnerId.toString(), userListInput);

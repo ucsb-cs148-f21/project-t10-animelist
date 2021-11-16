@@ -54,7 +54,7 @@ public class DiscreteRatingSystem extends RatingSystem {
                 }).collect(Collectors.toList());
 
         return UserListRating.builder()
-                .rating(internal)
+                .rating(discreteInternalScore)
                 .displayRating(label)
                 .subRatings(subRatings)
                 .build();
@@ -122,17 +122,19 @@ public class DiscreteRatingSystem extends RatingSystem {
         }
     }
 
-    public static final DiscreteRatingSystem TEN_POINT = DiscreteRatingSystem.builder()
-            .id("DEFAULT")
-            .name("10-Point Discrete")
-            .size(10)
-            .subRatings(singletonList(
-                    SubRating.builder()
-                            .id(0)
-                            .name("Score")
-                            .weight(1f)
-                            .build()
-            ))
-            .labels(asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
-            .build();
+    public static DiscreteRatingSystem TEN_POINT() {
+        return DiscreteRatingSystem.builder()
+                .id("DEFAULT")
+                .name("10-Point Discrete")
+                .size(10)
+                .subRatings(singletonList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("Score")
+                                .weight(1f)
+                                .build()
+                ))
+                .labels(asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+                .build();
+    }
 }

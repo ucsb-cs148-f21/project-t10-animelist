@@ -18,6 +18,15 @@ public class UserListRating {
     }
 
     @Override
+    public String toString() {
+        return "UserListRating{" +
+                "displayRating='" + displayRating + '\'' +
+                ", rating=" + rating +
+                ", subRatings=" + subRatings +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
