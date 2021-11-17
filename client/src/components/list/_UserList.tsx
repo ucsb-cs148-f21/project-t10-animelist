@@ -74,10 +74,17 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
     )
   }
 
+  function loginCheck() {
+    var x = document.getElementById("guest");
+    if (data == null) {
+      x.style.display = "none";
+    }
+  }
+
   return (
     <VStack width="full" p={6} maxWidth="6xl">
       <Heading>{userlist.name}</Heading>
-      <Button alignSelf="flex-end">Add Anime</Button>
+      <Button id="guest" alignSelf="flex-end" onClick={loginCheck}>Add Anime</Button>
       <Table>
         <Thead>
           <Tr>
