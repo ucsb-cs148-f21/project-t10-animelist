@@ -30,26 +30,26 @@ import * as Yup from 'yup';
 // subrating: String!
 // subratings: [Subrating!]!
 
-function showLabels(){
-  // For Discrete Rating System
+function contElements(){
   var x = document.getElementById("labels") as HTMLElement;
-  x.style.display = "block";
+  x.style.display = "none";
+  var y = document.getElementById("range") as HTMLElement;
+  y.style.display = "block"
 }
 
-function hideLabels(){
-  // For Continuous Rating System
+function discElements(){
   var x = document.getElementById("labels") as HTMLElement;
-    x.style.display = "none";
+  x.style.display = "block";
+  var y = document.getElementById("range") as HTMLElement;
+  y.style.display = "none"
 }
 
 function showSubratings(){
-  // For Discrete Rating System
   var x = document.getElementById("subratings") as HTMLElement;
   x.style.display = "block";
 }
 
 function hideSubratings(){
-  // For Continuous Rating System
   var x = document.getElementById("subratings") as HTMLElement;
     x.style.display = "none";
 }
@@ -96,12 +96,18 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
     // Temp values for radios
     const [valueType, setValueType] = React.useState("1");
     const [valueSub, setValueSub] = React.useState("1");
+    const [lower, setLower] = React.useState(0);
+    const setL = (lower) => setLower(lower);
+    const [upper, setUpper] = React.useState(10);
+    const setU = (upper) => setUpper(upper);
+    let upper2 = +upper - +1;
+    let lower2 = +lower + +1;
 
     return(
 
       <form onSubmit={formik.handleSubmit} id="createRatingSystem">
         <Stack
-          spacing={{ base: 8, md: 8 }}
+          spacing={{ base: 8, md: 6 }}
         >
         <FormControl isRequired>
           <FormLabel>Name</FormLabel>
@@ -118,7 +124,7 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
               <Stack spacing="16px">
                 <Radio
                   size="lg" 
-                  onChange={hideLabels} 
+                  onChange={contElements} 
                   value="1" 
                   name="CONTINUOUS"
                 >
@@ -126,7 +132,7 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
                 </Radio>
                 <Radio 
                   size="lg" 
-                  onChange={showLabels} 
+                  onChange={discElements} 
                   value="2" 
                   name="DISCRETE"
                 >
@@ -137,14 +143,18 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
           </Stack>
         </FormControl>
     
+        <Stack id="range">
         <FormControl>
           <Stack spacing="24px">
-            <Heading size="md">
-            Customize the range</Heading>
+
+            <Heading size="md">Customize the scores</Heading>
           
-            <FormLabel>Lower bound</FormLabel>
+            <FormLabel>Lowest Score</FormLabel>
             <NumberInput
-              defaultValue="0"
+              value={lower}
+              max={upper2}
+              onChange={setL}
+              precision={0}
               id="lowerBound"
             >
               <NumberInputField />
@@ -154,9 +164,12 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
               </NumberInputStepper>
             </NumberInput>
 
-            <FormLabel>Upper bound</FormLabel>
+            <FormLabel>Highest Score</FormLabel>
             <NumberInput
-              defaultValue="10"
+              value={upper}
+              min={lower2}
+              onChange={setU}
+              precision={0}
               id="upperBound"
             >
               <NumberInputField />
@@ -167,10 +180,11 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
             </NumberInput>
           </Stack>
         </FormControl>
+        </Stack>
 
         <Stack 
           id="labels"
-          spacing={{ base: 4, md: 4 }}
+          spacing={{ base: 4, md: 6 }}
           style={{display: "none"}}
         >
           <Heading size="md"> Assign labels to your discrete rating system</Heading>
