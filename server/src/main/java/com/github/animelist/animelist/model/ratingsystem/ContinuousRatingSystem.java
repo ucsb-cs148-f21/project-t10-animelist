@@ -40,7 +40,7 @@ public class ContinuousRatingSystem extends RatingSystem {
         final double internal = this.scoreInternal(userListSubRatings);
 
         final var decimalFormat = new DecimalFormat("0.00");
-        decimalFormat.setRoundingMode(RoundingMode.UP);
+        decimalFormat.setRoundingMode(RoundingMode.HALF_UP);
 
         var subRatings = IntStream.range(0, userListSubRatings.size())
                 .boxed().map(idx -> {
@@ -48,7 +48,7 @@ public class ContinuousRatingSystem extends RatingSystem {
 
                     return UserListSubRating.builder()
                             .id(idx)
-                            .displayRating(String.valueOf(userListSubRating.getRating() + offset))
+                            .displayRating(decimalFormat.format(userListSubRating.getRating() + offset))
                             .rating(userListSubRating.getRating())
                             .build();
                 }).collect(Collectors.toList());
@@ -126,7 +126,7 @@ public class ContinuousRatingSystem extends RatingSystem {
         return ContinuousRatingSystem.builder()
                 .id("DEFAULT")
                 .name("10-Point Continuous")
-                .size(10)
+                .size(11)
                 .subRatings(singletonList(
                         SubRating.builder()
                                 .id(0)
@@ -134,7 +134,7 @@ public class ContinuousRatingSystem extends RatingSystem {
                                 .weight(1f)
                                 .build()
                 ))
-                .offset(1)
+                .offset(0)
                 .build();
     }
 }

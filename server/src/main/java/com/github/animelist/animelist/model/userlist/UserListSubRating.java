@@ -8,7 +8,7 @@ public class UserListSubRating {
 
     private String displayRating;
 
-    private Integer rating;
+    private Double rating;
 
     @Override
     public String toString() {
@@ -19,7 +19,7 @@ public class UserListSubRating {
                 '}';
     }
 
-    public UserListSubRating(Integer id, String displayRating, Integer rating) {
+    public UserListSubRating(Integer id, String displayRating, Double rating) {
         this.id = id;
         this.displayRating = displayRating;
         this.rating = rating;
@@ -54,11 +54,11 @@ public class UserListSubRating {
         this.displayRating = displayRating;
     }
 
-    public Integer getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
@@ -69,7 +69,7 @@ public class UserListSubRating {
     public static class Builder {
         private Integer id;
         private String displayRating;
-        private Integer rating;
+        private Double rating;
 
         public Builder id(Integer id) {
             this.id = id;
@@ -81,7 +81,7 @@ public class UserListSubRating {
             return this;
         }
 
-        public Builder rating(Integer rating) {
+        public Builder rating(double rating) {
             this.rating = rating;
             return this;
         }

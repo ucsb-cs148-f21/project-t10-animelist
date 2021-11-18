@@ -54,13 +54,30 @@ public abstract class RatingSystem {
 
     public abstract UserListRating score(final List<UserListSubRating> userListSubRatings);
 
+    public UserListRating convert(final RatingSystem from, final UserListRating rating) {
+        final double ranking = (rating.getRating() / (from.getMaxInternalScore()));
+        final double internalScore = ranking * (this.getMaxInternalScore());
+
+        final List<UserListSubRating> newSubRatings = this.getSubRatings().stream()
+                .map(subRating -> UserListSubRating.builder()
+                        .rating(internalScore)
+                        .build())
+                .collect(Collectors.toList());
+
+        return this.score(newSubRatings);
+    }
+
     protected double scoreInternal(final List<UserListSubRating> userListSubRatings) {
         Assert.isTrue(userListSubRatings.size() == this.subRatings.size(), "Amount of subratings does not match");
-        userListSubRatings.forEach(item -> Assert.isTrue(item.getRating() >= 0 && item.getRating() < this.size, "Subratings have out of range ratings"));
+        userListSubRatings.forEach(item -> Assert.isTrue(item.getRating() >= 0 && item.getRating() <= this.getMaxInternalScore(), "Subratings have out of range ratings"));
 
         // 1-to-1 mapping by the indexes instead of using ids
         return IntStream.range(0, this.subRatings.size()).boxed()
                 .reduce(0d, (total, idx) -> total + this.subRatings.get(idx).getWeight() * userListSubRatings.get(idx).getRating(), Double::sum);
+    }
+
+    protected int getMaxInternalScore() {
+        return this.getSize() - 1;
     }
 
     @Override

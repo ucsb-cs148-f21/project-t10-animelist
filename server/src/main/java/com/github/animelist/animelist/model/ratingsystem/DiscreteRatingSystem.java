@@ -39,8 +39,6 @@ public class DiscreteRatingSystem extends RatingSystem {
     @Override
     public UserListRating score(List<UserListSubRating> userListSubRatings) {
         final double internal = this.scoreInternal(userListSubRatings);
-        int discreteInternalScore = (int) Math.round(internal);
-        final String label = labels.get(discreteInternalScore);
 
         var subRatings = IntStream.range(0, userListSubRatings.size())
                 .boxed().map(idx -> {
@@ -48,16 +46,20 @@ public class DiscreteRatingSystem extends RatingSystem {
 
                     return UserListSubRating.builder()
                             .id(idx)
-                            .displayRating(labels.get(userListSubRating.getRating()))
+                            .displayRating(this.getLabelForInternalScore(userListSubRating.getRating()))
                             .rating(userListSubRating.getRating())
                             .build();
                 }).collect(Collectors.toList());
 
         return UserListRating.builder()
-                .rating(discreteInternalScore)
-                .displayRating(label)
+                .rating(internal)
+                .displayRating(this.getLabelForInternalScore(internal))
                 .subRatings(subRatings)
                 .build();
+    }
+
+    private String getLabelForInternalScore(final double internalScore) {
+        return this.labels.get((int) Math.round(internalScore));
     }
 
     @Override
@@ -126,7 +128,7 @@ public class DiscreteRatingSystem extends RatingSystem {
         return DiscreteRatingSystem.builder()
                 .id("DEFAULT")
                 .name("10-Point Discrete")
-                .size(10)
+                .size(11)
                 .subRatings(singletonList(
                         SubRating.builder()
                                 .id(0)
@@ -134,7 +136,7 @@ public class DiscreteRatingSystem extends RatingSystem {
                                 .weight(1f)
                                 .build()
                 ))
-                .labels(asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+                .labels(asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
                 .build();
     }
 }
