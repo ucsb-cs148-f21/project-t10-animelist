@@ -90,7 +90,7 @@ The blocks require a fairly complex set of data structures to represent them. Th
 
 ### 4.1. Input Types
 
-The input types exist in GraphQL-land and are how the objects will be stored in the database.
+The input types exist in GraphQL-land and provide the parameters necessary to add and modify blocks on the profile page.
 
 **ProfilePageInput:**
 
@@ -148,19 +148,37 @@ interface Block {
 type UserListBlock implements Block {
   width: Width!
   type: BlockType!
-  userListBlockInput: UserListBlockInput!
+  userListBlockInput: UserListBlockSettings!
+  additionalData: UserListBlockAdditionalData!
+}
+
+type UserListBlockSettings {
+  listId: ID!
+  maxEntries: Int
+}
+
+type UserListBlockAdditionalData {
   userList: UserList!
 }
 
 type TextBlock implements Block {
   width: Width!
   type: BlockType!
-  textBlockInput: TextBlockInput!
+  textBlockInput: TextBlockSettings!
+}
+
+type TextBlockSettings {
+  text: String!
 }
 
 type StatisticsBlock implements Block {
   width: Width!
   type: BlockType!
+  additionalData: StatisticsBlockAdditionalData!=
+
+}
+
+type StatisticsBlockAdditionalData {
   entries: Int!
   avgRating: Int!
 }
@@ -173,4 +191,10 @@ type SpacerBlock implements Block {
 
 Note that each block contains all of the information necessary to display it. For example, the UserListBlock contains the actual user list data, not just the ID of the user list it corresponds to.
 
-Each block also contains the same `type` field as a BlockInput. This information is redundant in these output types since the GraphQL type now also encodes the block type information. For example, any statistics block will be returned as a StatisticsBlock, so we can tell it's a statistics block based on the type name. However, keeping this `type` field allows us to reuse the queried "output" blocks as block inputs, without needing to readd the type field.
+Furthermore, each block has two properties that make it convenient to re-use as inputs to update the user's profile:
+
+1. It contains all of the same fields that were in the corresponding `BlockInput`: the `width`, `type`, and the `xxxBlockInput` field if applicable.
+
+2. The *only* field in addition to the above fields, if any, is the `additionalData` field.
+
+So to convert the 2D list of blocks sent to the client back into a valid `ProfilePageInput`, all we need to do is remove the `additionalData` field, if it exists, from each block.
