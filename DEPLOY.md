@@ -21,6 +21,8 @@ where `admin` is your admin username (by default it is `admin`), `<password>` is
 - Save your mongodb uri and your created database name since these will have to put into heroku config vars when deploying
 
 # Heroku + Vercel deployment
+Please `git clone` the repo. These commands are executed at the root of the
+repository.
 ## Push server to Heroku
 Using Heroku CLI.
 - `heroku login -i` (Log in with your heroku account)
@@ -44,7 +46,7 @@ Setting heroku config vars
 ## Push to vercel
 Please sign up for a vercel account at [vercel.com](https://vercel.com/`)
 
-In the `client` directory
+`cd` into the `client` directory:
 - `yarn vercel` (follow CLI instructions and choose the defaults)
 - The app will be dpeloyed in a preview stage. 
 - Visit the newly created project on Vercel website.
