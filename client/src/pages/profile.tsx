@@ -5,6 +5,7 @@ import ProfileCard from "../components/profiles/ProfileCard";
 import { MalLinkOauthDocument, MalLinkOauthQuery, useMeQuery } from '../generated/graphql';
 import useImperativeQuery from "../utils/useImperativeQuery";
 import { ApolloQueryResult } from "@apollo/client";
+import Link from "next/link";
 
 const Profile: React.FC<{}> = () => {
   const { data, loading } = useMeQuery();
@@ -41,6 +42,9 @@ const Profile: React.FC<{}> = () => {
         }}>
           Link MAL
         </Button>
+        <Link href="/createratingsystem">
+        <Button colorScheme="blue">Create Rating System</Button>
+        </Link>
       </VStack>
     </Center>
   );
