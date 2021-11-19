@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Icon, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, VStack } from "@chakra-ui/react";
+import { Badge, Button, Heading, Icon, Link, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { useMeQuery, UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
@@ -24,6 +24,7 @@ interface IListItem {
 const UserList: React.FC<UserListProps> = ({ userlist }) => {
   const { data } = useMeQuery();
   const isLoggedIn = data;
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
   const [listItems, setListItems] = useState<IListItem[]>([])
   const [page, setPage] = useState<number>(1);
@@ -100,8 +101,9 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
       {
         isLoggedIn && data.me.id == userlist.ownerId ?
           (
-            <Button alignSelf="flex-end">Add Anime</Button>
-          ) :
+            <Link href="/search">
+              <Button colorScheme="blue">Add Anime</Button>
+            </Link>) :
           <div></div>
       }
 
@@ -112,6 +114,15 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
             <Th>Anime title</Th>
             <Th>Watch Status</Th>
             <Th>Rating</Th>
+            {
+              isLoggedIn && data.me.id == userlist.ownerId ?
+                (
+                  <Th>Edit</Th>
+                ) :
+                (
+                  <div></div>
+                )
+            }
           </Tr>
         </Thead>
         <Tbody>
@@ -122,6 +133,15 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
                 <Td>{item.title}</Td>
                 <Td><Badge>{item.watchStatus}</Badge></Td>
                 <Td>{item.rating ? item.rating.displayRating : <Icon as={BsDash} />}</Td>
+                {
+                  isLoggedIn && data.me.id == userlist.ownerId ?
+                    (
+                      <Td><Button onClick={onOpen}> Edit </Button></Td>
+                    ) :
+                    (
+                      <div></div>
+                    )
+                }
               </Tr>);
             })
           }
