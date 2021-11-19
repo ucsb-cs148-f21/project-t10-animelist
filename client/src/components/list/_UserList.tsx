@@ -23,6 +23,7 @@ interface IListItem {
 
 const UserList: React.FC<UserListProps> = ({ userlist }) => {
   const { data } = useMeQuery();
+  const isLoggedIn = data;
   const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
   const [listItems, setListItems] = useState<IListItem[]>([])
   const [page, setPage] = useState<number>(1);
@@ -74,17 +75,29 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
     )
   }
 
-  function loginCheck() {
-    var x = document.getElementById("guest");
-    if (data == null) {
-      x.style.display = "none";
-    }
-  }
-
   return (
     <VStack width="full" p={6} maxWidth="6xl">
       <Heading>{userlist.name}</Heading>
-      <Button id="guest" alignSelf="flex-end" onClick={loginCheck}>Add Anime</Button>
+
+      {
+          isLoggedIn ?
+            (
+              <Button 
+                size={"sm"}
+              >
+                Logged in
+              </Button>
+            ) :
+            (
+                <Button
+                  size={"sm"}
+                >
+                  Not logged in
+                </Button>
+            )
+        }
+
+      <Button alignSelf="flex-end">Add Anime</Button>
       <Table>
         <Thead>
           <Tr>
