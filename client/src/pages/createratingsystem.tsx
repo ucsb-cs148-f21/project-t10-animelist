@@ -1,8 +1,29 @@
-import { Heading, Container, Stack } from "@chakra-ui/react";
+import { Center, Spinner, Heading, Container, Stack } from "@chakra-ui/react";
 import * as React from 'react';
 import CreateRatingSystemForm from "../components/ratingsystem/CreateRatingSystemForm";
+import { useMeQuery } from '../generated/graphql';
+import { useRouter } from "next/router";
 
 const CreateRatingSystem: React.FC<{}> = () => {
+
+  const { data, loading } = useMeQuery();
+  const router = useRouter();
+
+  if (loading) { 
+    return (
+      <Center
+        flexGrow={1}
+      >
+        <Spinner />
+      </Center>
+    );
+  }
+
+  if (!data || !data.me) {
+    router.push("/login");
+
+    return (<div />);
+  }
 
   return (
     <Stack
