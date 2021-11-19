@@ -10,11 +10,11 @@ Although this document is formatted as Markdown, it contains diagrams that will 
 
 Our application provides a platform for anime viewers who are interested in maintaining a collection of the series they've watched and are currently watching. Some of the basic features for this type of application include adding entries to a list, setting a status (e.g. plan to watch, currently watching, watched) for each one, and adding a rating for each one.
 
-There are already some very capable sites that fulfill this purpose, such as MyAnimeList (MAL) and Anilist. We plan to differentiate ourselves from these existing offerings by catering to a more "power-user" group of users
+There are already some capable sites that fulfill this purpose, such as MyAnimeList (MAL) and Anilist. We plan to differentiate ourselves from these existing offerings by catering to a "power-user" group of users that would benefit from a greater degree of customizability. Before apps like MyAnimeList, using a spreadsheet was a common solution for this use case, which required significant manual work but allowed complete customization to the user's needs. We aim to have our app closer to spreadsheets on the customization spectrum, without sacrificing much convenience.
 
 ## 3. UX Considerations
 
-WIP section
+As briefly mentioned above, our 
 
 ## 4. High-Level Architecture
 
@@ -49,6 +49,4 @@ Second, the frontend files that actually run in the user's browser are implement
 
 Finally, as previously mentioned, we use GraphQL to communicate between the frontend and backend! GraphQL is an API specification that acts as an alternative to traditional REST APIs. Rather than making a request to a REST endpoint and receiving data back with a shape determined by the endpoint, GraphQL allows us to traverse a graph of data and specify exactly what objects and fields we want to retrieve. It also allows us to get all of the data we need in a single request, rather than having to make multiple requests to retrieve all of the necessary data. This is because the data is represented as nodes and fields, where the fields can themselves be nodes.
 
-## 5. Detailed Architecture
-
-## 6. Design Process Documentation
+## 5. Design Process Documentation
