@@ -7,14 +7,23 @@ public class UserListRating {
 
     private String displayRating;
 
-    private Integer rating;
+    private Double rating;
 
     private List<UserListSubRating> subRatings;
 
-    public UserListRating(String displayRating, Integer rating, List<UserListSubRating> subRatings) {
+    public UserListRating(String displayRating, Double rating, List<UserListSubRating> subRatings) {
         this.displayRating = displayRating;
         this.rating = rating;
         this.subRatings = subRatings;
+    }
+
+    @Override
+    public String toString() {
+        return "UserListRating{" +
+                "displayRating='" + displayRating + '\'' +
+                ", rating=" + rating +
+                ", subRatings=" + subRatings +
+                '}';
     }
 
     @Override
@@ -38,11 +47,11 @@ public class UserListRating {
         this.displayRating = displayRating;
     }
 
-    public Integer getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
@@ -60,7 +69,7 @@ public class UserListRating {
 
     public static class Builder {
         private String displayRating;
-        private Integer rating;
+        private Double rating;
         private List<UserListSubRating> subRatings;
 
         public Builder displayRating(String displayRating) {
@@ -68,7 +77,7 @@ public class UserListRating {
             return this;
         }
 
-        public Builder rating(Integer rating) {
+        public Builder rating(double rating) {
             this.rating = rating;
             return this;
         }

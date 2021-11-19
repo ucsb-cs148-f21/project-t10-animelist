@@ -13,7 +13,7 @@ type UserListItem {
 
 type UserListRating {
   displayRating: String!
-  rating: Int!
+  rating: Float!
   subRatings: [UserListSubRating!]!
 }
 
@@ -28,7 +28,7 @@ enum WatchStatus {
 type UserListSubRating {
   id: Int!
   displayRating: String
-  rating: Int!
+  rating: Float!
 }
 
 input CreateUserListInput {
@@ -51,5 +51,5 @@ input UpdateUserListItemInput {
 
 input UserListSubRatingInput {
   id: Int!
-  rating: Int!
+  rating: Float!
 }

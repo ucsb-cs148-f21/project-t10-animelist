@@ -1,12 +1,18 @@
 package com.github.animelist.animelist.model.ratingsystem;
 
+import com.github.animelist.animelist.model.userlist.UserListRating;
+import com.github.animelist.animelist.model.userlist.UserListSubRating;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.nonNull;
 
 @Document("ratingSystems")
@@ -28,6 +34,32 @@ public class DiscreteRatingSystem extends RatingSystem {
 
     public void setLabels(List<String> labels) {
         this.labels = labels;
+    }
+
+    @Override
+    public UserListRating score(List<UserListSubRating> userListSubRatings) {
+        final double internal = this.scoreInternal(userListSubRatings);
+
+        var subRatings = IntStream.range(0, userListSubRatings.size())
+                .boxed().map(idx -> {
+                    var userListSubRating = userListSubRatings.get(idx);
+
+                    return UserListSubRating.builder()
+                            .id(idx)
+                            .displayRating(this.getLabelForInternalScore(userListSubRating.getRating()))
+                            .rating(userListSubRating.getRating())
+                            .build();
+                }).collect(Collectors.toList());
+
+        return UserListRating.builder()
+                .rating(internal)
+                .displayRating(this.getLabelForInternalScore(internal))
+                .subRatings(subRatings)
+                .build();
+    }
+
+    private String getLabelForInternalScore(final double internalScore) {
+        return this.labels.get((int) Math.round(internalScore));
     }
 
     @Override
@@ -90,5 +122,21 @@ public class DiscreteRatingSystem extends RatingSystem {
         public DiscreteRatingSystem build() {
             return new DiscreteRatingSystem(id, name, ownerId, size, subRatings, labels);
         }
+    }
+
+    public static DiscreteRatingSystem TEN_POINT() {
+        return DiscreteRatingSystem.builder()
+                .id("DEFAULT")
+                .name("10-Point Discrete")
+                .size(11)
+                .subRatings(singletonList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("Score")
+                                .weight(1f)
+                                .build()
+                ))
+                .labels(asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+                .build();
     }
 }

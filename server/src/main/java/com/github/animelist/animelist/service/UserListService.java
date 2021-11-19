@@ -2,6 +2,8 @@ package com.github.animelist.animelist.service;
 
 import com.github.animelist.animelist.entity.User;
 import com.github.animelist.animelist.model.input.UserListEntryInput;
+import com.github.animelist.animelist.model.input.UserListItemInput;
+import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
 import org.bson.types.ObjectId;
@@ -35,24 +37,37 @@ public class UserListService {
         return Optional.ofNullable(mongoTemplate.findById(new ObjectId(listId), UserList.class));
     }
 
-    public boolean addItem(final String listId, final String ownerId, final UserListItem item) {
-        final var query = getListQuery(listId, ownerId);
-        query.addCriteria(where("items.mediaID").ne(item.getMediaID()));
+    public Optional<UserListItem> addItem(final String ownerId, final UserListItemInput input) {
+        final UserListItem userListItem = formItem(input);
+
+        final var query = getListQuery(input.listId(), ownerId);
+        query.addCriteria(where("items.mediaID").ne(input.mediaID()));
 
         final Update update = new Update();
-        update.push("items").value(item);
+        update.push("items").value(userListItem);
 
-        return verifyOneUpdated(mongoTemplate.updateFirst(query, update, UserList.class));
+        return verifyOneUpdated(mongoTemplate.updateFirst(query, update, UserList.class)) ? Optional.of(userListItem) : Optional.empty();
     }
 
-    public boolean updateItem(final String listId, final String ownerId, final UserListItem item) {
-        final var query = getListQuery(listId, ownerId);
-        query.addCriteria(where("items.mediaID").is(item.getMediaID()));
+    public Optional<UserListItem> updateItem(final String ownerId, final UserListItemInput input) {
+        final UserListItem userListItem = formItem(input);
+
+        final var query = getListQuery(input.listId(), ownerId);
+        query.addCriteria(where("items.mediaID").is(input.mediaID()));
 
         final Update update = new Update();
-        update.set("items.$", item);
+        update.set("items.$", userListItem);
 
-        return verifyOneUpdated(mongoTemplate.updateFirst(query, update, UserList.class));
+        return verifyOneUpdated(mongoTemplate.updateFirst(query, update, UserList.class)) ? Optional.of(userListItem) : Optional.empty();
+    }
+
+    private UserListItem formItem(final UserListItemInput item) {
+        final RatingSystem ratingSystem = getUserList(item.listId()).orElseThrow().getRatingSystem();
+        return UserListItem.builder()
+                .mediaID(item.mediaID())
+                .watchStatus(item.watchStatus())
+                .rating(Optional.ofNullable(item.subRatings()).map(ratingSystem::score).orElse(null))
+                .build();
     }
 
     private Query getListQuery(final String listId, final String ownerId) {

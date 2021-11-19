@@ -45,7 +45,7 @@ public class UserListController {
         final var userList = UserList.builder()
                 .name(input.name())
                 .ownerId(new ObjectId(userDetails.getId()))
-                .ratingSystem(ContinuousRatingSystem.TEN_POINT)
+                .ratingSystem(ContinuousRatingSystem.TEN_POINT())
                 .build();
 
         return userListService.createUserList(userList);
@@ -56,22 +56,8 @@ public class UserListController {
     public UserListItem addUserListItem(@Argument("input") final UserListItemInput input) {
         final var userDetails = AuthUtil.getUserDetails();
 
-        // TODO: Put scoring algorithm to get correct UserListRating
-        final var userListItem = UserListItem.builder()
-                .mediaID(input.mediaID())
-                .watchStatus(input.watchStatus())
-                .rating(UserListRating.builder()
-                        .rating(0)
-                        .displayRating("STUB")
-                        .subRatings(input.subRatings())
-                        .build())
-                .build();
-
-        if (!userListService.addItem(input.listId(), userDetails.getId(), userListItem)) {
-            throw new RuntimeException("Failed to add item. Item might already exist");
-        }
-
-        return userListItem;
+        return userListService.addItem(userDetails.getId(), input)
+                .orElseThrow(() -> new RuntimeException("Add item failed"));
     }
 
     @MutationMapping
@@ -79,22 +65,8 @@ public class UserListController {
     public UserListItem updateUserListItem(@Argument("input") final UserListItemInput input) {
         final var userDetails = AuthUtil.getUserDetails();
 
-        // TODO: Put scoring algorithm to get correct UserListRating
-        final var userListItem = UserListItem.builder()
-                .mediaID(input.mediaID())
-                .watchStatus(input.watchStatus())
-                .rating(UserListRating.builder()
-                        .rating(0)
-                        .displayRating("STUB")
-                        .subRatings(input.subRatings())
-                        .build())
-                .build();
-
-        if (!userListService.updateItem(input.listId(), userDetails.getId(), userListItem)) {
-            throw new RuntimeException("Failed to update item");
-        }
-
-        return userListItem;
+        return userListService.updateItem(userDetails.getId(), input)
+                .orElseThrow(() -> new RuntimeException("Update item failed"));
     }
 
     @MutationMapping

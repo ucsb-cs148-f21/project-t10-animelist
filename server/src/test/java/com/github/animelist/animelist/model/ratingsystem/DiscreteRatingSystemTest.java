@@ -1,6 +1,8 @@
 package com.github.animelist.animelist.model.ratingsystem;
 
 
+import com.github.animelist.animelist.model.userlist.UserListRating;
+import com.github.animelist.animelist.model.userlist.UserListSubRating;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,12 +11,15 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -63,8 +68,8 @@ public class DiscreteRatingSystemTest {
                 .name("Test")
                 .ownerId(new ObjectId())
                 .size(1)
-                .labels(Arrays.asList("S"))
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
+                .labels(singletonList("S"))
+                .subRatings(singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
 
         assertThrows(IllegalArgumentException.class, builder::build);
     }
@@ -77,7 +82,7 @@ public class DiscreteRatingSystemTest {
                 .name(badName)
                 .ownerId(new ObjectId())
                 .size(1)
-                .labels(asList("S"))
+                .labels(singletonList("S"))
                 .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
 
         assertThrows(IllegalArgumentException.class, builder::build);
@@ -97,6 +102,199 @@ public class DiscreteRatingSystemTest {
                 ));
 
         assertThrows(IllegalArgumentException.class, builder::build);
+    }
+
+    @Test
+    void discreteRatingSystemTenPointScore_happy() {
+        var ratingSystem = DiscreteRatingSystem.TEN_POINT();
+        var subRatings = singletonList(
+                UserListSubRating.builder()
+                        .rating(6)
+                        .build()
+        );
+
+        var expected = UserListRating.builder()
+                .displayRating("6")
+                .rating(6)
+                .subRatings(singletonList(
+                        UserListSubRating.builder()
+                                .id(0)
+                                .displayRating("6")
+                                .rating(6)
+                                .build()
+                ))
+                .build();
+
+        var actual = ratingSystem.score(subRatings);
+
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void discreteRatingSystemSubRatings_happy() {
+        var ratingSystem = DiscreteRatingSystem.builder()
+                .id("Test")
+                .name("Test")
+                .size(11)
+                .labels(asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+                .subRatings(asList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("25")
+                                .weight(0.25f)
+                                .build(),
+                        SubRating.builder()
+                                .id(1)
+                                .name("75")
+                                .weight(0.75f)
+                                .build()
+                ))
+                .build();
+
+        var subRatings = asList(
+                UserListSubRating.builder()
+                        .rating(10)
+                        .build(),
+                UserListSubRating.builder()
+                        .rating(5)
+                        .build()
+        );
+
+        var expected = UserListRating.builder()
+                .displayRating("6")
+                .rating(6.25)
+                .subRatings(asList(
+                        UserListSubRating.builder()
+                                .id(0)
+                                .displayRating("10")
+                                .rating(10)
+                                .build(),
+                        UserListSubRating.builder()
+                                .id(1)
+                                .displayRating("5")
+                                .rating(5)
+                                .build()
+                ))
+                .build();
+
+        var actual = ratingSystem.score(subRatings);
+
+        assertThat(actual, is(expected));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
+    void continuousTenPointConvertToDiscreteTenPoint_happy(int internalScore) {
+        var input = ContinuousRatingSystem.TEN_POINT().score(singletonList(
+                UserListSubRating.builder()
+                        .id(0)
+                        .rating(internalScore)
+                        .build()
+        ));
+
+        var expected = UserListRating.builder()
+                .rating(internalScore)
+                .displayRating(String.valueOf(internalScore))
+                .subRatings(singletonList(
+                        UserListSubRating.builder()
+                                .id(0)
+                                .displayRating(String.valueOf(internalScore))
+                                .rating(internalScore)
+                                .build()
+                ))
+                .build();
+
+        var actual = DiscreteRatingSystem.TEN_POINT().convert(ContinuousRatingSystem.TEN_POINT(), input);
+
+        assertThat(actual, is(expected));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+    void discreteTenPointConvertToDiscreteFivePoint_happy(int internalScore) {
+        var input = DiscreteRatingSystem.TEN_POINT().score(singletonList(
+                UserListSubRating.builder()
+                        .id(0)
+                        .rating(internalScore)
+                        .build()
+        ));
+
+        var fivePointRatingSystem = DiscreteRatingSystem.builder()
+                .id("Test")
+                .name("Five point")
+                .ownerId(new ObjectId())
+                .size(6)
+                .subRatings(singletonList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("Score")
+                                .weight(1f)
+                                .build()
+                ))
+                .labels(asList("0", "1", "2", "3", "4", "5"))
+                .build();
+
+        double convertedInternalScore = (internalScore / 10d) * 5;
+        String display = String.valueOf((int) Math.round(convertedInternalScore));
+
+        var expected = UserListRating.builder()
+                .rating(convertedInternalScore)
+                .displayRating(display)
+                .subRatings(singletonList(
+                        UserListSubRating.builder()
+                                .id(0)
+                                .displayRating(display)
+                                .rating(convertedInternalScore)
+                                .build()
+                ))
+                .build();
+
+        var actual = fivePointRatingSystem.convert(DiscreteRatingSystem.TEN_POINT(), input);
+        assertThat(actual, is(expected));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
+    void discreteTenPointConvertToDiscreteHundredPoint_happy(int internalScore) {
+        var input = DiscreteRatingSystem.TEN_POINT().score(singletonList(
+                UserListSubRating.builder()
+                        .id(0)
+                        .rating(internalScore)
+                        .build()
+        ));
+
+        var fivePointRatingSystem = DiscreteRatingSystem.builder()
+                .id("Test")
+                .name("100 point")
+                .ownerId(new ObjectId())
+                .size(101)
+                .subRatings(singletonList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("Score")
+                                .weight(1f)
+                                .build()
+                ))
+                .labels(IntStream.range(0, 101).boxed().map(Object::toString).collect(Collectors.toList()))
+                .build();
+
+        double convertedInternalScore = (internalScore / 10d) * 100;
+        String display = String.valueOf((int) Math.round(convertedInternalScore));
+
+        var expected = UserListRating.builder()
+                .rating(convertedInternalScore)
+                .displayRating(display)
+                .subRatings(singletonList(
+                        UserListSubRating.builder()
+                                .id(0)
+                                .displayRating(display)
+                                .rating(convertedInternalScore)
+                                .build()
+                ))
+                .build();
+
+        var actual = fivePointRatingSystem.convert(DiscreteRatingSystem.TEN_POINT(), input);
+        assertThat(actual, is(expected));
     }
 
 }
