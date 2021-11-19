@@ -1,22 +1,22 @@
 # Anime List Design Doc
 
-
-
 ## 1. Preamble
 
 This document will provide an overview of the system architecture for our application.
 
-Although this document is formatted as Markdown, it contains diagrams that will not be rendered by GitHub. So we will maintain a PDF copy of this document [here.](https://github.com/ucsb-cs148-f21/project-t10-animelist/blob/main/team/DESIGN.pdf)
+Although this document is formatted as Markdown, it contains diagrams that will not be rendered by GitHub. So we will maintain a PDF copy of this document [here.](https://github.com/ucsb-cs148-f21/project-t10-animelist/blob/main/docs/DESIGN.pdf)
 
+## 2. Background
 
+Our application provides a platform for anime viewers who are interested in maintaining a collection of the series they've watched and are currently watching. Some of the basic features for this type of application include adding entries to a list, setting a status (e.g. plan to watch, currently watching, watched) for each one, and adding a rating for each one.
 
-## 2. Background and Motivation
+There are already some very capable sites that fulfill this purpose, such as MyAnimeList (MAL) and Anilist. We plan to differentiate ourselves from these existing offerings by catering to a more "power-user" group of users
 
-WIP
+## 3. UX Considerations
 
+WIP section
 
-
-## 3. High-Level Architecture
+## 4. High-Level Architecture
 
 ```mermaid
 flowchart LR
@@ -49,8 +49,6 @@ Second, the frontend files that actually run in the user's browser are implement
 
 Finally, as previously mentioned, we use GraphQL to communicate between the frontend and backend! GraphQL is an API specification that acts as an alternative to traditional REST APIs. Rather than making a request to a REST endpoint and receiving data back with a shape determined by the endpoint, GraphQL allows us to traverse a graph of data and specify exactly what objects and fields we want to retrieve. It also allows us to get all of the data we need in a single request, rather than having to make multiple requests to retrieve all of the necessary data. This is because the data is represented as nodes and fields, where the fields can themselves be nodes.
 
-## 3. Requirements
+## 5. Detailed Architecture
 
-WIP section
-
-
+## 6. Design Process Documentation
