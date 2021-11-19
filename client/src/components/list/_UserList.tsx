@@ -80,24 +80,31 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
       <Heading>{userlist.name}</Heading>
 
       {
-          isLoggedIn ?
-            (
-              <Button 
-                size={"sm"}
-              >
-                Logged in
-              </Button>
-            ) :
-            (
-                <Button
-                  size={"sm"}
-                >
-                  Not logged in
-                </Button>
-            )
-        }
+        isLoggedIn ?
+          (
+            <Button
+              size={"sm"}
+            >
+              Logged in
+            </Button>
+          ) :
+          (
+            <Button
+              size={"sm"}
+            >
+              Not logged in
+            </Button>
+          )
+      }
 
-      <Button alignSelf="flex-end">Add Anime</Button>
+      {
+        isLoggedIn && data.me.id == userlist.ownerId ?
+          (
+            <Button alignSelf="flex-end">Add Anime</Button>
+          ) :
+          <div></div>
+      }
+
       <Table>
         <Thead>
           <Tr>
