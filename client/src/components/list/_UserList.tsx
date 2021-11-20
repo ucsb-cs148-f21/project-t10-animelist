@@ -6,14 +6,16 @@ import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
 import { createApolloAnilist, initializeApolloAnilist, useApolloAnilist } from "../../utils/createApolloAnilist";
 import { Image } from "@chakra-ui/react"
 import { BsDash } from "react-icons/bs";
+import UserListEntry from "./_UserListEntry";
 
 const PAGE_SIZE = 10;
 
-interface UserListProps {
+export interface UserListProps {
   userlist: UserListType;
+  isOwn: boolean;
 }
 
-interface IListItem {
+export interface IListItem {
   id: number;
   title: string;
   watchStatus: string;
@@ -21,10 +23,7 @@ interface IListItem {
   rating?: UserListRating;
 }
 
-const UserList: React.FC<UserListProps> = ({ userlist }) => {
-  const { data } = useMeQuery();
-  const isLoggedIn = data;
-  const { isOpen, onOpen, onClose } = useDisclosure()
+const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
   const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
   const [listItems, setListItems] = useState<IListItem[]>([])
   const [page, setPage] = useState<number>(1);
@@ -79,34 +78,7 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
   return (
     <VStack width="full" p={6} maxWidth="6xl">
       <Heading>{userlist.name}</Heading>
-
-      {
-        isLoggedIn ?
-          (
-            <Button
-              size={"sm"}
-            >
-              Logged in
-            </Button>
-          ) :
-          (
-            <Button
-              size={"sm"}
-            >
-              Not logged in
-            </Button>
-          )
-      }
-
-      {
-        isLoggedIn && data.me.id == userlist.ownerId ?
-          (
-            <Link href="/search">
-              <Button colorScheme="blue">Add Anime</Button>
-            </Link>) :
-          <div></div>
-      }
-
+      { isOwn && <Button colorScheme="blue">Add Anime</Button> }
       <Table>
         <Thead>
           <Tr>
@@ -114,36 +86,12 @@ const UserList: React.FC<UserListProps> = ({ userlist }) => {
             <Th>Anime title</Th>
             <Th>Watch Status</Th>
             <Th>Rating</Th>
-            {
-              isLoggedIn && data.me.id == userlist.ownerId ?
-                (
-                  <Th>Edit</Th>
-                ) :
-                (
-                  <div></div>
-                )
-            }
+            { isOwn && <Th/> }
           </Tr>
         </Thead>
         <Tbody>
           {
-            listItems.map((item) => {
-              return (<Tr>
-                <Td><Image src={item.coverImage} minWidth="67px" width="67px" height="100px" objectFit="cover" /></Td>
-                <Td>{item.title}</Td>
-                <Td><Badge>{item.watchStatus}</Badge></Td>
-                <Td>{item.rating ? item.rating.displayRating : <Icon as={BsDash} />}</Td>
-                {
-                  isLoggedIn && data.me.id == userlist.ownerId ?
-                    (
-                      <Td><Button onClick={onOpen}> Edit </Button></Td>
-                    ) :
-                    (
-                      <div></div>
-                    )
-                }
-              </Tr>);
-            })
+            listItems.map((item) => <UserListEntry key={item.id} item={item} canEdit={isOwn}/>)
           }
         </Tbody>
       </Table>
