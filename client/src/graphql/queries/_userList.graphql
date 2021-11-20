@@ -16,5 +16,16 @@ query _UserList($listId: String!) {
               }
           }
       }
+      ratingSystem {
+            id
+            name
+            ownerId
+            size
+            subRatings {
+                id 
+                name
+                weight
+            }
+      }
     }
 }
