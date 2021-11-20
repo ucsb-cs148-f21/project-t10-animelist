@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as React from "react";
-import { ContinuousRatingSystem, DiscreteRatingSystem, RatingSystem, use_UpdateUserListItemMutation, WatchStatus } from "../../generated/graphql";
+import { use_UpdateUserListItemMutation, WatchStatus } from "../../generated/graphql";
 import { IListItem } from "./_UserList";
 ;
 
@@ -49,9 +49,8 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ item, isOpen, onClose, 
       <ModalOverlay />
       <ModalContent>
         <ModalHeader padding="0 0 0 0">
-          <Image src={item.bannerImage} height="150px" width="100%" objectFit="cover" />
+          <Image src={item.bannerImage} borderRadius="5px 5px 0px 0px" height="150px" width="100%" objectFit="cover" />
           <Heading padding="1rem">{item.title}</Heading>
-          { item.ratingSystem.__typename }
         </ModalHeader>
         <ModalCloseButton />
         <form onSubmit={formik.handleSubmit}>

@@ -1,14 +1,12 @@
-import { Badge, Button, ButtonGroup, Heading, Icon, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
+import { PlusSquareIcon, SettingsIcon } from "@chakra-ui/icons";
+import { Button, ButtonGroup, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Table, Tbody, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { ContinuousRatingSystem, DiscreteRatingSystem, RatingSystem, useMeQuery, UserList as UserListType, UserListItem as UserListItemType, UserListRating } from "../../generated/graphql";
+import { ContinuousRatingSystem, DiscreteRatingSystem, UserList as UserListType, UserListItem as UserListItemType, UserListRating } from "../../generated/graphql";
 import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
-import { createApolloAnilist, initializeApolloAnilist, useApolloAnilist } from "../../utils/createApolloAnilist";
-import { Image } from "@chakra-ui/react"
-import { BsDash } from "react-icons/bs";
+import { initializeApolloAnilist } from "../../utils/createApolloAnilist";
 import SearchAddAnime from "../search/_SearchAddAnime";
 import UserListItem from "./_UserListItem";
-import { PlusSquareIcon, SettingsIcon } from "@chakra-ui/icons";
 
 const PAGE_SIZE = 20;
 
