@@ -1,13 +1,13 @@
 import { Badge, Button, Heading, Icon, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { RatingSystem, useMeQuery, UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
+import { RatingSystem, useMeQuery, UserList as UserListType, UserListItem as UserListItemType, UserListRating } from "../../generated/graphql";
 import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
 import { createApolloAnilist, initializeApolloAnilist, useApolloAnilist } from "../../utils/createApolloAnilist";
 import { Image } from "@chakra-ui/react"
 import { BsDash } from "react-icons/bs";
-import UserListEntry from "./_UserListEntry";
 import SearchAddAnime from "../search/_SearchAddAnime";
+import UserListItem from "./_UserListItem";
 
 const PAGE_SIZE = 20;
 
@@ -19,6 +19,7 @@ export interface UserListProps {
 
 export interface IListItem {
   id: number;
+  listId: string;
   title: string;
   watchStatus: string;
   coverImage: string;
@@ -61,7 +62,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
         return map;
       }, {});
 
-      const userListItemOf: Record<number, UserListItem> = userlist.items.reduce((map, item) => {
+      const userListItemOf: Record<number, UserListItemType> = userlist.items.reduce((map, item) => {
         map[item.mediaID] = item
         return map;
       }, {});
@@ -71,6 +72,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
         title: anilistMedia.title.romaji,
         watchStatus: userListItemOf[anilistMedia.id].watchStatus,
         rating: userListItemOf[anilistMedia.id].rating,
+        listId: userlist.id,
         coverImage: anilistMedia.coverImage.medium
       }));
 
@@ -114,7 +116,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
         </Thead>
         <Tbody>
           {
-            listItems.map((item) => <UserListEntry ratingSystem={userlist.ratingSystem} key={item.id} item={item} canEdit={isOwn}/>)
+            listItems.map((item) => <UserListItem ratingSystem={userlist.ratingSystem} key={item.id} item={item} canEdit={isOwn}/>)
           }
         </Tbody>
       </Table>

@@ -52,7 +52,7 @@ input UpdateUserListItemInput {
   listId: String!
   mediaID: Int!
   watchStatus: WatchStatus!
-  subRatings: [UserListSubRatingInput]!
+  subRatings: [UserListSubRatingInput]
 }
 
 input UserListSubRatingInput {
