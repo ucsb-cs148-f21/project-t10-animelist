@@ -1,7 +1,7 @@
 import { Badge, Button, Heading, Icon, Link, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { useMeQuery, UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
+import { RatingSystem, useMeQuery, UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
 import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
 import { createApolloAnilist, initializeApolloAnilist, useApolloAnilist } from "../../utils/createApolloAnilist";
 import { Image } from "@chakra-ui/react"
@@ -11,6 +11,7 @@ import UserListEntry from "./_UserListEntry";
 const PAGE_SIZE = 10;
 
 export interface UserListProps {
+  ratingSystem: RatingSystem;
   userlist: UserListType;
   isOwn: boolean;
 }
@@ -91,7 +92,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
         </Thead>
         <Tbody>
           {
-            listItems.map((item) => <UserListEntry key={item.id} item={item} canEdit={isOwn}/>)
+            listItems.map((item) => <UserListEntry ratingSystem={userlist.ratingSystem} key={item.id} item={item} canEdit={isOwn}/>)
           }
         </Tbody>
       </Table>
