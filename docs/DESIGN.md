@@ -6,15 +6,51 @@ This document will provide an overview of the system architecture for our applic
 
 Although this document is formatted as Markdown, it contains diagrams that will not be rendered by GitHub. So we will maintain a PDF copy of this document [here.](https://github.com/ucsb-cs148-f21/project-t10-animelist/blob/main/docs/DESIGN.pdf)
 
+
+
 ## 2. Background
 
 Our application provides a platform for anime viewers who are interested in maintaining a collection of the series they've watched and are currently watching. Some of the basic features for this type of application include adding entries to a list, setting a status (e.g. plan to watch, currently watching, watched) for each one, and adding a rating for each one.
 
 There are already some capable sites that fulfill this purpose, such as MyAnimeList (MAL) and Anilist. We plan to differentiate ourselves from these existing offerings by catering to a "power-user" group of users that would benefit from a greater degree of customizability. Before apps like MyAnimeList, using a spreadsheet was a common solution for this use case, which required significant manual work but allowed complete customization to the user's needs. We aim to have our app closer to spreadsheets on the customization spectrum, without sacrificing much convenience.
 
+
+
 ## 3. UX Considerations
 
-As briefly mentioned above, our 
+As briefly mentioned above, we want our app to be highly customizable and personal compared to the experiences offered by existing anime list apps. However, we recognize that a high degree of customizability can sometimes come at the cost of convenience, which is something we want to avoid. Throughout the design process, we have aimed to balance these two factors.
+
+The following subsections will show some high-level user flows for common processes in our app.
+
+### 3.1. Account Creation
+
+```mermaid
+journey
+    title Account Creation
+    section Sign up
+        Navigate to homepage: 3
+        Click "sign up" button: 3
+        Enter account info: 4
+    section Log in
+        Enter account info: 3
+        Logged in: 4
+```
+
+### 3.2. Rating System Creation
+
+Note: the 
+
+```mermaid
+journey
+    title Rating System Creation
+    
+```
+
+### 3.3. Anime List Creation
+
+### 3.4. Anime List Editing
+
+### 
 
 ## 4. High-Level Architecture
 
@@ -48,5 +84,7 @@ The Next.js server is somewhat of a black box since the implementation is part o
 Second, the frontend files that actually run in the user's browser are implemented using React. These files make up the "client" portion of our application, and are responsible for communicating with the backend and displaying the UI of our app.
 
 Finally, as previously mentioned, we use GraphQL to communicate between the frontend and backend! GraphQL is an API specification that acts as an alternative to traditional REST APIs. Rather than making a request to a REST endpoint and receiving data back with a shape determined by the endpoint, GraphQL allows us to traverse a graph of data and specify exactly what objects and fields we want to retrieve. It also allows us to get all of the data we need in a single request, rather than having to make multiple requests to retrieve all of the necessary data. This is because the data is represented as nodes and fields, where the fields can themselves be nodes.
+
+
 
 ## 5. Design Process Documentation
