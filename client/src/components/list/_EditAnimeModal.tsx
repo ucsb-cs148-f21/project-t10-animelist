@@ -24,7 +24,7 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ item, isOpen, onClose, 
   const formik = useFormik({
     initialValues: item,
     onSubmit: async (submittedListItem) => {
-      const { data, errors } = await updateListItem({
+      const { data } = await updateListItem({
         variables: {
           input: {
             listId: submittedListItem.listId,
