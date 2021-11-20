@@ -28,7 +28,7 @@ import {
 import { UserListEntryExtended } from "./UserListRow"; import { useFormik } from "formik";
 import EditAnimeModalForm from "./EditAnimeModalForm";
 ;
-import { RatingSystem } from "../../generated/graphql";
+import { RatingSystem, use_UpdateUserListItemMutation } from "../../generated/graphql";
 import { IListItem } from "./_UserList";
 
 interface EditAnimeModalProps {
@@ -40,6 +40,26 @@ interface EditAnimeModalProps {
 }
 
 const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ ratingSystem, item, isOpen, onClose }) => {
+  // const [updateUserListItem] = use_UpdateUserListItemMutation();
+  // const formik = useFormik({
+  //   initialValues: {
+      
+  //   },
+  //   onSubmit: async values => {
+  //     const updatedEntry: UserListEntryInput = {
+  //       mediaID: entryData.mediaID,
+  //       rated: (values.score !== ''),
+  //       rating: (values.score !== '') ? Number(values.score) : 0
+  //     };
+  //     await updateUserListEntry({
+  //       variables: {
+  //         input: updatedEntry
+  //       }
+  //     });
+  //     window.location.reload();
+  //   }
+  // });
+
   return (
     <Modal isCentered isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -48,7 +68,7 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ ratingSystem, item, isO
         <ModalCloseButton />
 
         <ModalBody>
-          Score: {item.rating.displayRating}
+          Score: {item.rating ? item.rating.displayRating: "-"}
           <Stack>
             <Table>
               <Thead>
@@ -63,14 +83,15 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ ratingSystem, item, isO
                   ratingSystem.subRatings.map((subRating, index) => (
                     <Tr>
                       <Td>{subRating.name}</Td>
-                      <Td><Input variant="filled" initialValue={subRating.weight}/></Td>
-                      <Td><Input variant="filled" initialValue={item.rating.subRatings.at(index).displayRating}/></Td>
+                      <Td>{subRating.weight}</Td>
+                      <Td>{item.rating ? item.rating.subRatings.at(index).displayRating: "-"}</Td>
                     </Tr>
                   )
                   )
                 }
               </Tbody>
             </Table>
+            <Button>Save</Button>
           </Stack>
         </ModalBody>
 
