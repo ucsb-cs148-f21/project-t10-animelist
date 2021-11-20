@@ -1115,7 +1115,7 @@ export type Media = {
   /** If the media is intended only for 18+ adult audiences */
   isAdult?: Maybe<Scalars['Boolean']>;
   /** If the media is marked as favourite by the current authenticated user */
-  isFavourite: Scalars['Boolean'];
+  isFavourite?: Scalars['Boolean'];
   /** If the media is officially licensed or a self-published doujin release */
   isLicensed?: Maybe<Scalars['Boolean']>;
   /** Locked media may not be added to lists our favorited. This may be due to the entry pending for deletion or other reasons. */
@@ -4597,6 +4597,13 @@ export type FetchAnimeInfoQueryVariables = Exact<{
 
 export type FetchAnimeInfoQuery = { __typename?: 'Query', Page?: Maybe<{ __typename?: 'Page', pageInfo?: Maybe<{ __typename?: 'PageInfo', total?: Maybe<number>, currentPage?: Maybe<number>, lastPage?: Maybe<number>, hasNextPage?: Maybe<boolean>, perPage?: Maybe<number> }>, media?: Maybe<Array<Maybe<{ __typename?: 'Media', id: number, title?: Maybe<{ __typename?: 'MediaTitle', romaji?: Maybe<string> }>, coverImage?: Maybe<{ __typename?: 'MediaCoverImage', medium?: Maybe<string> }> }>>> }> };
 
+export type SearchAnimeQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchAnimeQuery = { __typename?: 'Query', Page?: Maybe<{ __typename?: 'Page', media?: Maybe<Array<Maybe<{ __typename?: 'Media', id: number, genres?: Maybe<Array<Maybe<string>>>, siteUrl?: Maybe<string>, title?: Maybe<{ __typename?: 'MediaTitle', romaji?: Maybe<string> }>, coverImage?: Maybe<{ __typename?: 'MediaCoverImage', medium?: Maybe<string> }> }>>> }> };
+
 
 export const FetchAnimeInfoDocument = gql`
     query FetchAnimeInfo($ids: [Int]!) {
@@ -4648,3 +4655,48 @@ export function useFetchAnimeInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type FetchAnimeInfoQueryHookResult = ReturnType<typeof useFetchAnimeInfoQuery>;
 export type FetchAnimeInfoLazyQueryHookResult = ReturnType<typeof useFetchAnimeInfoLazyQuery>;
 export type FetchAnimeInfoQueryResult = Apollo.QueryResult<FetchAnimeInfoQuery, FetchAnimeInfoQueryVariables>;
+export const SearchAnimeDocument = gql`
+    query SearchAnime($search: String!) {
+  Page {
+    media(search: $search, type: ANIME, isAdult: false) {
+      id
+      title {
+        romaji
+      }
+      coverImage {
+        medium
+      }
+      genres
+      siteUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchAnimeQuery__
+ *
+ * To run a query within a React component, call `useSearchAnimeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchAnimeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchAnimeQuery({
+ *   variables: {
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useSearchAnimeQuery(baseOptions: Apollo.QueryHookOptions<SearchAnimeQuery, SearchAnimeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchAnimeQuery, SearchAnimeQueryVariables>(SearchAnimeDocument, options);
+      }
+export function useSearchAnimeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchAnimeQuery, SearchAnimeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchAnimeQuery, SearchAnimeQueryVariables>(SearchAnimeDocument, options);
+        }
+export type SearchAnimeQueryHookResult = ReturnType<typeof useSearchAnimeQuery>;
+export type SearchAnimeLazyQueryHookResult = ReturnType<typeof useSearchAnimeLazyQuery>;
+export type SearchAnimeQueryResult = Apollo.QueryResult<SearchAnimeQuery, SearchAnimeQueryVariables>;

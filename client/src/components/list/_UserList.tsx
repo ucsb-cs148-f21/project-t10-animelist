@@ -1,4 +1,4 @@
-import { Badge, Button, Heading, Icon, Link, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
+import { Badge, Button, Heading, Icon, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { RatingSystem, useMeQuery, UserList as UserListType, UserListItem, UserListRating } from "../../generated/graphql";
@@ -7,8 +7,9 @@ import { createApolloAnilist, initializeApolloAnilist, useApolloAnilist } from "
 import { Image } from "@chakra-ui/react"
 import { BsDash } from "react-icons/bs";
 import UserListEntry from "./_UserListEntry";
+import SearchAddAnime from "../search/_SearchAddAnime";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 20;
 
 export interface UserListProps {
   ratingSystem: RatingSystem;
@@ -23,6 +24,27 @@ export interface IListItem {
   coverImage: string;
   rating?: UserListRating;
 }
+
+const AddAnime: React.FC<{ addedIds: Set<number>; listId: string }> = ({ addedIds, listId }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <>
+      <Button alignSelf="flex-end" onClick={onOpen}>Add Anime</Button>
+      <Modal isCentered scrollBehavior="inside" isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent padding="10px" maxW="56rem">
+          <ModalCloseButton />
+          <ModalHeader>
+            <Heading>Add Anime</Heading>
+          </ModalHeader>
+          <ModalBody>
+            <SearchAddAnime addedIds={addedIds} listId={listId} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
 
 const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
   const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
@@ -79,7 +101,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
   return (
     <VStack width="full" p={6} maxWidth="6xl">
       <Heading>{userlist.name}</Heading>
-      { isOwn && <Button colorScheme="blue">Add Anime</Button> }
+      {isOwn && <AddAnime addedIds={new Set(userlist.items.map(item => item.mediaID))} listId={userlist.id} />}
       <Table>
         <Thead>
           <Tr>
@@ -87,7 +109,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
             <Th>Anime title</Th>
             <Th>Watch Status</Th>
             <Th>Rating</Th>
-            { isOwn && <Th/> }
+            {isOwn && <Th />}
           </Tr>
         </Thead>
         <Tbody>

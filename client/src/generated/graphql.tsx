@@ -28,7 +28,7 @@ export type ContinuousRatingSystem = RatingSystem & {
   id: Scalars['ID'];
   name: Scalars['String'];
   offset: Scalars['Int'];
-  ownerId: Scalars['ID'];
+  ownerId?: Maybe<Scalars['String']>;
   size: Scalars['Int'];
   subRatings: Array<SubRating>;
 };
@@ -46,7 +46,7 @@ export type DiscreteRatingSystem = RatingSystem & {
   id: Scalars['ID'];
   labels: Array<Scalars['String']>;
   name: Scalars['String'];
-  ownerId: Scalars['ID'];
+  ownerId?: Maybe<Scalars['String']>;
   size: Scalars['Int'];
   subRatings: Array<SubRating>;
 };
@@ -159,7 +159,7 @@ export type QueryUserListArgs = {
 export type RatingSystem = {
   id: Scalars['ID'];
   name: Scalars['String'];
-  ownerId: Scalars['ID'];
+  ownerId?: Maybe<Scalars['String']>;
   size: Scalars['Int'];
   subRatings: Array<SubRating>;
 };
@@ -274,6 +274,13 @@ export enum WatchStatus {
   Watching = 'WATCHING'
 }
 
+export type _AddUserListItemMutationVariables = Exact<{
+  input: AddUserListItemInput;
+}>;
+
+
+export type _AddUserListItemMutation = { __typename?: 'Mutation', addUserListItem?: Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string }> };
+
 export type _UpdateUserListItemMutationVariables = Exact<{
   input: UpdateUserListItemInput;
 }>;
@@ -333,7 +340,7 @@ export type _UserListQueryVariables = Exact<{
 }>;
 
 
-export type _UserListQuery = { __typename?: 'Query', userList?: Maybe<{ __typename?: 'UserList', id: string, ownerId: string, name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string, rating: number, subRatings: Array<{ __typename?: 'UserListSubRating', id: number, displayRating?: Maybe<string>, rating: number }> }> }>>>, ratingSystem?: Maybe<{ __typename?: 'ContinuousRatingSystem', id: string, name: string, ownerId: string, size: number, subRatings: Array<{ __typename?: 'SubRating', id: string, name: string, weight: number }> } | { __typename?: 'DiscreteRatingSystem', id: string, name: string, ownerId: string, size: number, subRatings: Array<{ __typename?: 'SubRating', id: string, name: string, weight: number }> }> }> };
+export type _UserListQuery = { __typename?: 'Query', userList?: Maybe<{ __typename?: 'UserList', id: string, ownerId: string, name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string, rating: number, subRatings: Array<{ __typename?: 'UserListSubRating', id: number, displayRating?: Maybe<string>, rating: number }> }> }>>>, ratingSystem?: Maybe<{ __typename?: 'ContinuousRatingSystem', id: string, name: string, ownerId?: Maybe<string>, size: number, subRatings: Array<{ __typename?: 'SubRating', id: string, name: string, weight: number }> } | { __typename?: 'DiscreteRatingSystem', id: string, name: string, ownerId?: Maybe<string>, size: number, subRatings: Array<{ __typename?: 'SubRating', id: string, name: string, weight: number }> }> }> };
 
 export type MalLinkOauthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -356,6 +363,40 @@ export type UserListQueryVariables = Exact<{ [key: string]: never; }>;
 export type UserListQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', userList: Array<{ __typename?: 'UserListEntry', mediaID: number, rated: boolean, rating: number }> }> };
 
 
+export const _AddUserListItemDocument = gql`
+    mutation _addUserListItem($input: AddUserListItemInput!) {
+  addUserListItem(input: $input) {
+    mediaID
+    watchStatus
+  }
+}
+    `;
+export type _AddUserListItemMutationFn = Apollo.MutationFunction<_AddUserListItemMutation, _AddUserListItemMutationVariables>;
+
+/**
+ * __use_AddUserListItemMutation__
+ *
+ * To run a mutation, you first call `use_AddUserListItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `use_AddUserListItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addUserListItemMutation, { data, loading, error }] = use_AddUserListItemMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function use_AddUserListItemMutation(baseOptions?: Apollo.MutationHookOptions<_AddUserListItemMutation, _AddUserListItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<_AddUserListItemMutation, _AddUserListItemMutationVariables>(_AddUserListItemDocument, options);
+      }
+export type _AddUserListItemMutationHookResult = ReturnType<typeof use_AddUserListItemMutation>;
+export type _AddUserListItemMutationResult = Apollo.MutationResult<_AddUserListItemMutation>;
+export type _AddUserListItemMutationOptions = Apollo.BaseMutationOptions<_AddUserListItemMutation, _AddUserListItemMutationVariables>;
 export const _UpdateUserListItemDocument = gql`
     mutation _UpdateUserListItem($input: UpdateUserListItemInput!) {
   updateUserListItem(input: $input) {

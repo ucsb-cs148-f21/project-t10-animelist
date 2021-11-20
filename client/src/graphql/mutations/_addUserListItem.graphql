@@ -1,0 +1,6 @@
+mutation _addUserListItem($input: AddUserListItemInput!) {
+  addUserListItem(input: $input) {
+    mediaID
+    watchStatus
+  }
+}

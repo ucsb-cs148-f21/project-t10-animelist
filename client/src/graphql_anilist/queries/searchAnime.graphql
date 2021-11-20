@@ -1,0 +1,15 @@
+query SearchAnime($search: String!) {
+  Page {
+    media(search: $search, type: ANIME, isAdult: false) {
+      id
+      title {
+        romaji
+      }
+      coverImage {
+        medium
+      }
+      genres
+      siteUrl
+    }
+  }
+}
