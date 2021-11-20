@@ -3,6 +3,7 @@ type UserList {
   ownerId: String!
   name: String!
   items: [UserListItem]
+  ratingSystem: RatingSystem
 }
 
 type EmbeddedUserList {

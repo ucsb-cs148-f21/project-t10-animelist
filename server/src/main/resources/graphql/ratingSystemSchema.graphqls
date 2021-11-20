@@ -1,7 +1,7 @@
 interface RatingSystem {
   id: ID!
   name: String!
-  ownerId: ID!
+  ownerId: String
   size: Int!
   subRatings: [SubRating!]!
 }
@@ -20,7 +20,7 @@ type SubRating {
 type DiscreteRatingSystem implements RatingSystem {
   id: ID!
   name: String!
-  ownerId: ID!
+  ownerId: String
   size: Int!
   subRatings: [SubRating!]!
   labels: [String!]!
@@ -29,7 +29,7 @@ type DiscreteRatingSystem implements RatingSystem {
 type ContinuousRatingSystem implements RatingSystem {
   id: ID!
   name: String!
-  ownerId: ID!
+  ownerId: String
   size: Int!
   offset: Int!
   subRatings: [SubRating!]!
