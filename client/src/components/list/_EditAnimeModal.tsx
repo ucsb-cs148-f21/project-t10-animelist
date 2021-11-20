@@ -32,7 +32,7 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ ratingSystem, item, isO
             listId: submittedListItem.listId,
             mediaID: submittedListItem.id,
             watchStatus: submittedListItem.watchStatus as WatchStatus,
-            subRatings: submittedListItem.rating.subRatings.map(subRating => ({ id: subRating.id, rating: subRating.rating }))
+            subRatings: submittedListItem.rating ? submittedListItem.rating.subRatings.map(subRating => ({ id: subRating.id, rating: subRating.rating })) : null
           }
         }
       })
