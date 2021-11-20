@@ -4595,7 +4595,7 @@ export type FetchAnimeInfoQueryVariables = Exact<{
 }>;
 
 
-export type FetchAnimeInfoQuery = { __typename?: 'Query', Page?: Maybe<{ __typename?: 'Page', pageInfo?: Maybe<{ __typename?: 'PageInfo', total?: Maybe<number>, currentPage?: Maybe<number>, lastPage?: Maybe<number>, hasNextPage?: Maybe<boolean>, perPage?: Maybe<number> }>, media?: Maybe<Array<Maybe<{ __typename?: 'Media', id: number, title?: Maybe<{ __typename?: 'MediaTitle', romaji?: Maybe<string> }>, coverImage?: Maybe<{ __typename?: 'MediaCoverImage', medium?: Maybe<string> }> }>>> }> };
+export type FetchAnimeInfoQuery = { __typename?: 'Query', Page?: Maybe<{ __typename?: 'Page', pageInfo?: Maybe<{ __typename?: 'PageInfo', total?: Maybe<number>, currentPage?: Maybe<number>, lastPage?: Maybe<number>, hasNextPage?: Maybe<boolean>, perPage?: Maybe<number> }>, media?: Maybe<Array<Maybe<{ __typename?: 'Media', id: number, bannerImage?: Maybe<string>, title?: Maybe<{ __typename?: 'MediaTitle', romaji?: Maybe<string> }>, coverImage?: Maybe<{ __typename?: 'MediaCoverImage', medium?: Maybe<string> }> }>>> }> };
 
 export type SearchAnimeQueryVariables = Exact<{
   search: Scalars['String'];
@@ -4623,6 +4623,7 @@ export const FetchAnimeInfoDocument = gql`
       coverImage {
         medium
       }
+      bannerImage
     }
   }
 }

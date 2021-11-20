@@ -1,32 +1,30 @@
 import {
-  Button, Input, Modal, ModalBody,
-  ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack,
-  Table, Tbody,
+  Button, ButtonGroup, FormControl, FormLabel, Heading, Image, Input, Modal, ModalBody,
+  ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Table, Tbody,
   Td, Th, Thead,
-  Tr
+  Tr,
+  useToast
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as React from "react";
-import { useState } from "react";
-import { RatingSystem, use_UpdateUserListItemMutation, WatchStatus } from "../../generated/graphql";
+import { ContinuousRatingSystem, DiscreteRatingSystem, RatingSystem, use_UpdateUserListItemMutation, WatchStatus } from "../../generated/graphql";
 import { IListItem } from "./_UserList";
 ;
 
 interface EditAnimeModalProps {
-  // ratingSystem: RatingSystem,
-  ratingSystem: RatingSystem,
   item: IListItem,
   isOpen: boolean,
   onClose: () => void,
   onSave: (item: IListItem) => void
 }
 
-const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ ratingSystem, item, isOpen, onClose, onSave }) => {
+const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ item, isOpen, onClose, onSave }) => {
   const [updateListItem] = use_UpdateUserListItemMutation();
+  const toast = useToast();
   const formik = useFormik({
     initialValues: item,
     onSubmit: async (submittedListItem) => {
-      await updateListItem({
+      const { data, errors } = await updateListItem({
         variables: {
           input: {
             listId: submittedListItem.listId,
@@ -35,23 +33,36 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ ratingSystem, item, isO
             subRatings: submittedListItem.rating ? submittedListItem.rating.subRatings.map(subRating => ({ id: subRating.id, rating: subRating.rating })) : null
           }
         }
-      })
-      onSave(submittedListItem)
+      });
+      if (data) {
+        onSave(submittedListItem)
+        onClose()
+        toast({ position: "top", status: "success", title: "Success" })
+      } else {
+        toast({ position: "top", status: "error", title: "Error" })
+      }
     }
   });
 
   return (
-    <Modal isCentered isOpen={isOpen} onClose={onClose}>
+    <Modal isCentered isOpen={isOpen} size={"xl"} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader> {item.title}</ModalHeader>
+        <ModalHeader padding="0 0 0 0">
+          <Image src={item.bannerImage} height="150px" width="100%" objectFit="cover" />
+          <Heading padding="1rem">{item.title}</Heading>
+          { item.ratingSystem.__typename }
+        </ModalHeader>
         <ModalCloseButton />
         <form onSubmit={formik.handleSubmit}>
           <ModalBody>
-            <Select id="watchStatus" {...formik.getFieldProps("watchStatus")}>
-              <option value={WatchStatus.PlanToWatch}>Plan to watch</option>
-              <option value={WatchStatus.Completed}>Completed</option>
-            </Select>
+            <FormControl>
+              <FormLabel>Watch Status</FormLabel>
+              <Select id="watchStatus" {...formik.getFieldProps("watchStatus")}>
+                <option value={WatchStatus.PlanToWatch}>Plan to watch</option>
+                <option value={WatchStatus.Completed}>Completed</option>
+              </Select>
+            </FormControl>
             <Table>
               <Thead>
                 <Tr>
@@ -62,7 +73,7 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ ratingSystem, item, isO
               </Thead>
               <Tbody>
                 {
-                  ratingSystem.subRatings.map((subRating, index) => (
+                  item.ratingSystem.subRatings.map((subRating, index) => (
                     <Tr>
                       <Td>{subRating.name}</Td>
                       <Td>{subRating.weight}</Td>
@@ -77,7 +88,10 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ ratingSystem, item, isO
           </ModalBody>
 
           <ModalFooter>
-            <Button type="submit">Save</Button>
+            <ButtonGroup>
+              <Button variant="outline" colorScheme="red">Delete</Button>
+              <Button type="submit" colorScheme="green" isLoading={formik.isSubmitting}>Save</Button>
+            </ButtonGroup>
           </ModalFooter>
         </form>
       </ModalContent>

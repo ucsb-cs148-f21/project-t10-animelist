@@ -1,18 +1,18 @@
-import { Badge, Button, Heading, Icon, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
+import { Badge, Button, ButtonGroup, Heading, Icon, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Skeleton, Table, TableCaption, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { RatingSystem, useMeQuery, UserList as UserListType, UserListItem as UserListItemType, UserListRating } from "../../generated/graphql";
+import { ContinuousRatingSystem, DiscreteRatingSystem, RatingSystem, useMeQuery, UserList as UserListType, UserListItem as UserListItemType, UserListRating } from "../../generated/graphql";
 import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
 import { createApolloAnilist, initializeApolloAnilist, useApolloAnilist } from "../../utils/createApolloAnilist";
 import { Image } from "@chakra-ui/react"
 import { BsDash } from "react-icons/bs";
 import SearchAddAnime from "../search/_SearchAddAnime";
 import UserListItem from "./_UserListItem";
+import { PlusSquareIcon, SettingsIcon } from "@chakra-ui/icons";
 
 const PAGE_SIZE = 20;
 
 export interface UserListProps {
-  ratingSystem: RatingSystem;
   userlist: UserListType;
   isOwn: boolean;
 }
@@ -23,15 +23,20 @@ export interface IListItem {
   title: string;
   watchStatus: string;
   coverImage: string;
+  bannerImage: string;
+  ratingSystem?: ContinuousRatingSystem | DiscreteRatingSystem;
   rating?: UserListRating;
 }
 
-const AddAnime: React.FC<{ addedIds: Set<number>; listId: string }> = ({ addedIds, listId }) => {
+const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> = ({ addedIds, listId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button alignSelf="flex-end" onClick={onOpen}>Add Anime</Button>
-      <Modal isCentered scrollBehavior="inside" isOpen={isOpen} onClose={onClose}>
+      <ButtonGroup alignSelf="flex-end">
+        <Button leftIcon={<PlusSquareIcon/>} alignSelf="flex-end" colorScheme="blue" onClick={onOpen}>Add Anime</Button>
+        <Button leftIcon={<SettingsIcon/>}>Settings</Button>
+      </ButtonGroup>
+      <Modal isCentered   scrollBehavior="inside" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent padding="10px" maxW="56rem">
           <ModalCloseButton />
@@ -72,8 +77,10 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
         title: anilistMedia.title.romaji,
         watchStatus: userListItemOf[anilistMedia.id].watchStatus,
         rating: userListItemOf[anilistMedia.id].rating,
+        ratingSystem: userlist.ratingSystem as any,
         listId: userlist.id,
-        coverImage: anilistMedia.coverImage.medium
+        coverImage: anilistMedia.coverImage.medium,
+        bannerImage: anilistMedia.bannerImage
       }));
 
       setListItems(
@@ -103,7 +110,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
   return (
     <VStack width="full" p={6} maxWidth="6xl">
       <Heading>{userlist.name}</Heading>
-      {isOwn && <AddAnime addedIds={new Set(userlist.items.map(item => item.mediaID))} listId={userlist.id} />}
+      {isOwn && <ListOwnerBar addedIds={new Set(userlist.items.map(item => item.mediaID))} listId={userlist.id} />}
       <Table>
         <Thead>
           <Tr>
@@ -116,7 +123,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
         </Thead>
         <Tbody>
           {
-            listItems.map((item) => <UserListItem ratingSystem={userlist.ratingSystem} key={item.id} item={item} canEdit={isOwn}/>)
+            listItems.map((item) => <UserListItem key={item.id} item={item} canEdit={isOwn}/>)
           }
         </Tbody>
       </Table>

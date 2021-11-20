@@ -21,6 +21,12 @@ query _UserList($listId: String!) {
             name
             ownerId
             size
+            ... on ContinuousRatingSystem {
+                offset
+            }
+            ... on DiscreteRatingSystem {
+                labels
+            }
             subRatings {
                 id 
                 name

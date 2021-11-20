@@ -205,7 +205,7 @@ export type SubRatingInput = {
 export type UpdateUserListItemInput = {
   listId: Scalars['String'];
   mediaID: Scalars['Int'];
-  subRatings: Array<Maybe<UserListSubRatingInput>>;
+  subRatings?: Maybe<Array<Maybe<UserListSubRatingInput>>>;
   watchStatus: WatchStatus;
 };
 
@@ -340,7 +340,7 @@ export type _UserListQueryVariables = Exact<{
 }>;
 
 
-export type _UserListQuery = { __typename?: 'Query', userList?: Maybe<{ __typename?: 'UserList', id: string, ownerId: string, name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string, rating: number, subRatings: Array<{ __typename?: 'UserListSubRating', id: number, displayRating?: Maybe<string>, rating: number }> }> }>>>, ratingSystem?: Maybe<{ __typename?: 'ContinuousRatingSystem', id: string, name: string, ownerId?: Maybe<string>, size: number, subRatings: Array<{ __typename?: 'SubRating', id: string, name: string, weight: number }> } | { __typename?: 'DiscreteRatingSystem', id: string, name: string, ownerId?: Maybe<string>, size: number, subRatings: Array<{ __typename?: 'SubRating', id: string, name: string, weight: number }> }> }> };
+export type _UserListQuery = { __typename?: 'Query', userList?: Maybe<{ __typename?: 'UserList', id: string, ownerId: string, name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string, rating: number, subRatings: Array<{ __typename?: 'UserListSubRating', id: number, displayRating?: Maybe<string>, rating: number }> }> }>>>, ratingSystem?: Maybe<{ __typename?: 'ContinuousRatingSystem', offset: number, id: string, name: string, ownerId?: Maybe<string>, size: number, subRatings: Array<{ __typename?: 'SubRating', id: string, name: string, weight: number }> } | { __typename?: 'DiscreteRatingSystem', labels: Array<string>, id: string, name: string, ownerId?: Maybe<string>, size: number, subRatings: Array<{ __typename?: 'SubRating', id: string, name: string, weight: number }> }> }> };
 
 export type MalLinkOauthQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -699,6 +699,12 @@ export const _UserListDocument = gql`
       name
       ownerId
       size
+      ... on ContinuousRatingSystem {
+        offset
+      }
+      ... on DiscreteRatingSystem {
+        labels
+      }
       subRatings {
         id
         name

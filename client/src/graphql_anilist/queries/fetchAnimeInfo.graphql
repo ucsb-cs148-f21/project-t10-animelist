@@ -15,6 +15,7 @@ query FetchAnimeInfo($ids: [Int]!) {
       coverImage {
         medium
       }
+      bannerImage
     }
   }
 }
