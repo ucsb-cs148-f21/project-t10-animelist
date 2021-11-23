@@ -1,6 +1,7 @@
 package com.github.animelist.animelist.entity;
 
 import com.github.animelist.animelist.model.user.UserListEntry;
+import com.github.animelist.animelist.model.userlist.EmbeddedUserList;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,7 +22,7 @@ public class User extends DateAudit {
 
     private String password;
 
-    private List<ObjectId> userLists;
+    private List<EmbeddedUserList> userLists;
 
     private List<UserListEntry> userList;
 

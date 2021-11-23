@@ -5,6 +5,11 @@ type UserList {
   items: [UserListItem]
 }
 
+type EmbeddedUserList {
+  id: ID!
+  name: String!
+}
+
 type UserListItem {
   mediaID: Int!
   watchStatus: String!
