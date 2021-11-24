@@ -1,11 +1,11 @@
-import { VStack } from '@chakra-ui/react';
+import { Heading, VStack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/dist/client/router';
 import * as React from 'react';
-import UserList from '../../components/list/_UserList';
+import UserList, { ListOwnerBar } from '../../components/list/_UserList';
 import { useMeQuery, use_UserListQuery } from '../../generated/graphql';
 
 const ListPage: React.FC<{}> = () => {
-  
+
   const router = useRouter();
   const { listId } = router.query
   const { data: meData } = useMeQuery();
@@ -13,7 +13,7 @@ const ListPage: React.FC<{}> = () => {
 
   if (loading) {
     return (
-      <div/>
+      <div />
     )
   }
 
@@ -23,9 +23,19 @@ const ListPage: React.FC<{}> = () => {
     )
   }
 
+  if (!data.userList.items || data.userList.items.length == 0) {
+    return (
+      <VStack py={{ base: 10 }} width="full" maxWidth="6xl">
+        <Heading>{ data.userList.name }</Heading>
+        <ListOwnerBar addedIds={new Set(data.userList.items.map(item => item.mediaID))} listId={data.userList.id}/>
+        <Text>You have no items, yet! :(</Text>
+      </VStack>
+    );
+  }
+
   return (
-    <VStack py={{ base: 10 }} width="full">
-      <UserList userlist={data.userList} isOwn={meData && meData.me && meData.me.id == data.userList.ownerId}/>
+    <VStack py={{ base: 10 }} width="full" maxWidth="6xl">
+      <UserList userlist={data.userList} isOwn={meData && meData.me && meData.me.id == data.userList.ownerId} />
     </VStack>
   );
 };

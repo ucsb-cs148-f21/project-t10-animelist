@@ -26,7 +26,7 @@ export interface IListItem {
   rating?: UserListRating;
 }
 
-const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> = ({ addedIds, listId }) => {
+export const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> = ({ addedIds, listId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -106,7 +106,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
   }
 
   return (
-    <VStack width="full" p={6} maxWidth="6xl">
+    <VStack width="full" p={6}>
       <Heading>{userlist.name}</Heading>
       {isOwn && <ListOwnerBar addedIds={new Set(userlist.items.map(item => item.mediaID))} listId={userlist.id} />}
       <Table>
