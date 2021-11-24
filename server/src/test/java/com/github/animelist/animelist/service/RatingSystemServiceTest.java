@@ -44,7 +44,7 @@ public class RatingSystemServiceTest {
                 .ownerId(new ObjectId())
                 .size(10)
                 .offset(1)
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
                 .build();
         final ContinuousRatingSystem expected = ContinuousRatingSystem.builder()
                 .id(new ObjectId().toString())
@@ -74,7 +74,7 @@ public class RatingSystemServiceTest {
                 .name("Test")
                 .ownerId(new ObjectId())
                 .size(10)
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
                 .labels(IntStream.range(1, 11).mapToObj(String::valueOf).collect(Collectors.toList()))
                 .build();
         final DiscreteRatingSystem expected = DiscreteRatingSystem.builder()
@@ -107,7 +107,7 @@ public class RatingSystemServiceTest {
                 .ownerId(new ObjectId())
                 .size(10)
                 .offset(1)
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
                 .build();
 
         when(mongoTemplate.findById(eq(new ObjectId(expected.getId())), eq(RatingSystem.class))).thenReturn(expected);
