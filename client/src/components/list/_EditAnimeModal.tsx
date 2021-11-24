@@ -30,12 +30,12 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ item, isOpen, onClose, 
             listId: submittedListItem.listId,
             mediaID: submittedListItem.id,
             watchStatus: submittedListItem.watchStatus as WatchStatus,
-            subRatings: submittedListItem.rating ? submittedListItem.rating.subRatings.map(subRating => ({ id: subRating.id, rating: subRating.rating })) : null
+            subRatings: submittedListItem.rating ? submittedListItem.rating.subRatings.map((subRating, idx) => ({ id: subRating.id ? subRating.id : idx, rating: subRating.rating })) : null
           }
         }
       });
       if (data) {
-        onSave(submittedListItem)
+        onSave({...submittedListItem, watchStatus: data.updateUserListItem.watchStatus, rating: data.updateUserListItem.rating});
         onClose()
         toast({ position: "top", status: "success", title: "Success" })
       } else {
@@ -80,7 +80,7 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ item, isOpen, onClose, 
                         {
                           item.ratingSystem.__typename === "ContinuousRatingSystem" ?
                           <Input id={`rating.subRatings[${index}].rating`} {...formik.getFieldProps(`rating.subRatings[${index}].rating`)}/> :
-                          <Select>
+                          <Select id={`rating.subRatings[${index}].rating`} {...formik.getFieldProps(`rating.subRatings[${index}].rating`)}>
                             {
                               (item.ratingSystem as DiscreteRatingSystem).labels.map((label, idx) => (
                                 <option key={idx} value={idx}>{label}</option>
