@@ -20,8 +20,8 @@ public class DiscreteRatingSystem extends RatingSystem {
 
     private List<String> labels;
 
-    public DiscreteRatingSystem(String id, String name, ObjectId ownerId, Integer size, List<SubRating> subRating, List<String> labels) {
-        super(id, name, ownerId, size, subRating);
+    public DiscreteRatingSystem(String id, String name, ObjectId ownerId, Integer size, List<SubRating> subRatings, List<String> labels) {
+        super(id, name, ownerId, size, subRatings);
         this.labels = labels;
         Assert.isTrue(labels.size() == size, "the number of labels should be equal to size" );
         var nonNullNonBlankLabelsSize = labels.stream().filter(label -> nonNull(label) && !label.isBlank()).count();
