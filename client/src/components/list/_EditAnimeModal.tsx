@@ -60,6 +60,8 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ item, isOpen, onClose, 
               <Select id="watchStatus" {...formik.getFieldProps("watchStatus")}>
                 <option value={WatchStatus.PlanToWatch}>Plan to watch</option>
                 <option value={WatchStatus.Completed}>Completed</option>
+                <option value={WatchStatus.OnHold}>On Hold</option>
+                <option value={WatchStatus.Dropped}>Dropped</option>
               </Select>
             </FormControl>
             <Table>
