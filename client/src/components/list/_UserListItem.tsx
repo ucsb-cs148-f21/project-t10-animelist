@@ -37,8 +37,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ item: initialItem, canEdit 
       <Td>{item.title}</Td>
       <Td>{badgeFor(item.watchStatus as WatchStatus)}</Td>
       <Td>{item.rating ? item.rating.displayRating : <Icon as={BsDash} />}</Td>
-      { canEdit && <Td><Button onClick={onOpen}>Edit</Button></Td> }
-      { canEdit && <EditAnimeModal item={item} isOpen={isOpen} onClose={onClose} onSave={changeItemState}/>}
+      { canEdit && <Td><Button onClick={onOpen}>Edit</Button><EditAnimeModal item={item} isOpen={isOpen} onClose={onClose} onSave={changeItemState}/></Td> }
     </Tr>
   );
 };
