@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as React from "react";
-import { use_UpdateUserListItemMutation, WatchStatus } from "../../generated/graphql";
+import { DiscreteRatingSystem, RatingSystemType, use_UpdateUserListItemMutation, WatchStatus } from "../../generated/graphql";
 import { IListItem } from "./_UserList";
 ;
 
@@ -73,10 +73,22 @@ const EditAnimeModal: React.FC<EditAnimeModalProps> = ({ item, isOpen, onClose, 
               <Tbody>
                 {
                   item.ratingSystem.subRatings.map((subRating, index) => (
-                    <Tr>
+                    <Tr key={subRating.id}>
                       <Td>{subRating.name}</Td>
                       <Td>{subRating.weight}</Td>
-                      <Td><Input initialValue={item.rating ? item.rating.subRatings.at(index).displayRating : "-"} /></Td>
+                      <Td>
+                        {
+                          item.ratingSystem.__typename === "ContinuousRatingSystem" ?
+                          <Input id={`rating.subRatings[${index}].rating`} {...formik.getFieldProps(`rating.subRatings[${index}].rating`)}/> :
+                          <Select>
+                            {
+                              (item.ratingSystem as DiscreteRatingSystem).labels.map((label, idx) => (
+                                <option key={idx} value={idx}>{label}</option>
+                              ))
+                            }
+                          </Select>
+                        }
+                      </Td>
                     </Tr>
                   )
                   )
