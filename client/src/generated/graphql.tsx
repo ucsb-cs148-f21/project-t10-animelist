@@ -55,6 +55,18 @@ export type DiscreteRatingSystemInput = {
   labels: Array<Scalars['String']>;
 };
 
+export type EmbeddedRatingSystem = {
+  __typename?: 'EmbeddedRatingSystem';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type EmbeddedUserList = {
+  __typename?: 'EmbeddedUserList';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
 export type LoginInput = {
   password: Scalars['String'];
   usernameOrEmail: Scalars['String'];
@@ -213,8 +225,10 @@ export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
+  ratingSystems?: Maybe<Array<Maybe<EmbeddedRatingSystem>>>;
   updatedAt: Scalars['DateTime'];
   userList: Array<UserListEntry>;
+  userLists?: Maybe<Array<Maybe<EmbeddedUserList>>>;
   username: Scalars['String'];
 };
 

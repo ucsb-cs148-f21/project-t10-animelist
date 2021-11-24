@@ -69,7 +69,16 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: from([tokenLink, authLink, httpLink]),
-    cache: new InMemoryCache()
+    cache: new InMemoryCache({
+      typePolicies: {
+        UserListSubRating: {
+          keyFields: false
+        },
+        SubRating: {
+          keyFields: false
+        }
+      }
+    })
   });
 }
 
