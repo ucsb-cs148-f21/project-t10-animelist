@@ -5,6 +5,7 @@ type User {
   username: String!
   userList: [UserListEntry!]!
   userLists: [EmbeddedUserList]
+  ratingSystems: [EmbeddedRatingSystem]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

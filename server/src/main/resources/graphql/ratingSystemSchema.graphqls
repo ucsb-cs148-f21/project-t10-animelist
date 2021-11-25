@@ -6,11 +6,17 @@ interface RatingSystem {
   subRatings: [SubRating!]!
 }
 
+type EmbeddedRatingSystem {
+  id: ID!
+  name: String!
+}
+
 type SubRating {
   id: ID!
   name: String!
   weight: Float!
 }
+
 type DiscreteRatingSystem implements RatingSystem {
   id: ID!
   name: String!

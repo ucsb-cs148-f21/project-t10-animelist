@@ -53,7 +53,7 @@ public class RatingSystemControllerTest {
                 .ownerId(new ObjectId())
                 .size(10)
                 .offset(1)
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
                 .build();
 
         when(ratingSystemService.getRatingSystem(testID.toString())).thenReturn(Optional.of(expected));
@@ -68,7 +68,7 @@ public class RatingSystemControllerTest {
         final RatingSystemInput input = new RatingSystemInput(
                 "Test",
                 3,
-                Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()),
+                Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()),
                 RatingSystemType.DISCRETE,
                 discreteInput,
                 null);
@@ -77,7 +77,7 @@ public class RatingSystemControllerTest {
                 .name("Test")
                 .ownerId(new ObjectId())
                 .size(3)
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
                 .labels(IntStream.range(1, 4).mapToObj(String::valueOf).collect(Collectors.toList()))
                 .build();
         when(ratingSystemService.createRatingSystem(any())).thenReturn(expected);
@@ -91,13 +91,13 @@ public class RatingSystemControllerTest {
     void createContinuousRatingSystem_happy() {
         mockAuthenticationPrincipal();
         final ContinuousRatingSystemInput continuousInput = new ContinuousRatingSystemInput(1);
-        final RatingSystemInput input = new RatingSystemInput("Test",10,Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()), RatingSystemType.CONTINUOUS,null,continuousInput);
+        final RatingSystemInput input = new RatingSystemInput("Test",10,Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()), RatingSystemType.CONTINUOUS,null,continuousInput);
         final RatingSystem expected = DiscreteRatingSystem.builder()
                 .id(new ObjectId().toString())
                 .name("Test")
                 .ownerId(new ObjectId())
                 .size(10)
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
                 .labels(IntStream.range(1, 11).mapToObj(String::valueOf).collect(Collectors.toList()))
                 .build();
         when(ratingSystemService.createRatingSystem(any())).thenReturn(expected);

@@ -32,7 +32,7 @@ public class DiscreteRatingSystemTest {
                 .ownerId(new ObjectId())
                 .size(3)
                 .labels(Arrays.asList("one", "two", "three"))
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
 
         assertDoesNotThrow(builder::build);
     }
@@ -45,7 +45,7 @@ public class DiscreteRatingSystemTest {
                 .ownerId(new ObjectId())
                 .size(10)
                 .offset(1)
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
 
         assertDoesNotThrow(builder::build);
     }
@@ -57,7 +57,7 @@ public class DiscreteRatingSystemTest {
                 .ownerId(new ObjectId())
                 .size(10)
                 .labels(Arrays.asList("S", "A", "B", "C", "D", "E"))
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
 
         assertThrows(IllegalArgumentException.class, builder::build);
     }
@@ -69,7 +69,7 @@ public class DiscreteRatingSystemTest {
                 .ownerId(new ObjectId())
                 .size(1)
                 .labels(singletonList("S"))
-                .subRatings(singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
+                .subRatings(singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
 
         assertThrows(IllegalArgumentException.class, builder::build);
     }
@@ -83,14 +83,14 @@ public class DiscreteRatingSystemTest {
                 .ownerId(new ObjectId())
                 .size(1)
                 .labels(singletonList("S"))
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()));
+                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
 
         assertThrows(IllegalArgumentException.class, builder::build);
     }
 
     @ParameterizedTest
-    @ValueSource(floats = { 0.2f,  0.90f, 1.01f, 0.98f, 2f})
-    void DiscreteRatingSystemBuilder_badWeightSum(final float badSubratingWeight) {
+    @ValueSource(doubles = { 0.2d,  0.90d, 1.01d, 0.98d, 2d})
+    void DiscreteRatingSystemBuilder_badWeightSum(final double badSubratingWeight) {
         final var builder = DiscreteRatingSystem.builder()
                 .name("Test")
                 .ownerId(new ObjectId())
@@ -141,12 +141,12 @@ public class DiscreteRatingSystemTest {
                         SubRating.builder()
                                 .id(0)
                                 .name("25")
-                                .weight(0.25f)
+                                .weight(0.25d)
                                 .build(),
                         SubRating.builder()
                                 .id(1)
                                 .name("75")
-                                .weight(0.75f)
+                                .weight(0.75d)
                                 .build()
                 ))
                 .build();
@@ -228,7 +228,7 @@ public class DiscreteRatingSystemTest {
                         SubRating.builder()
                                 .id(0)
                                 .name("Score")
-                                .weight(1f)
+                                .weight(1d)
                                 .build()
                 ))
                 .labels(asList("0", "1", "2", "3", "4", "5"))
@@ -272,7 +272,7 @@ public class DiscreteRatingSystemTest {
                         SubRating.builder()
                                 .id(0)
                                 .name("Score")
-                                .weight(1f)
+                                .weight(1d)
                                 .build()
                 ))
                 .labels(IntStream.range(0, 101).boxed().map(Object::toString).collect(Collectors.toList()))

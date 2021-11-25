@@ -131,7 +131,7 @@ public class ContinuousRatingSystem extends RatingSystem {
                         SubRating.builder()
                                 .id(0)
                                 .name("Score")
-                                .weight(1f)
+                                .weight(1d)
                                 .build()
                 ))
                 .offset(0)

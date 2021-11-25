@@ -8,10 +8,10 @@ public class SubRating {
 
     private String name;
 
-    private Float weight;
+    private Double weight;
 
 
-    public SubRating(Integer id, String name, Float weight) {
+    public SubRating(Integer id, String name, Double weight) {
         this.id = id;
         this.name = name;
         this.weight = weight;
@@ -46,11 +46,11 @@ public class SubRating {
         this.name = name;
     }
 
-    public Float getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(Float weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
@@ -62,7 +62,7 @@ public class SubRating {
 
         private Integer id;
         private String name;
-        private Float weight;
+        private Double weight;
 
         public Builder id(Integer id) {
             this.id = id;
@@ -74,7 +74,7 @@ public class SubRating {
             return this;
         }
 
-        public Builder weight(Float weight) {
+        public Builder weight(Double weight) {
             this.weight = weight;
             return this;
         }

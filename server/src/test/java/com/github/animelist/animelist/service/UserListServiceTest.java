@@ -52,7 +52,7 @@ public class UserListServiceTest {
                         .ownerId(new ObjectId())
                         .size(10)
                         .offset(1)
-                        .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
+                        .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
                         .build())
                 .items(singletonList(
                         UserListItem.builder()
@@ -93,7 +93,7 @@ public class UserListServiceTest {
                         .ownerId(new ObjectId())
                         .size(10)
                         .offset(1)
-                        .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
+                        .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
                         .build())
                 .items(singletonList(
                         UserListItem.builder()
