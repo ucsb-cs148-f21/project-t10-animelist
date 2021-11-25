@@ -4,6 +4,7 @@ type User {
   id: ID!
   username: String!
   userList: [UserListEntry!]!
+  userLists: [EmbeddedUserList]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

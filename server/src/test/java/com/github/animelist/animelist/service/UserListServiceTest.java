@@ -1,8 +1,10 @@
 package com.github.animelist.animelist.service;
 
+import com.github.animelist.animelist.entity.User;
 import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.SubRating;
+import com.github.animelist.animelist.model.userlist.EmbeddedUserList;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
 import com.github.animelist.animelist.model.userlist.WatchStatus;
@@ -61,27 +63,22 @@ public class UserListServiceTest {
                 .build();
         final var expectedUserList = UserList.builder()
                 .id(new ObjectId().toString())
-                .name("test")
-                .ownerId(new ObjectId())
-                .ratingSystem(ContinuousRatingSystem.builder()
-                        .name("test")
-                        .ownerId(new ObjectId())
-                        .size(10)
-                        .offset(1)
-                        .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1f).build()))
-                        .build())
-                .items(singletonList(
-                        UserListItem.builder()
-                                .mediaID(1234)
-                                .watchStatus(WatchStatus.PLAN_TO_WATCH)
-                                .build()
-                ))
+                .name(userListInput.getName())
+                .ownerId(userListInput.getOwnerId())
+                .ratingSystem(userListInput.getRatingSystem())
+                .items(userListInput.getItems())
+                .build();
+        final var expectedEmbeddedUserList = EmbeddedUserList.builder()
+                .id(new ObjectId(expectedUserList.getId()))
+                .name(expectedUserList.getName())
                 .build();
 
         when(mongoTemplate.insert(userListInput)).thenReturn(expectedUserList);
 
         var actualUserList = userListService.createUserList(userListInput);
 
+        verify(mongoTemplate, times(1))
+                .updateFirst(new Query().addCriteria(where("_id").is(expectedUserList.getOwnerId())), new Update().push("userLists", expectedEmbeddedUserList), User.class);
         assertThat(actualUserList, is(expectedUserList));
     }
 

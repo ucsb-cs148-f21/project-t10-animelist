@@ -4,6 +4,7 @@ import com.github.animelist.animelist.entity.User;
 import com.github.animelist.animelist.model.input.UserListEntryInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
+import com.github.animelist.animelist.model.userlist.EmbeddedUserList;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
 import org.bson.types.ObjectId;
@@ -30,7 +31,16 @@ public class UserListService {
     }
 
     public UserList createUserList(final UserList userList) {
-        return mongoTemplate.insert(userList);
+        final UserList insertedList =  mongoTemplate.insert(userList);
+        final EmbeddedUserList embeddedUserList = EmbeddedUserList.builder()
+                .id(new ObjectId(insertedList.getId()))
+                .name(insertedList.getName())
+                .build();
+        final Query userQuery = new Query().addCriteria(Criteria.where("_id").is(userList.getOwnerId()));
+        final Update insertEmbeddedUserList = new Update().push("userLists", embeddedUserList);
+        mongoTemplate.updateFirst(userQuery, insertEmbeddedUserList, User.class);
+
+        return insertedList;
     }
 
     public Optional<UserList> getUserList(final String listId) {
