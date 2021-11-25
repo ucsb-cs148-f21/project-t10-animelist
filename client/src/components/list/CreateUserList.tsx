@@ -4,6 +4,7 @@ import {
     Stack,
     VStack,
     Button,
+    Select,
     Heading,
     FormControl, 
     FormLabel,
@@ -17,6 +18,8 @@ import * as React from 'react';
 import{ Formik, Form, Field, useFormik } from "formik";
 import * as Yup from 'yup';
 import ChooseRatingModal from "./ChooseRatingModal";
+//import { RatingSystem } from "../../generated/graphql";
+
 
 const CreateUserList: React.FC<{}> = () => {
 
@@ -31,7 +34,8 @@ const CreateUserList: React.FC<{}> = () => {
 
     const formik = useFormik({
       initialValues:{
-        name: ""
+        name: "",
+        ratingSystemID: ""
       },
       validationSchema,
       onSubmit: (values, actions) => {
@@ -49,8 +53,9 @@ const CreateUserList: React.FC<{}> = () => {
 
           <Stack spacing="24px">
             <Heading size="md">Choose a Rating System for your List!</Heading>
-            <Button onClick={onOpen} colorScheme="blue" width="120px">Add Rating</Button>
-            <ChooseRatingModal isOpen={isOpen} onClose={onClose}/>
+            <Select placeholder="---" size="lg" isRequired>
+                <option value="ratingSystemID1"> MyFirstRatingSystem</option>
+            </Select>
           </Stack>
 
           <Center>

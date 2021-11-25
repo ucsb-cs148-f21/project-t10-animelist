@@ -33,7 +33,7 @@ const CreateList: React.FC<{}> = () => {
       maxWidth="3xl"
     >
       <Heading>
-        Create an Anime List
+        Create a New Anime List
       </Heading>
       <CreateUserList/>
     </Stack>
