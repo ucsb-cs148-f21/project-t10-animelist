@@ -1,0 +1,14 @@
+mutation _UpdateUserListItem($input: UpdateUserListItemInput!) {
+  updateUserListItem(input: $input) {
+    mediaID
+    watchStatus
+    rating {
+      rating
+      displayRating
+      subRatings {
+        id
+        rating
+      }
+    }
+  }
+}

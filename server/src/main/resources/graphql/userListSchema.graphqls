@@ -3,6 +3,7 @@ type UserList {
   ownerId: String!
   name: String!
   items: [UserListItem]
+  ratingSystem: RatingSystem
 }
 
 type EmbeddedUserList {
@@ -51,7 +52,7 @@ input UpdateUserListItemInput {
   listId: String!
   mediaID: Int!
   watchStatus: WatchStatus!
-  subRatings: [UserListSubRatingInput]!
+  subRatings: [UserListSubRatingInput]
 }
 
 input UserListSubRatingInput {

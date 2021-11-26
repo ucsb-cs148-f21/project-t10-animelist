@@ -1,0 +1,37 @@
+query _UserList($listId: String!) {
+    userList(listId: $listId) {
+      id
+      ownerId
+      name
+      items {
+          mediaID
+          watchStatus
+          rating {
+              displayRating
+              rating
+              subRatings {
+                  id
+                  displayRating
+                  rating
+              }
+          }
+      }
+      ratingSystem {
+            id
+            name
+            ownerId
+            size
+            ... on ContinuousRatingSystem {
+                offset
+            }
+            ... on DiscreteRatingSystem {
+                labels
+            }
+            subRatings {
+                id 
+                name
+                weight
+            }
+      }
+    }
+}
