@@ -48,13 +48,19 @@ const CreateUserList: React.FC<{}> = () => {
           <Stack spacing={{ base: 8, md: 12 }} mt={4}>
           <FormControl isRequired>
             <FormLabel>Name</FormLabel>
-            <Input placeholder="MyUserList" id="name"/>
+            <Input placeholder="MyUserList" id="name" {...formik.getFieldProps("name")}/>
           </FormControl>
 
           <Stack spacing="24px">
             <Heading size="md">Choose a Rating System for your List!</Heading>
-            <Select placeholder="---" size="lg" isRequired>
-                <option value="ratingSystemID1"> MyFirstRatingSystem</option>
+            <Select 
+              placeholder="---" 
+              size="lg" 
+              id="ratingSystemID" 
+              {...formik.getFieldProps("ratingSystemID")} 
+              isRequired
+            >
+                <option value="ratingSystemID1" > MyFirstRatingSystem</option>
             </Select>
           </Stack>
 
