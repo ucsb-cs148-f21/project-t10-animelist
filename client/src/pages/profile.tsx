@@ -45,6 +45,9 @@ const Profile: React.FC<{}> = () => {
         <Link href="/createratingsystem">
         <Button colorScheme="blue">Create Rating System</Button>
         </Link>
+        <Link href="/createlist">
+        <Button colorScheme="blue">Create a List</Button>
+        </Link>
       </VStack>
     </Center>
   );
