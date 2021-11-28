@@ -37,19 +37,6 @@ public class DiscreteRatingSystemTest {
         assertDoesNotThrow(builder::build);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = { "Test", "TEST", "1234", "Test123", "Test 1234", "TEST   1234", "TEST-1234-TEST TEST" })
-    void createContinuousRatingSystemBuilder_happyName(final String name) {
-        final var builder = ContinuousRatingSystem.builder()
-                .name(name)
-                .ownerId(new ObjectId())
-                .size(10)
-                .offset(1)
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
-
-        assertDoesNotThrow(builder::build);
-    }
-
     @Test
     void DiscreteRatingSystemBuilder_badLabelMatch() {
         final var builder = DiscreteRatingSystem.builder()
@@ -70,20 +57,6 @@ public class DiscreteRatingSystemTest {
                 .size(1)
                 .labels(singletonList("S"))
                 .subRatings(singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
-
-        assertThrows(IllegalArgumentException.class, builder::build);
-    }
-
-    @ParameterizedTest
-    @NullAndEmptySource
-    @ValueSource(strings = {"", "  ", "\n", "\t", "tj\n", "  test", "test   ", "-test", "test-"})
-    void DiscreteRatingSystemBuilder_badName(final String badName) {
-        final var builder = DiscreteRatingSystem.builder()
-                .name(badName)
-                .ownerId(new ObjectId())
-                .size(1)
-                .labels(singletonList("S"))
-                .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
 
         assertThrows(IllegalArgumentException.class, builder::build);
     }

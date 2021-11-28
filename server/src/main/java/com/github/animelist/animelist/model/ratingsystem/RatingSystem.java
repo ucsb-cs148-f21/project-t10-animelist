@@ -49,7 +49,6 @@ public abstract class RatingSystem {
         var weightSum = subRatings.stream().mapToDouble(SubRating::getWeight).sum();
         var difference = WEIGHT_SUM_EXPECTED - weightSum;
         Assert.isTrue(difference >= 0 && difference <= WEIGHT_SUM_EPSILON, "subRatings weight sum must sum up to 1");
-        Assert.isTrue(name.matches("^[a-zA-Z0-9]+(?:[\\w -]*[a-zA-Z0-9]+)*$"),"Name must be AlphaNumeric");
     }
 
     public abstract UserListRating score(final List<UserListSubRating> userListSubRatings);
