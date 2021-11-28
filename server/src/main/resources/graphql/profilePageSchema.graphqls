@@ -11,7 +11,7 @@ type UserListBlock implements Block {
 }
 
 type UserListBlockSettings {
-  listId: ID!
+  listId: String!
   maxEntries: Int
 }
 
@@ -37,7 +37,7 @@ type StatisticsBlock implements Block {
 
 type StatisticsBlockAdditionalData {
   entries: Int!
-  avgRating: Int!
+  avgRating: Int
 }
 
 type SpacerBlock implements Block {
@@ -68,7 +68,7 @@ input BlockInput {
 }
 
 input UserListBlockInput {
-  listId: ID!
+  listId: String!
   maxEntries: Int
 }
 

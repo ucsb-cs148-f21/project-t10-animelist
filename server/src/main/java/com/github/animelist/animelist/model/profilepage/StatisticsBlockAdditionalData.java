@@ -2,9 +2,9 @@ package com.github.animelist.animelist.model.profilepage;
 
 public class StatisticsBlockAdditionalData {
     private int entries;
-    private float avgRating;
+    private Double avgRating;
 
-    public StatisticsBlockAdditionalData(int entries, float avgRating) {
+    public StatisticsBlockAdditionalData(int entries, Double avgRating) {
         this.entries = entries;
         this.avgRating = avgRating;
     }
@@ -17,11 +17,11 @@ public class StatisticsBlockAdditionalData {
         this.entries = entries;
     }
 
-    public float getAvgRating() {
+    public Double getAvgRating() {
         return avgRating;
     }
 
-    public void setAvgRating(float avgRating) {
+    public void setAvgRating(Double avgRating) {
         this.avgRating = avgRating;
     }
 
@@ -29,7 +29,7 @@ public class StatisticsBlockAdditionalData {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + Float.floatToIntBits(avgRating);
+        result = prime * result + ((avgRating == null) ? 0 : avgRating.hashCode());
         result = prime * result + entries;
         return result;
     }
@@ -43,7 +43,10 @@ public class StatisticsBlockAdditionalData {
         if (getClass() != obj.getClass())
             return false;
         StatisticsBlockAdditionalData other = (StatisticsBlockAdditionalData) obj;
-        if (Float.floatToIntBits(avgRating) != Float.floatToIntBits(other.avgRating))
+        if (avgRating == null) {
+            if (other.avgRating != null)
+                return false;
+        } else if (!avgRating.equals(other.avgRating))
             return false;
         if (entries != other.entries)
             return false;

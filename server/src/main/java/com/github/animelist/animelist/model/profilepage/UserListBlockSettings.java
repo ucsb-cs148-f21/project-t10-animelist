@@ -1,29 +1,28 @@
 package com.github.animelist.animelist.model.profilepage;
 
-import org.bson.types.ObjectId;
 
 public class UserListBlockSettings {
-    private ObjectId listId;
-    private int maxEntries;
+    private String listId;
+    private Integer maxEntries;
     
-    public UserListBlockSettings(ObjectId listId, int maxEntries) {
+    public UserListBlockSettings(String listId, Integer maxEntries) {
         this.listId = listId;
         this.maxEntries = maxEntries;
     }
 
-    public ObjectId getListId() {
+    public String getListId() {
         return listId;
     }
 
-    public void setListId(ObjectId listId) {
+    public void setListId(String listId) {
         this.listId = listId;
     }
 
-    public int getMaxEntries() {
+    public Integer getMaxEntries() {
         return maxEntries;
     }
 
-    public void setMaxEntries(int maxEntries) {
+    public void setMaxEntries(Integer maxEntries) {
         this.maxEntries = maxEntries;
     }
 
@@ -32,7 +31,7 @@ public class UserListBlockSettings {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((listId == null) ? 0 : listId.hashCode());
-        result = prime * result + maxEntries;
+        result = prime * result + ((maxEntries == null) ? 0 : maxEntries.hashCode());
         return result;
     }
 
@@ -50,7 +49,10 @@ public class UserListBlockSettings {
                 return false;
         } else if (!listId.equals(other.listId))
             return false;
-        if (maxEntries != other.maxEntries)
+        if (maxEntries == null) {
+            if (other.maxEntries != null)
+                return false;
+        } else if (!maxEntries.equals(other.maxEntries))
             return false;
         return true;
     }
