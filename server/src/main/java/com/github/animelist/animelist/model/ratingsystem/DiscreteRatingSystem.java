@@ -126,8 +126,8 @@ public class DiscreteRatingSystem extends RatingSystem {
 
     public static DiscreteRatingSystem TEN_POINT() {
         return DiscreteRatingSystem.builder()
-                .id("DEFAULT")
-                .name("10-Point Discrete")
+                .id("10_DISCRETE")
+                .name("10 Point")
                 .size(11)
                 .subRatings(singletonList(
                         SubRating.builder()
@@ -137,6 +137,38 @@ public class DiscreteRatingSystem extends RatingSystem {
                                 .build()
                 ))
                 .labels(asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"))
+                .build();
+    }
+
+    public static DiscreteRatingSystem FIVE_STAR() {
+        return DiscreteRatingSystem.builder()
+                .id("5_STAR")
+                .name("5 star")
+                .size(5)
+                .subRatings(singletonList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("Score")
+                                .weight(1d)
+                                .build()
+                ))
+                .labels(asList("⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"))
+                .build();
+    }
+
+    public static DiscreteRatingSystem THREE_SMILEY() {
+        return DiscreteRatingSystem.builder()
+                .id("3_SMILEY")
+                .name("☹️😐😀")
+                .size(3)
+                .subRatings(singletonList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("Score")
+                                .weight(1d)
+                                .build()
+                ))
+                .labels(asList("☹️", "😐", "😀"))
                 .build();
     }
 }
