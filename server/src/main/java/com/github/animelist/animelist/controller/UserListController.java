@@ -4,15 +4,11 @@ import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UserListEntryInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
-import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
 import com.github.animelist.animelist.model.user.UserListEntry;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
-import com.github.animelist.animelist.model.userlist.UserListRating;
-import com.github.animelist.animelist.model.userlist.WatchStatus;
 import com.github.animelist.animelist.service.UserListService;
 import com.github.animelist.animelist.util.AuthUtil;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -42,13 +38,8 @@ public class UserListController {
     @PreAuthorize("isAuthenticated()")
     public UserList createUserList(@Argument("input") final CreateUserListInput input) {
         final var userDetails = AuthUtil.getUserDetails();
-        final var userList = UserList.builder()
-                .name(input.name())
-                .ownerId(new ObjectId(userDetails.getId()))
-                .ratingSystem(ContinuousRatingSystem.TEN_POINT())
-                .build();
 
-        return userListService.createUserList(userList);
+        return userListService.createUserList(userDetails.getId(), input);
     }
 
     @MutationMapping

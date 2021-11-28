@@ -39,6 +39,7 @@ type UserListSubRating {
 
 input CreateUserListInput {
   name: String!
+  ratingSystemId: String!
 }
 
 input AddUserListItemInput {
