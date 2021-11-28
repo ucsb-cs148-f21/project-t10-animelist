@@ -1,6 +1,7 @@
 package com.github.animelist.animelist.service;
 
 import com.github.animelist.animelist.entity.User;
+import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.SubRating;
@@ -22,6 +23,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import java.util.Collections;
 import java.util.Optional;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -39,43 +41,33 @@ public class UserListServiceTest {
     @Mock
     private MongoTemplate mongoTemplate;
 
+    @Mock
+    private RatingSystemService ratingSystemService;
+
     @InjectMocks
     private UserListService userListService;
 
     @Test
     public void createUserList_happy() {
-        final var userListInput = UserList.builder()
-                .name("test")
-                .ownerId(new ObjectId())
-                .ratingSystem(ContinuousRatingSystem.builder()
-                        .name("test")
-                        .ownerId(new ObjectId())
-                        .size(10)
-                        .offset(1)
-                        .subRatings(Collections.singletonList(SubRating.builder().id(0).name("score").weight(1d).build()))
-                        .build())
-                .items(singletonList(
-                        UserListItem.builder()
-                                .mediaID(1234)
-                                .watchStatus(WatchStatus.PLAN_TO_WATCH)
-                                .build()
-                ))
-                .build();
+        final var userListInput = new CreateUserListInput("Test", "10_CONTINUOUS");
+        final var EXPECTED_OWNER_ID = new ObjectId();
+
         final var expectedUserList = UserList.builder()
                 .id(new ObjectId().toString())
-                .name(userListInput.getName())
-                .ownerId(userListInput.getOwnerId())
-                .ratingSystem(userListInput.getRatingSystem())
-                .items(userListInput.getItems())
+                .name(userListInput.name())
+                .ownerId(EXPECTED_OWNER_ID)
+                .ratingSystem(ContinuousRatingSystem.TEN_POINT())
+                .items(emptyList())
                 .build();
         final var expectedEmbeddedUserList = EmbeddedUserList.builder()
                 .id(new ObjectId(expectedUserList.getId()))
                 .name(expectedUserList.getName())
                 .build();
 
-        when(mongoTemplate.insert(userListInput)).thenReturn(expectedUserList);
+        when(mongoTemplate.insert(any(UserList.class))).thenReturn(expectedUserList);
+        when(ratingSystemService.getRatingSystem(any())).thenCallRealMethod();
 
-        var actualUserList = userListService.createUserList(userListInput);
+        var actualUserList = userListService.createUserList(EXPECTED_OWNER_ID.toString(), userListInput);
 
         verify(mongoTemplate, times(1))
                 .updateFirst(new Query().addCriteria(where("_id").is(expectedUserList.getOwnerId())), new Update().push("userLists", expectedEmbeddedUserList), User.class);
