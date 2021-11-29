@@ -1,0 +1,77 @@
+interface Block {
+  width: Width!
+  type: BlockType!
+}
+
+type UserListBlock implements Block {
+  width: Width!
+  type: BlockType!
+  userListBlockInput: UserListBlockSettings!
+  additionalData: UserListBlockAdditionalData!
+}
+
+type UserListBlockSettings {
+  listId: String!
+  maxEntries: Int
+}
+
+type UserListBlockAdditionalData {
+  userList: UserList!
+}
+
+type TextBlock implements Block {
+  width: Width!
+  type: BlockType!
+  textBlockInput: TextBlockSettings!
+}
+
+type TextBlockSettings {
+  text: String!
+}
+
+type StatisticsBlock implements Block {
+  width: Width!
+  type: BlockType!
+  additionalData: StatisticsBlockAdditionalData!
+}
+
+type StatisticsBlockAdditionalData {
+  entries: Int!
+  avgRating: Int
+}
+
+type SpacerBlock implements Block {
+  width: Width!
+  type: BlockType!
+}
+
+enum Width {
+  FULL
+}
+
+enum BlockType {
+  USER_LIST
+  TEXT
+  STATISTICS
+  SPACER
+}
+
+input ProfilePageInput {
+  blocks: [[BlockInput!]!]!
+}
+
+input BlockInput {
+  width: Width!
+  type: BlockType!
+  userListBlockInput: UserListBlockInput
+  textBlockInput: TextBlockInput
+}
+
+input UserListBlockInput {
+  listId: String!
+  maxEntries: Int
+}
+
+input TextBlockInput {
+  text: String!
+}
