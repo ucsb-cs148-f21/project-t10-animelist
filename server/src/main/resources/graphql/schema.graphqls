@@ -3,6 +3,7 @@ scalar DateTime
 type User {
   id: ID!
   username: String!
+  profilePageBlocks: [[Block!]!]!
   userList: [UserListEntry!]!
   userLists: [EmbeddedUserList]
   ratingSystems: [EmbeddedRatingSystem]

@@ -1,9 +1,9 @@
 package com.github.animelist.animelist.entity;
 
+import com.github.animelist.animelist.model.profilepage.Block;
 import com.github.animelist.animelist.model.ratingsystem.EmbeddedRatingSystem;
 import com.github.animelist.animelist.model.user.UserListEntry;
 import com.github.animelist.animelist.model.userlist.EmbeddedUserList;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -23,6 +23,8 @@ public class User extends DateAudit {
 
     private String password;
 
+    private List<List<Block>> profilePageBlocks;
+
     private List<EmbeddedUserList> userLists;
 
     private List<EmbeddedRatingSystem> ratingSystems;
@@ -41,6 +43,7 @@ public class User extends DateAudit {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.profilePageBlocks = new ArrayList<List<Block>>();
         this.userList = new ArrayList<>();
     }
 
@@ -77,6 +80,14 @@ public class User extends DateAudit {
 
     public void setPassword(final String password) {
         this.password = password;
+    }
+
+    public List<List<Block>> getProfilePageBlocks() {
+        return profilePageBlocks;
+    }
+
+    void setProfilePageBlocks(List<List<Block>> profilePageBlocks) {
+        this.profilePageBlocks = profilePageBlocks; 
     }
 
     public List<UserListEntry> getUserList() {
