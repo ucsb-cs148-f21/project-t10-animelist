@@ -22,7 +22,7 @@ Since last meeting, I mostly took a break for Thanksgiving and dabbled in a litt
 
 ### Hardy
 
-Waiting for Update
+Since last meeting, I worked on updating manual document. For today, after the mutation of userlist pushing, I will work on the editing of userlist UI. By next meeting, hopefully I will finish the issue.
 
 ### Justin
 
