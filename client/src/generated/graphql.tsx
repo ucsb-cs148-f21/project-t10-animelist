@@ -377,7 +377,7 @@ export type MalLoginOauthQuery = { __typename?: 'Query', malLoginOauth: string }
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, ratingSystems?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedRatingSystem', id: string, name: string }>>>, userLists?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedUserList', id: string, name: string }>>> }> };
 
 export type UserListQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -866,6 +866,14 @@ export const MeDocument = gql`
   me {
     id
     username
+    ratingSystems {
+      id
+      name
+    }
+    userLists {
+      id
+      name
+    }
   }
 }
     `;

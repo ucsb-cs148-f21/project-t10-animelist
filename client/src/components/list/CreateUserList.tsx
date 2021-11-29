@@ -19,13 +19,14 @@ import * as React from 'react';
 import { Formik, Form, Field, useFormik } from "formik";
 import * as Yup from 'yup';
 import ChooseRatingModal from "./ChooseRatingModal";
-import { useCreateUserListMutation } from "../../generated/graphql";
+import { useCreateUserListMutation, useMeQuery } from "../../generated/graphql";
 import { useRouter } from "next/dist/client/router";
 //import { RatingSystem } from "../../generated/graphql";
 
 
 const CreateUserList: React.FC<{}> = () => {
   const [createUserList] = useCreateUserListMutation();
+  const { data: meData } = useMeQuery();
   const toast = useToast();
   const router = useRouter();
 
@@ -74,7 +75,6 @@ const CreateUserList: React.FC<{}> = () => {
         <Stack spacing="24px">
           <Heading size="md">Choose a Rating System for your List!</Heading>
           <Select
-            placeholder="---"
             size="lg"
             id="ratingSystemId"
             {...formik.getFieldProps("ratingSystemId")}
@@ -85,6 +85,9 @@ const CreateUserList: React.FC<{}> = () => {
             <option value="100_CONTINUOUS" >100 point decimal</option>
             <option value="5_STAR" >5 stars</option>
             <option value="3_SMILEY" >3 smiley</option>
+            {
+              meData && meData.me.ratingSystems && meData.me.ratingSystems.map(item => <option key={item.id} value={item.id}>{item.name}</option>)
+            }
           </Select>
         </Stack>
 
