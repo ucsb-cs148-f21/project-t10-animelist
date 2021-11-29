@@ -22,7 +22,9 @@ import {
   } from "@chakra-ui/react"
 import{ Formik, Form, Field, useFormik } from "formik";
 import * as Yup from 'yup';
+import { SubRatingInput } from "../../generated/graphql";
 import { AddIcon } from "@chakra-ui/icons";
+import { useState } from "react";
 
 interface CreateSubratingsModalProps{
   //entryData: 
@@ -32,7 +34,7 @@ interface CreateSubratingsModalProps{
 
 
 const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({isOpen, onClose}) =>{
-
+  const [ values, setValues ] = useState<SubRatingInput[]>([{ id: "0", name: "Animation", weight: 0.5 }, { id: "1", name: "Sound", weight: 0.5 }])
   // at least 2 subratings must be created
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -43,14 +45,11 @@ const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({isOpen, on
   });
 
   const formik = useFormik({
-    initialValues:{
-      name: "",
-      weight: 0.0,
-      subRatings: []
-    },
     validationSchema,
-    onSubmit: async values => {
-      window.location.reload();
+    initialValues: values,
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      console.log(values)
     }
   });
   
@@ -60,12 +59,9 @@ const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({isOpen, on
         <ModalContent>
           <ModalHeader> Create Subratings! </ModalHeader>
           <ModalCloseButton />
-
           <ModalBody>
-
             <form onSubmit={formik.handleSubmit}>
               <VStack width="full" p={6}>
-
                 <Table>
                   <TableCaption> Example: 'Sound' could be one of your subratings</TableCaption>
 
@@ -77,18 +73,20 @@ const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({isOpen, on
                   </Thead>
 
                   <Tbody>
-                  
-                    <Tr>
-                      <Td> <Input placeholder="Subrating1"/> </Td>
-                      <Td> 1.0 </Td>
-                    </Tr>
-                  
+                    {
+                      formik.values.map((subrating, idx) => (
+                        <Tr key={idx}>
+                          <Td><Input id={`[${idx}].name`} {...formik.getFieldProps(`[${idx}].name`)}/></Td>
+                          <Td><Input id={`[${idx}].weight`} {...formik.getFieldProps(`[${idx}].weight`)}/></Td>
+                        </Tr>
+                      ))
+                    }
                   </Tbody>
 
                 </Table>
 
                 <HStack>
-                  <Button leftIcon={<AddIcon />} > Add a Subrating </Button>
+                  <Button leftIcon={<AddIcon/>} onClick={() => { setValues(old => old.concat({ id: "1", name: "New One", weight: 0.3 })) }}> Add a Subrating </Button>
                 </HStack>
 
                 <Center>
@@ -96,7 +94,6 @@ const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({isOpen, on
                     Save
                   </Button>
                 </Center>
-
               </VStack>
             </form>
           </ModalBody>
