@@ -35,19 +35,6 @@ public class ContinuousRatingSystemTest {
         assertDoesNotThrow(builder::build);
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = { "Test", "TEST", "1234", "Test123", "Test 1234", "TEST   1234", "TEST-1234-TEST TEST" })
-    void createContinuousRatingSystemBuilder_happyName(final String name) {
-        final var builder = ContinuousRatingSystem.builder()
-                .name(name)
-                .ownerId(new ObjectId())
-                .size(10)
-                .offset(1)
-                .subRatings(singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
-
-        assertDoesNotThrow(builder::build);
-    }
-
     @Test
     void createContinuousRatingSystemBuilder_badOffset() {
         final var builder = ContinuousRatingSystem.builder()
@@ -66,20 +53,6 @@ public class ContinuousRatingSystemTest {
                 .name("Test")
                 .ownerId(new ObjectId())
                 .size(-3)
-                .offset(1)
-                .subRatings(singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
-
-        assertThrows(IllegalArgumentException.class, builder::build);
-    }
-
-    @ParameterizedTest
-    @NullAndEmptySource
-    @ValueSource(strings = { "", "  ", "\n", "\t", "tj\n", "  test", "test   ", "-test", "test-" })
-    void createContinuousRatingSystemBuilder_badName(final String badName) {
-        final var builder = ContinuousRatingSystem.builder()
-                .name(badName)
-                .ownerId(new ObjectId())
-                .size(10)
                 .offset(1)
                 .subRatings(singletonList(SubRating.builder().id(0).name("score").weight(1d).build()));
 

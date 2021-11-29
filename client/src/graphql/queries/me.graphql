@@ -2,5 +2,13 @@ query Me {
     me {
         id
         username
+        ratingSystems {
+            id
+            name
+        }
+        userLists {
+            id
+            name
+        }
     }
 }

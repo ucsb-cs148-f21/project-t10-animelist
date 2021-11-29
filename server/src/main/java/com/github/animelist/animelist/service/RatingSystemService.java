@@ -1,6 +1,8 @@
 package com.github.animelist.animelist.service;
 
 import com.github.animelist.animelist.entity.User;
+import com.github.animelist.animelist.model.ratingsystem.ContinuousRatingSystem;
+import com.github.animelist.animelist.model.ratingsystem.DiscreteRatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.EmbeddedRatingSystem;
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
 import org.bson.types.ObjectId;
@@ -37,6 +39,13 @@ public class RatingSystemService {
     }
 
     public Optional<RatingSystem> getRatingSystem(final String id) {
-        return Optional.ofNullable(mongoTemplate.findById(new ObjectId(id), RatingSystem.class));
+        return switch(id) {
+            case "10_DISCRETE" -> Optional.of(DiscreteRatingSystem.TEN_POINT());
+            case "10_CONTINUOUS" -> Optional.of(ContinuousRatingSystem.TEN_POINT());
+            case "100_CONTINUOUS" -> Optional.of(ContinuousRatingSystem.HUNDRED_POINT());
+            case "5_STAR" -> Optional.of(DiscreteRatingSystem.FIVE_STAR());
+            case "3_SMILEY" -> Optional.of(DiscreteRatingSystem.THREE_SMILEY());
+            default -> Optional.ofNullable(mongoTemplate.findById(new ObjectId(id), RatingSystem.class));
+        };
     }
 }

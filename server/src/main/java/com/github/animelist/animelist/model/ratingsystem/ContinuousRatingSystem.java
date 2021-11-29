@@ -124,9 +124,25 @@ public class ContinuousRatingSystem extends RatingSystem {
 
     public static ContinuousRatingSystem TEN_POINT() {
         return ContinuousRatingSystem.builder()
-                .id("DEFAULT")
-                .name("10-Point Continuous")
+                .id("10_CONTINUOUS")
+                .name("10 Point Decimal")
                 .size(11)
+                .subRatings(singletonList(
+                        SubRating.builder()
+                                .id(0)
+                                .name("Score")
+                                .weight(1d)
+                                .build()
+                ))
+                .offset(0)
+                .build();
+    }
+
+    public static ContinuousRatingSystem HUNDRED_POINT() {
+        return ContinuousRatingSystem.builder()
+                .id("100_CONTINUOUS")
+                .name("100 Point Decimal")
+                .size(101)
                 .subRatings(singletonList(
                         SubRating.builder()
                                 .id(0)

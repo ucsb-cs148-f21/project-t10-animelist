@@ -1,6 +1,7 @@
 package com.github.animelist.animelist.service;
 
 import com.github.animelist.animelist.entity.User;
+import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UserListEntryInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
@@ -18,19 +19,28 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 import static com.github.animelist.animelist.util.MongoUtil.verifyOneUpdated;
+import static java.util.Collections.emptyList;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Component
 public class UserListService {
 
     private final MongoTemplate mongoTemplate;
+    private final RatingSystemService ratingSystemService;
 
     @Autowired
-    public UserListService(final MongoTemplate mongoTemplate) {
+    public UserListService(final MongoTemplate mongoTemplate, final RatingSystemService ratingSystemService) {
         this.mongoTemplate = mongoTemplate;
+        this.ratingSystemService = ratingSystemService;
     }
 
-    public UserList createUserList(final UserList userList) {
+    public UserList createUserList(final String ownerId, final CreateUserListInput input) {
+        final UserList userList = UserList.builder()
+                .name(input.name())
+                .ownerId(new ObjectId(ownerId))
+                .ratingSystem(ratingSystemService.getRatingSystem(input.ratingSystemId()).orElseThrow(() -> new RuntimeException("Invalid rating system id")))
+                .items(emptyList())
+                .build();
         final UserList insertedList =  mongoTemplate.insert(userList);
         final EmbeddedUserList embeddedUserList = EmbeddedUserList.builder()
                 .id(new ObjectId(insertedList.getId()))

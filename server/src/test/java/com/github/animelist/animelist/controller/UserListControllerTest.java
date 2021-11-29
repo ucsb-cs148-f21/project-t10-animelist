@@ -42,14 +42,14 @@ public class UserListControllerTest {
     @Test
     void createUserList_happy() {
         mockAuthenticationPrincipal();
-        final CreateUserListInput input = new CreateUserListInput("Test");
+        final CreateUserListInput input = new CreateUserListInput("Test", "10_CONTINUOUS");
         final UserList expectedUserList = UserList.builder()
                 .name("Test")
                 .ownerId(EXPECTED_OWNER_ID)
                 .ratingSystem(ContinuousRatingSystem.TEN_POINT())
                 .build();
 
-        when(userListService.createUserList(expectedUserList)).thenReturn(expectedUserList);
+        when(userListService.createUserList(EXPECTED_OWNER_ID.toString(), input)).thenReturn(expectedUserList);
 
         final UserList actualUserList = userListController.createUserList(input);
 
