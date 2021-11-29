@@ -2,7 +2,7 @@ import {
     Input, 
     Radio, 
     Stack,
-    VStack,
+    Link,
     Button,
     Heading,
     FormControl, 
@@ -15,12 +15,15 @@ import {
     NumberIncrementStepper,
     NumberInput,
     NumberInputField,
-    NumberInputStepper
+    NumberInputStepper,
+    useDisclosure
 } from "@chakra-ui/react";
 
 import * as React from 'react';
 import{ Formik, Form, Field, useFormik } from "formik";
 import * as Yup from 'yup';
+import CreateSubratingsModal from "./CreateSubratingsModal"
+import AssignLabelsModal from "./AssignLabelsModal"
 
 // name: String!
 // type: String!
@@ -102,6 +105,15 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
     const setU = (upper) => setUpper(upper);
     let upper2 = +upper - +1;
     let lower2 = +lower + +1;
+
+    const { isOpen : isOpenLabels, 
+            onOpen : onOpenLabels, 
+            onClose : onCloseLabels
+          } = useDisclosure();
+    const { isOpen : isOpenSubratings, 
+            onOpen : onOpenSubratings, 
+            onClose : onCloseSubratings
+          } = useDisclosure();
 
     return(
 
@@ -193,9 +205,11 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
             type="button"
             maxW="200px"
             padding="15px"
+            onClick={onOpenLabels}
           >
             Assign Labels
           </Button>
+          <AssignLabelsModal isOpen={isOpenLabels} onClose={onCloseLabels} />
         </Stack>
     
         <FormControl>
@@ -239,12 +253,15 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
             type="button"
             maxW="200px"
             padding="15px"
+            onClick={onOpenSubratings}
           >
             Create Subratings
           </Button>
+          <CreateSubratingsModal isOpen={isOpenSubratings} onClose={onCloseSubratings} />
         </Stack>
 
         <Center>
+          <Link></Link>
           <Button
             mt={6}
             isLoading={formik.isSubmitting}
