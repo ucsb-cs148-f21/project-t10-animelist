@@ -24,30 +24,31 @@ import {
     InputGroup,
     Tfoot
     } from "@chakra-ui/react"
-//import { DiscreteRatingSystemInput } from "../../generated/graphql";
+import { DiscreteRatingSystemInput } from "../../generated/graphql";
 import{ Formik, Form, Field, useFormik } from "formik";
 import * as Yup from 'yup';
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { useState } from "react";
 
 interface AssignLabelsModalProps{
 	isOpen: boolean,
 	onClose: () => void
 }
 
-
 const AssignLabelsModal: React.FC<AssignLabelsModalProps> = ({isOpen, onClose}) =>{
+
+    const [values, setValues] = useState<DiscreteRatingSystemInput>({labels: ["S", "F"]});
 
     const validationSchema = Yup.object({
 
     });
 
     const formik = useFormik({
-      initialValues:{
-        label:""
-      },
+      initialValues: values,
+      enableReinitialize: true,
       validationSchema,
       onSubmit: async values => {
-        window.location.reload();
+        console.log(values)
       }
     });
 
@@ -73,17 +74,20 @@ const AssignLabelsModal: React.FC<AssignLabelsModalProps> = ({isOpen, onClose}) 
                   </Thead>
 
                   <Tbody>
-                    <Tr>
-                      <Td> 
-                        <InputGroup>
-                          <Input placeholder="Top"/> 
-                          <InputRightElement width='3.5rem'>
-                            <IconButton aria-label='Delete Label' h='1.75rem' icon={<MinusIcon />}> </IconButton>
-                          </InputRightElement>
-                        </InputGroup>
-                      </Td>
-                    </Tr>
-                  
+                    {
+                      formik.values.labels.map((label, idx) => (
+                        <Tr key={idx}>
+                          <Td> 
+                            <InputGroup>
+                            <Input id={`labels[${idx}]`} {...formik.getFieldProps(`labels[${idx}]`)}/> 
+                            <InputRightElement width='3.5rem'>
+                              <IconButton aria-label='Delete Label' h='1.75rem' icon={<MinusIcon />}> </IconButton>
+                            </InputRightElement>
+                            </InputGroup>
+                          </Td>
+                        </Tr>
+                    )) 
+                    }
                   </Tbody>
 
                   <Tfoot>
@@ -95,7 +99,7 @@ const AssignLabelsModal: React.FC<AssignLabelsModalProps> = ({isOpen, onClose}) 
                 </Table>
 
                 <HStack>
-                  <Button leftIcon={<AddIcon />} > Add a Label </Button>
+                  <Button leftIcon={<AddIcon />} onClick={() => {}}> Add a Label </Button>
                 </HStack>
 
                 <Center>
@@ -105,7 +109,7 @@ const AssignLabelsModal: React.FC<AssignLabelsModalProps> = ({isOpen, onClose}) 
                 </Center>
 
               </VStack>
-              
+
             </form>
           </ModalBody>
 
