@@ -27,7 +27,7 @@ import {
 import { DiscreteRatingSystemInput } from "../../generated/graphql";
 import{ Formik, Form, Field, useFormik } from "formik";
 import * as Yup from 'yup';
-import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon, CloseIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 
 interface AssignLabelsModalProps{
@@ -37,7 +37,7 @@ interface AssignLabelsModalProps{
 
 const AssignLabelsModal: React.FC<AssignLabelsModalProps> = ({isOpen, onClose}) =>{
 
-    const [values, setValues] = useState<DiscreteRatingSystemInput>({labels: ["S", "F"]});
+    const [values, setValues] = useState<string[]>(["S", "F"]);
 
     const validationSchema = Yup.object({
 
@@ -75,13 +75,19 @@ const AssignLabelsModal: React.FC<AssignLabelsModalProps> = ({isOpen, onClose}) 
 
                   <Tbody>
                     {
-                      formik.values.labels.map((label, idx) => (
+                      formik.values.map((label, idx) => (
                         <Tr key={idx}>
                           <Td> 
                             <InputGroup>
-                            <Input id={`labels[${idx}]`} {...formik.getFieldProps(`labels[${idx}]`)}/> 
+                            <Input id={`[${idx}]`} {...formik.getFieldProps(`[${idx}]`)}/> 
                             <InputRightElement width='3.5rem'>
-                              <IconButton aria-label='Delete Label' h='1.75rem' icon={<MinusIcon />}> </IconButton>
+                              <IconButton 
+                                aria-label='Delete Label' 
+                                h='1.75rem' 
+                                icon={<CloseIcon />} 
+                                onClick={() => {setValues(values.filter((newE) => newE !== label))}}
+                              > 
+                              </IconButton>
                             </InputRightElement>
                             </InputGroup>
                           </Td>
@@ -99,7 +105,7 @@ const AssignLabelsModal: React.FC<AssignLabelsModalProps> = ({isOpen, onClose}) 
                 </Table>
 
                 <HStack>
-                  <Button leftIcon={<AddIcon />} onClick={() => {}}> Add a Label </Button>
+                  <Button leftIcon={<AddIcon />} onClick={() => {setValues(old => old.concat("New Label"))}}> Add a Label </Button>
                 </HStack>
 
                 <Center>
