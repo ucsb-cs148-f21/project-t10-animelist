@@ -23,7 +23,7 @@ import * as React from 'react';
 import{ Formik, Form, Field, useFormik } from "formik";
 import * as Yup from 'yup';
 import CreateSubratingsModal from "./CreateSubratingsModal"
-import AssignLabelsModal from "./AssignLabelsModal"
+import CreateLabelsModal from "./CreateLabelsModal"
 
 // name: String!
 // type: String!
@@ -209,7 +209,7 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
           >
             Assign Labels
           </Button>
-          <AssignLabelsModal isOpen={isOpenLabels} onClose={onCloseLabels} />
+          <CreateLabelsModal isOpen={isOpenLabels} onClose={onCloseLabels} />
         </Stack>
     
         <FormControl>
