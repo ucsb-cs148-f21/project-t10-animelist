@@ -22,20 +22,9 @@ input UserListEntryInput {
   rating: Float!
 }
 
-type UserList {
-  id: String!
-  objectID: String!
-  name: String!
-  ratingSystem: RatingSystem!
-  items: [UserListItem]!
-}
-
 input UserListInput {
-  id: String!
-  objectID: String!
   name: String!
-  ratingSystem: RatingSystemInput!
-  items: [UserListItemInput]!
+  ratingSystemId: ID!
 }
 
 input RegisterInput {
@@ -84,5 +73,5 @@ type Mutation {
   createUserList(input: CreateUserListInput!): UserList
   addUserListItem(input: AddUserListItemInput!): UserListItem
   updateUserListItem(input: UpdateUserListItemInput!): UserListItem
-  updateUserList(input: UpdateUserListInput!): UserList
+  updateUserList(input: UpdateUserListInput!): Boolean
 }
