@@ -18,7 +18,9 @@ import com.github.animelist.animelist.model.profilepage.UserListBlockSettings;
 import static com.github.animelist.animelist.util.AuthUtil.getUserDetails;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProfilePageService {
     private final UserService userService;
 
@@ -35,6 +37,7 @@ public class ProfilePageService {
         User user = userService.getUser(userDetails.getId())
             .orElseThrow(() -> new RuntimeException("Can't find user."));
         user.setProfilePageBlocks(outputBlocks);
+        userService.updateUser(user);
 
         return outputBlocks;
     }

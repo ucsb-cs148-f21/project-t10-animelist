@@ -1,17 +1,21 @@
 package com.github.animelist.animelist.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.animelist.animelist.model.input.profilepage.BlockInput;
 import com.github.animelist.animelist.model.input.profilepage.ProfilePageInput;
 import com.github.animelist.animelist.model.profilepage.Block;
 import com.github.animelist.animelist.service.ProfilePageService;
-import com.github.animelist.animelist.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class ProfilePageController {
     private final ProfilePageService profilePageService;
 
@@ -25,9 +29,11 @@ public class ProfilePageController {
     @MutationMapping
     @PreAuthorize("isAuthenticated()")
     public List<List<Block>> updateProfilePageBlocks(
-        @Argument("input") final ProfilePageInput input) {
+        @Argument final Map<String, Object> args) {
+       
+        ObjectMapper mapper = new ObjectMapper();
+        ProfilePageInput input = mapper.convertValue(args.get("input"), ProfilePageInput.class);
 
-        profilePageService.setProfilePageBlocks(input.blocks());
-        return profilePageService.getProfilePageBlocks();
+        return profilePageService.updateProfilePageBlocks(input.blocks());
     }
 }
