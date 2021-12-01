@@ -76,7 +76,7 @@ const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({ isOpen, o
                                   precision={2}
                                   {...formik.getFieldProps(`subratings[${idx}].weight`)}
                                   onChange={(value) => formik.setFieldValue(`subratings[${idx}].weight`, value)}
-                                  width="5rem"
+                                  width="6rem"
                                 >
                                   <NumberInputField />
                                 </NumberInput>
