@@ -1,5 +1,6 @@
 package com.github.animelist.animelist.model.profilepage;
 
+import com.github.animelist.animelist.model.input.profilepage.UserListBlockInput;
 
 public class UserListBlockSettings {
     private String listId;
@@ -8,6 +9,10 @@ public class UserListBlockSettings {
     public UserListBlockSettings(String listId, Integer maxEntries) {
         this.listId = listId;
         this.maxEntries = maxEntries;
+    }
+
+    public UserListBlockSettings(UserListBlockInput input) {
+        this(input.listId(), input.maxEntries());
     }
 
     public String getListId() {

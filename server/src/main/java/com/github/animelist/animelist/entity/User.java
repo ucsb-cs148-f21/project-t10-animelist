@@ -86,7 +86,7 @@ public class User extends DateAudit {
         return profilePageBlocks;
     }
 
-    void setProfilePageBlocks(List<List<Block>> profilePageBlocks) {
+    public void setProfilePageBlocks(List<List<Block>> profilePageBlocks) {
         this.profilePageBlocks = profilePageBlocks; 
     }
 

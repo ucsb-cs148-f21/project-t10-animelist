@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.github.animelist.animelist.model.input.profilepage.ProfilePageInput;
 import com.github.animelist.animelist.model.profilepage.Block;
+import com.github.animelist.animelist.service.ProfilePageService;
 import com.github.animelist.animelist.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,13 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 public class ProfilePageController {
-    private final UserService userService;
+    private final ProfilePageService profilePageService;
 
     @Autowired
     public ProfilePageController(
-        final UserService userService) {
-
-        this.userService = userService;
+        final ProfilePageService profilePageService) {
+        
+        this.profilePageService = profilePageService;
     }
 
     @MutationMapping
@@ -26,7 +27,7 @@ public class ProfilePageController {
     public List<List<Block>> updateProfilePageBlocks(
         @Argument("input") final ProfilePageInput input) {
 
-        userService.setProfilePageBlocks(input.blocks());
+        profilePageService.setProfilePageBlocks(input.blocks());
         return profilePageService.getProfilePageBlocks();
     }
 }

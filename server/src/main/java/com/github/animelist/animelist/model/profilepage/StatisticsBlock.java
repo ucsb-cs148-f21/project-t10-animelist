@@ -13,6 +13,10 @@ public class StatisticsBlock extends Block {
         Assert.isTrue(type == BlockType.STATISTICS, "block type must match class");
     }
 
+    public StatisticsBlock(Width width, BlockType type) {
+        this(width, type, null);
+    }
+
     public StatisticsBlockAdditionalData getAdditionalData() {
         return additionalData;
     }

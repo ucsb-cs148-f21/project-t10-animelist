@@ -17,6 +17,12 @@ public class UserListBlock extends Block {
         Assert.isTrue(type == BlockType.USER_LIST, "block type must match class");
     }
 
+    public UserListBlock(Width width, BlockType type,
+        UserListBlockSettings userListBlockInput) {
+        
+        this(width, type, userListBlockInput, null);
+    }
+
     public UserListBlockSettings getUserListBlockInput() {
         return userListBlockInput;
     }
