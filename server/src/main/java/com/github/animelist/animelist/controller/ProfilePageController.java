@@ -45,12 +45,11 @@ public class ProfilePageController {
     @MutationMapping
     @PreAuthorize("isAuthenticated()")
     public List<List<Block>> updateProfilePageBlocks(
-        @Argument("input") final ProfilePageInput input) {
-//        @Argument final Map<String, Object> args) {
+        @Argument final Map<String, Object> args) {
        
-        // workaround to avoid unsuccessful cast from LinkedHashMap to BlockInput
-        //ObjectMapper mapper = new ObjectMapper();
-        //ProfilePageInput input = mapper.convertValue(args.get("input"), ProfilePageInput.class);
+        //workaround to avoid unsuccessful cast from LinkedHashMap to BlockInput
+        ObjectMapper mapper = new ObjectMapper();
+        ProfilePageInput input = mapper.convertValue(args.get("input"), ProfilePageInput.class);
 
         return profilePageService.updateProfilePageBlocks(input.blocks());
     }
