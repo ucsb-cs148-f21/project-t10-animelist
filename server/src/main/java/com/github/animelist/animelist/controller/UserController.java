@@ -23,6 +23,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
+import graphql.execution.DataFetcherResult;
+import graphql.schema.DataFetcher;
+
 import javax.servlet.http.HttpServletResponse;
 
 import static com.github.animelist.animelist.util.AuthUtil.getUserDetails;
@@ -50,11 +53,15 @@ public class UserController {
 
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
-    public User me() {
+    public DataFetcherResult<User> me() {
         JwtUserDetails userDetails = getUserDetails();
 
-        return userService.getUser(userDetails.getId())
+        User user = userService.getUser(userDetails.getId())
                 .orElseThrow(() -> new RuntimeException("Can't find user."));
+        return DataFetcherResult.<User>newResult()
+            .data(user)
+            .localContext(user)
+            .build();
     }
 
     @MutationMapping
@@ -100,7 +107,7 @@ public class UserController {
 
     @MutationMapping
     public boolean addListEntry(@Argument("input") final UserListEntry input) {
-        User currentUser = me();
+        User currentUser = me().getData();
         currentUser.addUserListEntry(input);
         userService.updateUser(currentUser);
         return true;
