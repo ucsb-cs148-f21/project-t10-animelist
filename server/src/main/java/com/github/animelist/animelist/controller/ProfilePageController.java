@@ -31,6 +31,7 @@ public class ProfilePageController {
     public List<List<Block>> updateProfilePageBlocks(
         @Argument final Map<String, Object> args) {
        
+        // workaround to avoid unsuccessful cast from LinkedHashMap to BlockInput
         ObjectMapper mapper = new ObjectMapper();
         ProfilePageInput input = mapper.convertValue(args.get("input"), ProfilePageInput.class);
 

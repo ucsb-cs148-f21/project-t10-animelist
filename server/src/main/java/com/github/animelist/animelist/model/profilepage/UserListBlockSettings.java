@@ -2,10 +2,13 @@ package com.github.animelist.animelist.model.profilepage;
 
 import com.github.animelist.animelist.model.input.profilepage.UserListBlockInput;
 
+import org.springframework.data.annotation.PersistenceConstructor;
+
 public class UserListBlockSettings {
     private String listId;
     private Integer maxEntries;
-    
+   
+    @PersistenceConstructor
     public UserListBlockSettings(String listId, Integer maxEntries) {
         this.listId = listId;
         this.maxEntries = maxEntries;

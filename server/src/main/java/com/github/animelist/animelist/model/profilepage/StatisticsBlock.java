@@ -1,5 +1,6 @@
 package com.github.animelist.animelist.model.profilepage;
 
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.util.Assert;
 
 public class StatisticsBlock extends Block {
@@ -13,6 +14,7 @@ public class StatisticsBlock extends Block {
         Assert.isTrue(type == BlockType.STATISTICS, "block type must match class");
     }
 
+    @PersistenceConstructor
     public StatisticsBlock(Width width, BlockType type) {
         this(width, type, null);
     }
