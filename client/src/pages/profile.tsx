@@ -2,14 +2,15 @@ import { Avatar, Box, Button, ButtonGroup, Center, Container, Grid, GridItem, He
 import * as React from 'react';
 import { useRouter } from "next/router";
 import ProfileCard from "../components/profiles/ProfileCard";
-import { MalLinkOauthDocument, MalLinkOauthQuery, useMeQuery } from '../generated/graphql';
+import { MalLinkOauthDocument, MalLinkOauthQuery, useProfileQuery } from '../generated/graphql';
 import useImperativeQuery from "../utils/useImperativeQuery";
 import { ApolloQueryResult } from "@apollo/client";
 import Link from "next/link";
 import UserListItem from "../components/list/_UserListItem";
+import ProfilePageBlockGrid from "../components/profiles/ProfilePageBlockGrid";
 
 const Profile: React.FC<{}> = () => {
-  const { data, loading } = useMeQuery();
+  const { data, loading } = useProfileQuery();
   const malOauth = useImperativeQuery(MalLinkOauthDocument);
   const router = useRouter();
 
@@ -62,11 +63,10 @@ const Profile: React.FC<{}> = () => {
           <Button colorScheme="blue">Create a List</Button>
         </Link>
       </ButtonGroup>
-      <Grid
-        width="100%"
-        templateRows='repeat(2, auto)'
-        gap={4}
-      >
+
+      
+      <ProfilePageBlockGrid blocks={data.me.profilePageBlocks} />
+
         <Box w='100%'>
           <Text>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla bibendum ante ac ligula tincidunt, mattis dignissim nisl convallis. Vestibulum pulvinar molestie quam in lacinia. Aenean lacinia tristique velit. Duis non arcu orci. In feugiat erat sit amet maximus laoreet. Suspendisse aliquam elementum purus, ut consequat risus blandit et. In quis rhoncus augue, a hendrerit arcu.
@@ -115,7 +115,6 @@ const Profile: React.FC<{}> = () => {
             </Stat>
           </StatGroup>
         </Box>
-      </Grid>
     </VStack>
   );
 };
