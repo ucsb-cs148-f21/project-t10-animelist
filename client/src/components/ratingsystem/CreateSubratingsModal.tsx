@@ -14,15 +14,17 @@ import {
 import { FieldArray, FormikProvider, useFormik } from "formik";
 import * as React from "react";
 import * as Yup from 'yup';
+import { SubRatingInput } from "../../generated/graphql";
 
 interface CreateSubratingsModalProps {
-  //entryData: 
+  //entryData:
+  initialSubratings: any[],
   isOpen: boolean,
   onClose: () => void
+  onSave: (subratings: SubRatingInput[]) => void
 }
 
-
-const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({ isOpen, onClose }) => {
+const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({ initialSubratings, isOpen, onClose, onSave }) => {
   const validationSchema = Yup.object().shape({
     subratings: Yup.array().required("Must have subratings").min(1, "Minimum of one subrating")
   });
@@ -30,12 +32,10 @@ const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({ isOpen, o
   const formik = useFormik({
     validationSchema,
     initialValues: {
-      subratings: [
-        { name: "Animation", weight: "0.50" },
-        { name: "Sound", weight: "0.50" }
-      ]
+      subratings: initialSubratings
     },
     onSubmit: async ({ subratings }) => {
+      onSave(subratings.map((subrating, idx) => ({ id: `${idx}`, name: subrating.name, weight: parseFloat(subrating.weight) })));
       console.log(subratings)
     }
   });

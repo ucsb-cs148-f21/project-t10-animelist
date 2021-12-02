@@ -8,22 +8,24 @@ import * as React from "react";
 import * as Yup from 'yup';
 
 interface CreateLabelsModalProps {
+  initialLabels: string[],
   isOpen: boolean,
   onClose: () => void
+  onSave: (labels: string[]) => void
 }
 
-const CreateLabelsModal: React.FC<CreateLabelsModalProps> = ({ isOpen, onClose }) => {
+const CreateLabelsModal: React.FC<CreateLabelsModalProps> = ({ initialLabels, isOpen, onClose, onSave }) => {
   const validationSchema = Yup.object({
-
+    labels: Yup.array().required("Must have labels").min(2, "Must have at least 2 labels")
   });
 
   const formik = useFormik({
     initialValues: {
-      labels: ["Good", "Neutral", "Bad"]
+      labels: initialLabels.slice().reverse()
     },
     validationSchema,
     onSubmit: async values => {
-      console.log(values)
+      onSave(values.labels.slice().reverse());
     }
   });
 
