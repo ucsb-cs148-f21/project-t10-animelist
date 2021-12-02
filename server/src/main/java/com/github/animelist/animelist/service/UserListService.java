@@ -1,9 +1,8 @@
 package com.github.animelist.animelist.service;
 
+import com.github.animelist.animelist.controller.RatingSystemController;
 import com.github.animelist.animelist.entity.User;
-import com.github.animelist.animelist.model.input.CreateUserListInput;
-import com.github.animelist.animelist.model.input.UserListEntryInput;
-import com.github.animelist.animelist.model.input.UserListItemInput;
+import com.github.animelist.animelist.model.input.*;
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
 import com.github.animelist.animelist.model.userlist.EmbeddedUserList;
 import com.github.animelist.animelist.model.userlist.UserList;
@@ -16,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static com.github.animelist.animelist.util.MongoUtil.verifyOneUpdated;
@@ -107,5 +107,29 @@ public class UserListService {
         update.set("userList.$.rating", entry.rating());
 
         return mongoTemplate.updateFirst(query, update, User.class).getMatchedCount() == 1;
+    }
+
+    public boolean updateUserList(final String ownerId, final String listId, final UpdateUserListInput input) {
+        //retrieve new rating system
+        final Optional<RatingSystem> ratingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId());
+
+        //retrieve current userlist
+        final Optional<UserList> userList = getUserList(listId);
+
+        //set old rating system to be new rating system
+        final Update updateRatingSystem = new Update();
+        updateRatingSystem.set(PUT SHIT IN HERE)
+
+        //change user list name
+        final Update updateName = new Update();
+        updateName.set("userList.$.name", input.name());
+
+        //change each item score in list
+        for (UserListItem item: userList.get().getItems()) {
+            item.getRating() = ratingSystem.get().convert();
+        }
+
+        //verify/return true if worked
+        return verifyOneUpdated(mongoTemplate.updateFirst()) ? Optional.of() : Optional.empty();
     }
 }
