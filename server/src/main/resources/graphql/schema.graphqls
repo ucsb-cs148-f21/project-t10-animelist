@@ -22,11 +22,6 @@ input UserListEntryInput {
   rating: Float!
 }
 
-input UserListInput {
-  name: String!
-  ratingSystemId: ID!
-}
-
 input RegisterInput {
   username: String!
   email: String!
