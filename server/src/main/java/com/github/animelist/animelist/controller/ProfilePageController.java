@@ -24,27 +24,21 @@ import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
+import graphql.execution.DataFetcherResult;
 import graphql.schema.DataFetchingEnvironment;
 
 @Controller
 public class ProfilePageController {
-    public static final int DEFAULT_USER_LIST_ENTRY_LIMIT = 5;
-
     private final ProfilePageService profilePageService;
-    private final UserListService userListService;
 
     @Autowired
-    public ProfilePageController(
-        final ProfilePageService profilePageService,
-        final UserListService userListService) {
-        
+    public ProfilePageController(final ProfilePageService profilePageService) {
         this.profilePageService = profilePageService;
-        this.userListService = userListService;
     }
 
     @MutationMapping
     @PreAuthorize("isAuthenticated()")
-    public List<List<Block>> updateProfilePageBlocks(
+    public DataFetcherResult<List<List<Block>>> updateProfilePageBlocks(
         @Argument final Map<String, Object> args) {
        
         //workaround to avoid unsuccessful cast from LinkedHashMap to BlockInput
@@ -56,22 +50,18 @@ public class ProfilePageController {
 
     @SchemaMapping(typeName="UserListBlock", field="additionalData")
     public UserListBlockAdditionalData getUserListBlockAdditionalData(UserListBlock block) {
-        UserListBlockSettings settings = block.getUserListBlockInput();
-        UserList list = userListService.getUserList(settings.getListId()).orElseThrow();
-
-        int entryLimit = (settings.getMaxEntries() != null) ?
-            settings.getMaxEntries() : DEFAULT_USER_LIST_ENTRY_LIMIT;
-        entryLimit = Math.max(entryLimit, list.getItems().size());
-        list.setItems(list.getItems().subList(0, entryLimit));
-
-        return new UserListBlockAdditionalData(list);
+        UserList slice = profilePageService.getUserListSlice(block.getUserListBlockInput());
+        return new UserListBlockAdditionalData(slice);
     }
 
     @SchemaMapping(typeName="StatisticsBlock", field="additionalData")
     public StatisticsBlockAdditionalData getStatisticsBlockAdditionalData(StatisticsBlock block,
         DataFetchingEnvironment dfe) {
 
-        User user = dfe.getRoot();
-        return new StatisticsBlockAdditionalData(10, 5.0);
+        User user = dfe.getLocalContext();
+        int entries = profilePageService.getUniqueMediaIds(user);
+
+        // hardcode avg. rating since we probably won't use it anymore
+        return new StatisticsBlockAdditionalData(entries, 5.0);
     }
 }

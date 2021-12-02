@@ -44,6 +44,8 @@ public class User extends DateAudit {
         this.email = email;
         this.password = password;
         this.profilePageBlocks = new ArrayList<List<Block>>();
+        this.userLists = new ArrayList<>();
+        this.ratingSystems = new ArrayList<>();
         this.userList = new ArrayList<>();
     }
 
@@ -88,6 +90,10 @@ public class User extends DateAudit {
 
     public void setProfilePageBlocks(List<List<Block>> profilePageBlocks) {
         this.profilePageBlocks = profilePageBlocks; 
+    }
+
+    public List<EmbeddedUserList> getUserLists() {
+        return userLists;
     }
 
     public List<UserListEntry> getUserList() {
