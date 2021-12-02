@@ -26,6 +26,7 @@ const CreateLabelsModal: React.FC<CreateLabelsModalProps> = ({ initialLabels, is
     validationSchema,
     onSubmit: async values => {
       onSave(values.labels.slice().reverse());
+      onClose();
     }
   });
 

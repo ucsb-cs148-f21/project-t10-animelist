@@ -309,6 +309,13 @@ export type AddListEntryMutationVariables = Exact<{
 
 export type AddListEntryMutation = { __typename?: 'Mutation', addListEntry?: Maybe<boolean> };
 
+export type CreateRatingSystemMutationVariables = Exact<{
+  input: RatingSystemInput;
+}>;
+
+
+export type CreateRatingSystemMutation = { __typename?: 'Mutation', createRatingSystem?: Maybe<{ __typename?: 'ContinuousRatingSystem', id: string, name: string } | { __typename?: 'DiscreteRatingSystem', id: string, name: string }> };
+
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
@@ -484,6 +491,40 @@ export function useAddListEntryMutation(baseOptions?: Apollo.MutationHookOptions
 export type AddListEntryMutationHookResult = ReturnType<typeof useAddListEntryMutation>;
 export type AddListEntryMutationResult = Apollo.MutationResult<AddListEntryMutation>;
 export type AddListEntryMutationOptions = Apollo.BaseMutationOptions<AddListEntryMutation, AddListEntryMutationVariables>;
+export const CreateRatingSystemDocument = gql`
+    mutation CreateRatingSystem($input: RatingSystemInput!) {
+  createRatingSystem(input: $input) {
+    id
+    name
+  }
+}
+    `;
+export type CreateRatingSystemMutationFn = Apollo.MutationFunction<CreateRatingSystemMutation, CreateRatingSystemMutationVariables>;
+
+/**
+ * __useCreateRatingSystemMutation__
+ *
+ * To run a mutation, you first call `useCreateRatingSystemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRatingSystemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRatingSystemMutation, { data, loading, error }] = useCreateRatingSystemMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateRatingSystemMutation(baseOptions?: Apollo.MutationHookOptions<CreateRatingSystemMutation, CreateRatingSystemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRatingSystemMutation, CreateRatingSystemMutationVariables>(CreateRatingSystemDocument, options);
+      }
+export type CreateRatingSystemMutationHookResult = ReturnType<typeof useCreateRatingSystemMutation>;
+export type CreateRatingSystemMutationResult = Apollo.MutationResult<CreateRatingSystemMutation>;
+export type CreateRatingSystemMutationOptions = Apollo.BaseMutationOptions<CreateRatingSystemMutation, CreateRatingSystemMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {

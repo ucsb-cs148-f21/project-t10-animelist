@@ -1,34 +1,22 @@
 import {
-  Input,
-  Radio,
-  Stack,
-  Link,
-  Button,
-  Heading,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  RadioGroup,
-  Center,
-  NumberDecrementStepper,
+  Button, FormControl, FormHelperText, FormLabel, Heading, Input, NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
-  useDisclosure,
-  VStack
+  NumberInputStepper, Radio, RadioGroup, Stack, useDisclosure, useToast
 } from "@chakra-ui/react";
-
+import { useFormik } from "formik";
 import * as React from 'react';
-import { Formik, Form, Field, useFormik } from "formik";
-import * as Yup from 'yup';
-import CreateSubratingsModal from "./CreateSubratingsModal"
-import CreateLabelsModal from "./CreateLabelsModal"
-import { RatingSystemInput, RatingSystemType } from "../../generated/graphql"
 import { useState } from "react";
+import * as Yup from 'yup';
+import { RatingSystemType, SubRatingInput, useCreateRatingSystemMutation } from "../../generated/graphql";
+import CreateLabelsModal from "./CreateLabelsModal";
+import CreateSubratingsModal from "./CreateSubratingsModal";
+
 
 const CreateRatingSystemForm: React.FC<{}> = () => {
+  const [createRatingSystem] = useCreateRatingSystemMutation();
+  const toast = useToast();
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(1, 'Name must be at least 1 character long')
@@ -52,11 +40,30 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
       lower: 0,
       upper: 10,
       labels: ["Bad", "Neutral", "Good"],
-      subRatings: [{ id: "0", name: "Score", weight: 1 }],
+      subRatings: [{ id: "0", name: "Score", weight: 1 }] as SubRatingInput[],
     },
     validationSchema,
-    onSubmit: (values) => {
-      console.log(values)
+    onSubmit: async (values) => {
+      await createRatingSystem({
+        variables: {
+          input: {
+            name: values.name,
+            ratingSystemType: values.type,
+            size: values.type === RatingSystemType.Continuous ? values.upper - values.lower + 1 : values.labels.length,
+            continuousParam: values.type === RatingSystemType.Continuous ? {offset: values.lower - 0} : null,
+            discreteParam: values.type === RatingSystemType.Discrete ? { labels: values.labels } : null,
+            subRatings: values.subRatings
+          }
+        }
+      })
+      .then(
+        res => {
+          toast({ title: "Success!", status: "success" })
+        },
+        err => {
+          toast({ title: "Error!", status: "error"})
+        }
+      )
     }
   });
 
@@ -74,7 +81,7 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
   const [wantSubRatings, setWantSubRatings] = useState<string>("0");
 
   return (
-    <form onSubmit={formik.handleSubmit} id="createRatingSystem">
+    <form onSubmit={formik.handleSubmit}>
       <Stack
         spacing={{ base: 8, md: 6 }}
       >
@@ -104,7 +111,7 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
         </FormControl>
 
         {
-          formik.values.type == RatingSystemType.Continuous ?
+          formik.values.type === RatingSystemType.Continuous ?
             <FormControl>
               <FormLabel>Highest Score</FormLabel>
               <NumberInput
@@ -188,17 +195,18 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
             >
               Create Subratings
             </Button>
-            <CreateSubratingsModal 
+            <CreateSubratingsModal
               initialSubratings={formik.values.subRatings}
-              isOpen={isOpenSubratings} 
-              onClose={onCloseSubratings} 
-              onSave={subRatings => formik.setFieldValue("subRatings", subRatings)}/>
+              isOpen={isOpenSubratings}
+              onClose={onCloseSubratings}
+              onSave={subRatings => formik.setFieldValue("subRatings", subRatings)} />
           </FormControl>
         }
 
         <Button
           mt={6}
           type="submit"
+          isLoading={formik.isSubmitting}
         >
           Create Rating System
         </Button>

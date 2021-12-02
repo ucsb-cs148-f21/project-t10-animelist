@@ -36,7 +36,7 @@ const CreateSubratingsModal: React.FC<CreateSubratingsModalProps> = ({ initialSu
     },
     onSubmit: async ({ subratings }) => {
       onSave(subratings.map((subrating, idx) => ({ id: `${idx}`, name: subrating.name, weight: parseFloat(subrating.weight) })));
-      console.log(subratings)
+      onClose();
     }
   });
 
