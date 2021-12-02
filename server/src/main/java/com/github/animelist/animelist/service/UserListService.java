@@ -111,25 +111,24 @@ public class UserListService {
 
     public boolean updateUserList(final String ownerId, final String listId, final UpdateUserListInput input) {
         //retrieve new rating system
-        final Optional<RatingSystem> ratingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId());
+        final Optional<RatingSystem> newRatingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId());
 
         //retrieve current userlist
         final Optional<UserList> userList = getUserList(listId);
 
-        //set old rating system to be new rating system
-        final Update updateRatingSystem = new Update();
-        updateRatingSystem.set(PUT SHIT IN HERE)
-
-        //change user list name
-        final Update updateName = new Update();
-        updateName.set("userList.$.name", input.name());
-
         //change each item score in list
+        final Update updateList = new Update();
         for (UserListItem item: userList.get().getItems()) {
-            item.getRating() = ratingSystem.get().convert();
+            updateList.set("item.$.getRating()",newRatingSystem.get().convert(userList.get().getRatingSystem(),item.getRating()));
         }
 
+        //set old rating system to be new rating system
+        updateList.set("userList.$.getRatingSystem()",newRatingSystem);
+
+        //change user list name
+        updateList.set("userList.$.name", input.name());
+
         //verify/return true if worked
-        return verifyOneUpdated(mongoTemplate.updateFirst()) ? Optional.of() : Optional.empty();
+        return verifyOneUpdated(mongoTemplate.updateFirst(query,updateList,UserList.class)) ? Optional.of() : Optional.empty();
     }
 }
