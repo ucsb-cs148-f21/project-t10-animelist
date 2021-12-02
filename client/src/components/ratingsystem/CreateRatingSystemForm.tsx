@@ -1,11 +1,13 @@
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
-  Button, FormControl, FormHelperText, FormLabel, Heading, Input, NumberDecrementStepper,
+  Button, FormControl, FormHelperText, FormLabel, Heading, HStack, IconButton, Input, NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
   NumberInputField,
-  NumberInputStepper, Radio, RadioGroup, Stack, useDisclosure, useToast
+  NumberInputStepper, Radio, RadioGroup, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast, Text, Divider
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
+import { remove } from "lodash";
 import * as React from 'react';
 import { useState } from "react";
 import * as Yup from 'yup';
@@ -50,20 +52,20 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
             name: values.name,
             ratingSystemType: values.type,
             size: values.type === RatingSystemType.Continuous ? values.upper - values.lower + 1 : values.labels.length,
-            continuousParam: values.type === RatingSystemType.Continuous ? {offset: values.lower - 0} : null,
+            continuousParam: values.type === RatingSystemType.Continuous ? { offset: values.lower - 0 } : null,
             discreteParam: values.type === RatingSystemType.Discrete ? { labels: values.labels } : null,
             subRatings: values.subRatings
           }
         }
       })
-      .then(
-        res => {
-          toast({ title: "Success!", status: "success" })
-        },
-        err => {
-          toast({ title: "Error!", status: "error"})
-        }
-      )
+        .then(
+          res => {
+            toast({ title: "Success!", status: "success" })
+          },
+          err => {
+            toast({ title: "Error!", status: "error" })
+          }
+        )
     }
   });
 
@@ -144,14 +146,21 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
             </FormControl>
             :
             <FormControl>
-              <Heading size="md"> Assign labels to your discrete rating system</Heading>
+              <FormLabel size="md">Assign labels to your discrete rating system</FormLabel>
+              <Heading size="sm">Highest Score</Heading>
+              {
+                formik.values.labels.slice().reverse().map((label, idx) => (
+                  <Text key={idx} py={2}>{label}</Text>
+                ))
+              }
+              <Heading size="sm">Lowest Score</Heading>
               <Button
                 mt={6}
                 type="button"
                 padding="15px"
                 onClick={onOpenLabels}
               >
-                Assign Labels
+                Edit Labels
               </Button>
               <CreateLabelsModal
                 initialLabels={formik.values.labels}
@@ -187,13 +196,31 @@ const CreateRatingSystemForm: React.FC<{}> = () => {
           wantSubRatings === "1" &&
           <FormControl>
             <FormLabel>Create Subratings</FormLabel>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th>Weight</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {
+                  formik.values.subRatings.map((subrating) => (
+                    <Tr key={subrating.id}>
+                      <Td>{subrating.name}</Td>
+                      <Td>{subrating.weight}</Td>
+                    </Tr>
+                  ))
+                }
+              </Tbody>
+            </Table>
             <Button
               mt={6}
               type="button"
               padding="15px"
               onClick={onOpenSubratings}
             >
-              Create Subratings
+              Edit Subratings
             </Button>
             <CreateSubratingsModal
               initialSubratings={formik.values.subRatings}
