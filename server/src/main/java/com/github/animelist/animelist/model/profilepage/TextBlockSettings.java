@@ -1,10 +1,19 @@
 package com.github.animelist.animelist.model.profilepage;
 
+import com.github.animelist.animelist.model.input.profilepage.TextBlockInput;
+
+import org.springframework.data.annotation.PersistenceConstructor;
+
 public class TextBlockSettings {
     private String text;
 
+    @PersistenceConstructor
     public TextBlockSettings(String text) {
         this.text = text;
+    }
+
+    public TextBlockSettings(TextBlockInput input) {
+        this(input.text());
     }
 
     public String getText() {
