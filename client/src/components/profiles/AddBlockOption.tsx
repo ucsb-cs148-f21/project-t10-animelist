@@ -5,11 +5,14 @@ import { BlockType } from '../../generated/graphql';
 import { CgSpaceBetweenV } from 'react-icons/cg';
 import { IoIosStats, IoMdText} from 'react-icons/io';
 import { BsListUl } from 'react-icons/bs';
+import { Button } from '@chakra-ui/button';
 
 const ICON_BOX_SIZE = '4em';
 
 interface Props {
   type: BlockType;
+  selected?: BlockType;
+  clickHandler: (type: BlockType) => void;
 }
 
 const getInfoFor = (type: BlockType) => {
@@ -25,19 +28,21 @@ const getInfoFor = (type: BlockType) => {
   }
 }
 
-const AddBlockOption: React.FC<Props> = ({ type }) => {
+const AddBlockOption: React.FC<Props> = ({ type, selected, clickHandler}) => {
   const [icon, label] = getInfoFor(type);
 
   return (
-    <Center borderWidth='1px' borderRadius='xl' minWidth='250px' width='250px'
-      padding='16px'>
+    <Button onClick={() => clickHandler(type)}
+      colorScheme='blue' borderWidth='1px' borderRadius='xl' minWidth='250px'
+      variant={(type === selected) ? 'solid' : 'ghost'}
+      size='xl' padding={6} >
 
-      <VStack>
-        {icon}
-        <Text fontSize='xl'>{label}</Text>
-      </VStack>
+        <VStack>
+          {icon}
+          <Text fontSize='xl'>{label}</Text>
+        </VStack>
 
-    </Center>
+    </Button>
   )
 }
 
