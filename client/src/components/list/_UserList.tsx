@@ -8,6 +8,7 @@ import { ContinuousRatingSystem, DiscreteRatingSystem, UserList as UserListType,
 import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
 import { initializeApolloAnilist } from "../../utils/createApolloAnilist";
 import SearchAddAnime from "../search/_SearchAddAnime";
+import { useCreateUserListMutation, useMeQuery } from "../../generated/graphql";
 import UserListItem from "./_UserListItem";
 
 const PAGE_SIZE = 20;
@@ -62,6 +63,7 @@ export const ListOwnerBar: React.FC<{ addedIds: Set<number>; userlist: UserListT
 
 export const EditUserListModal: React.FC<{ initialName: string, initialRatingSystemId: string, listId: string, isOpen: boolean, onClose: () => void, }> = ({ initialName, initialRatingSystemId, listId, isOpen, onClose }) => {
   const [updateUserList] = useUpdateUserListMutation();
+  const { data: meData } = useMeQuery();
   const formik = useFormik({
     initialValues: {
       name: initialName,
@@ -117,7 +119,7 @@ export const EditUserListModal: React.FC<{ initialName: string, initialRatingSys
                 <option value="5_STAR" >5 stars</option>
                 <option value="3_SMILEY" >3 smiley</option>
                 {
-                  //meData && meData.me.ratingSystems && meData.me.ratingSystems.map(item => <option key={item.id} value={item.id}>{item.name}</option>)
+                  meData && meData.me.ratingSystems && meData.me.ratingSystems.map(item => <option key={item.id} value={item.id}>{item.name}</option>)
                 }
               </Select>
             </FormControl>
