@@ -126,7 +126,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn, fullSize }) => {
           <Tr>
             {fullSize && <Th>Image</Th>}
             <Th>Anime title</Th>
-            <Th>Watch Status</Th>
+            <Th display={{ base: "none", md: "table-cell" }}>Watch Status</Th>
             <Th>Rating</Th>
             {isOwn && <Th />}
           </Tr>
