@@ -8,13 +8,27 @@ const List: React.FC<{}> = () => {
   const { data, loading } = useMeQuery();
   const router = useRouter();
 
+  if (loading) {
+    return <div />;
+  }
+
+  if (!data || !data.me) {
+    router.push("/login");
+    return <div />;
+  }
+
   return (
     <VStack py={{ base: 10 }} width="sm">
       <Heading>Your Lists</Heading>
       {
         data.me.userLists && data.me.userLists.length !== 0 &&
         data.me.userLists.map((userlist) => (
-          <Button width="full" maxW="sm" onClick={() => router.push(`list/${userlist.id}`)}>
+          <Button 
+            key={userlist.id}
+            width="full" 
+            maxW="sm" 
+            onClick={() => router.push(`list/${userlist.id}`)}
+          >
             <HStack width="full" justifyContent="space-between">
               <Text>
                 {userlist.name}
