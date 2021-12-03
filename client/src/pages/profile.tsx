@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, ButtonGroup, Center, Container, Grid, GridItem, Heading, HStack, Spinner, VStack, Text, Table, Tbody, Th, Thead, Tr, Td, Stat, StatArrow, StatGroup, StatHelpText, StatLabel, StatNumber } from "@chakra-ui/react";
+import { Avatar, Box, Button, ButtonGroup, Center, Container, Grid, GridItem, Heading, HStack, Spinner, VStack, Text, Table, Tbody, Th, Thead, Tr, Td, Stat, StatArrow, StatGroup, StatHelpText, StatLabel, StatNumber, Flex, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
 import * as React from 'react';
 import { useRouter } from "next/router";
 import ProfileCard from "../components/profiles/ProfileCard";
@@ -8,11 +8,19 @@ import { ApolloQueryResult } from "@apollo/client";
 import Link from "next/link";
 import UserListItem from "../components/list/_UserListItem";
 import ProfilePageBlockGrid from "../components/profiles/ProfilePageBlockGrid";
+import { EditIcon } from "@chakra-ui/icons";
+import AddBlockModal from "../components/profiles/AddBlockModal";
 
 const Profile: React.FC<{}> = () => {
   const { data, loading } = useProfileQuery();
   const malOauth = useImperativeQuery(MalLinkOauthDocument);
   const router = useRouter();
+
+  const {
+    isOpen: isOpenAddBlock,
+    onOpen: onOpenAddBlock,
+    onClose: onCloseAddBlock
+  } = useDisclosure();
 
   if (loading) {
     return (
@@ -37,16 +45,25 @@ const Profile: React.FC<{}> = () => {
       width="100%"
       maxWidth={{ base: "sm", md: "6xl" }}
     >
-      <HStack
-        spacing="3rem"
-        width="100%"
-      >
-        <Avatar
-          size={"lg"}
-          name={data.me.username}
-        />
-        <Heading>{data.me.username}</Heading>
-      </HStack>
+      <Flex width="100%" direction='row' justifyContent='space-between'>
+        <HStack
+          spacing="3rem"
+          width="100%"
+        >
+          <Avatar
+            size={"lg"}
+            name={data.me.username}
+          />
+          <Heading>{data.me.username}</Heading>
+        </HStack>
+        <Box>
+          <Tooltip label='Edit profile' placement='right' openDelay={250}>
+            <IconButton aria-label='Edit profile' icon={<EditIcon />}
+              onClick={onOpenAddBlock} />
+          </Tooltip>
+          <AddBlockModal isOpen={isOpenAddBlock} onClose={onCloseAddBlock} />
+        </Box>
+      </Flex>
       <ButtonGroup
         width="100%"
       >
