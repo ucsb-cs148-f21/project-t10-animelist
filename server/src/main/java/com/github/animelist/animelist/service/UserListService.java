@@ -110,14 +110,17 @@ public class UserListService {
     }
 
     public boolean updateUserList(final String ownerId, final UpdateUserListInput input) {
-
-        final RatingSystem newRatingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId()).orElseThrow();
-
         final UserList userList = getUserList(input.listId()).orElseThrow();
 
         if (!userList.getOwnerId().toString().equals(ownerId)) {
             throw new RuntimeException("User does not own this list.");
         }
+
+        if (userList.getName().equals(input.name()) && userList.getRatingSystem().getId().equals(input.ratingSystemId())) {
+            return false;
+        }
+
+        final RatingSystem newRatingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId()).orElseThrow();
 
         if (!input.ratingSystemId().equals(userList.getRatingSystem().getId())) {
             for (UserListItem item : userList.getItems()) {
@@ -127,8 +130,16 @@ public class UserListService {
             userList.setRatingSystem(newRatingSystem);
         }
 
-        userList.setName(input.name());
+        if (!userList.getName().equals(input.name())) {
+            userList.setName(input.name());
+            final Query userQuery = new Query().addCriteria(Criteria.where("_id").is(userList.getOwnerId()).and("userLists.id").is(userList.getId()));
+            final Update updateNameEmbeddedUserList = new Update().set("userLists.$.name", userList.getName());
+            mongoTemplate.updateFirst(userQuery, updateNameEmbeddedUserList, User.class);
+        }
 
-        return mongoTemplate.save(userList) != null;
+
+        mongoTemplate.save(userList);
+
+        return true;
     }
 }
