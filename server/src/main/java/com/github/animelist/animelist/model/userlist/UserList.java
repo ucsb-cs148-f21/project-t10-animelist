@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -92,7 +93,7 @@ public class UserList {
         private ObjectId ownerId;
         private String name;
         private RatingSystem ratingSystem;
-        private List<UserListItem> items;
+        private List<UserListItem> items = Collections.emptyList();
 
         public Builder id(String id) {
             this.id = id;

@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static com.github.animelist.animelist.util.MongoUtil.verifyOneUpdated;
 import static java.util.Collections.emptyList;
+import static java.util.Objects.isNull;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Component
@@ -54,7 +55,18 @@ public class UserListService {
     }
 
     public Optional<UserList> getUserList(final String listId) {
-        return Optional.ofNullable(mongoTemplate.findById(new ObjectId(listId), UserList.class));
+        return Optional.ofNullable(mongoTemplate.findById(new ObjectId(listId), UserList.class))
+                .map(userList -> {
+                    // sorted by score nonincreasing
+                    userList.getItems().sort((l, r) -> {
+                        if (isNull(l) && isNull(r)) return 0;
+                        if (isNull(l.getRating())) return 1;
+                        if (isNull(r.getRating())) return -1;
+
+                        return r.getRating().getRating().compareTo(l.getRating().getRating());
+                    });
+                    return userList;
+                });
     }
 
     public Optional<UserListItem> addItem(final String ownerId, final UserListItemInput input) {
