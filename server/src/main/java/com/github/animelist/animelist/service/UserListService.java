@@ -109,26 +109,23 @@ public class UserListService {
         return mongoTemplate.updateFirst(query, update, User.class).getMatchedCount() == 1;
     }
 
-    public boolean updateUserList(final String ownerId, final String listId, final UpdateUserListInput input) {
-        //retrieve new rating system
-        final Optional<RatingSystem> newRatingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId());
+    public boolean updateUserList(final String ownerId, final UpdateUserListInput input) {
+        final RatingSystem newRatingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId()).orElseThrow();
 
-        //retrieve current userlist
-        final Optional<UserList> userList = getUserList(listId);
+        final UserList userList = getUserList(input.listId()).orElseThrow();
 
-        //change each item score in list
-        final Update updateList = new Update();
-        for (UserListItem item: userList.get().getItems()) {
-            updateList.set("item.$.getRating()",newRatingSystem.get().convert(userList.get().getRatingSystem(),item.getRating()));
+        if (!userList.getOwnerId().toString().equals(ownerId)) {
+            throw new RuntimeException("User does not own this list.");
         }
 
-        //set old rating system to be new rating system
-        updateList.set("userList.$.getRatingSystem()",newRatingSystem);
+        for (UserListItem item : userList.getItems()) {
+            if (item.getRating() == null) continue;
+            item.setRating(newRatingSystem.convert(userList.getRatingSystem(), item.getRating()));
+        }
 
-        //change user list name
-        updateList.set("userList.$.name", input.name());
+        userList.setName(input.name());
+        userList.setRatingSystem(newRatingSystem);
 
-        //verify/return true if worked
-        return verifyOneUpdated(mongoTemplate.updateFirst(query,updateList,UserList.class)) ? Optional.of() : Optional.empty();
+        return mongoTemplate.save(userList) != null;
     }
 }

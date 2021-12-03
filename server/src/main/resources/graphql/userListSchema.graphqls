@@ -8,6 +8,7 @@ type UserList {
 
 input UpdateUserListInput {
   name: String!
+  listId: String!
   ratingSystemId: String!
 }
 
