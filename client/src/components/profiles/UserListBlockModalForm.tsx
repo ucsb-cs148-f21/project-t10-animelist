@@ -1,46 +1,74 @@
 import { Button, ButtonGroup } from '@chakra-ui/button';
-import { FormControl, FormLabel } from '@chakra-ui/form-control';
+import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
+import { HStack, VStack } from '@chakra-ui/layout';
+import { Select } from '@chakra-ui/select';
 import { Field, Form, Formik } from 'formik';
 import * as React from 'react';
-import { UserListBlockInput } from '../../generated/graphql';
+import { EmbeddedUserList, UserListBlockInput } from '../../generated/graphql';
 
 interface Props {
+  userLists: EmbeddedUserList[];
   onBack: () => void;
   onNext: (input: UserListBlockInput) => void;
 }
 
-const UserListBlockModalForm: React.FC<Props> = ({ onBack, onNext }) => (
-  <Formik
-    initialValues={{ text: '' }}
-    onSubmit={(values, actions) => {
-      onNext({ listId: 'abc', maxEntries: 10 });
-    }}
-  >
-    {props => (
-      <Form>
-        <Field name='text'>
-          {({ field, form }) => (
-            <FormControl>
-              <FormLabel htmlFor='text'>Text</FormLabel>
-              <Input {...field} id='text' placeholder='Text to display' />
-            </FormControl>
-          )}
-        </Field>
-        <ButtonGroup>
-          <Button colorScheme='blue' onClick={onBack}>Back</Button>
+const UserListBlockModalForm: React.FC<Props> = ({ userLists, onBack, onNext }) => {
+  const hasLists = userLists && (userLists.length > 0);
 
-          <Button
-            colorScheme='blue'
-            isLoading={props.isSubmitting}
-            type='submit'
-          >
-            Next
-          </Button>
-        </ButtonGroup>
-      </Form>
-    )}
-  </Formik>
-)
+  return (
+    <Formik
+      initialValues={{ list: '', maxEntries: '' }}
+      onSubmit={(values, actions) => {
+        onNext({
+          listId: values.list,
+          maxEntries: (values.maxEntries !== '') ? Number.parseInt(values.maxEntries) : null
+        });
+      }}
+    >
+      {props => (
+        <Form>
+          <VStack spacing='1rem' padding='0.5rem'>
+            <Field name='list'>
+              {({ field, form }) => (
+                <FormControl isRequired>
+                  <FormLabel htmlFor='list'>List</FormLabel>
+                  <Select
+                    {...field} id='list'
+                    placeholder={hasLists ? 'Select a list' : 'You have no lists!'}
+                    isDisabled={!hasLists}
+                  >
+                    {hasLists && userLists.map(list => <option value={list.id}>{list.name}</option>)}
+                  </Select>
+                </FormControl>
+              )}
+            </Field>
+
+            <Field name='maxEntries'>
+              {({ field, form}) => (
+                <FormControl>
+                  <FormLabel htmlFor='maxEntries'>Maximum entries shown</FormLabel>
+                  <Input {...field} type='number' placeholder='e.g. 10' />
+                </FormControl>
+              )}
+            </Field>
+
+            <HStack justify='center' spacing='2em'>
+              <Button colorScheme='blue' onClick={onBack}>Back</Button>
+
+              <Button
+                colorScheme='blue'
+                isLoading={props.isSubmitting}
+                type='submit'
+              >
+                Next
+              </Button>
+            </HStack>
+          </VStack>
+        </Form>
+      )}
+    </Formik>
+  );
+}
 
 export default UserListBlockModalForm;

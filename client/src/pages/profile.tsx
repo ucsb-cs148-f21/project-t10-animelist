@@ -10,6 +10,7 @@ import UserListItem from "../components/list/_UserListItem";
 import ProfilePageBlockGrid from "../components/profiles/ProfilePageBlockGrid";
 import { EditIcon } from "@chakra-ui/icons";
 import AddBlockModal from "../components/profiles/AddBlockModal";
+import { profile } from "console";
 
 const addBlock = (block: Block) => {
   console.log(block);
@@ -65,7 +66,11 @@ const Profile: React.FC<{}> = () => {
             <IconButton aria-label='Edit profile' icon={<EditIcon />}
               onClick={onOpenAddBlock} />
           </Tooltip>
-          <AddBlockModal isOpen={isOpenAddBlock} onClose={onCloseAddBlock} onBlockComplete={addBlock} />
+          <AddBlockModal
+            userLists={data.me.userLists}
+            isOpen={isOpenAddBlock}
+            onClose={onCloseAddBlock}
+            onBlockComplete={addBlock} />
         </Box>
       </Flex>
       <ButtonGroup

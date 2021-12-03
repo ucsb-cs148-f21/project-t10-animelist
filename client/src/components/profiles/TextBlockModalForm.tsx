@@ -22,7 +22,7 @@ const TextBlockModalForm: React.FC<Props> = ({ onBack, onNext }) => (
         <VStack spacing='1rem' padding='0.5rem'>
           <Field name='text'>
             {({ field, form }) => (
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel htmlFor='text'>Text</FormLabel>
                 <Textarea {...field} id='text' placeholder='Text to display' />
               </FormControl>

@@ -1,13 +1,14 @@
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import { HStack, Text, VStack, Wrap } from '@chakra-ui/layout';
 import * as React from 'react';
-import { Block, BlockType, TextBlockInput, UserListBlockInput, Width } from '../../generated/graphql';
+import { Block, BlockType, EmbeddedUserList, TextBlockInput, UserListBlockInput, Width } from '../../generated/graphql';
 import AddBlockOption from './AddBlockOption';
 import { Button } from '@chakra-ui/button';
 import TextBlockModalForm from './TextBlockModalForm';
 import UserListBlockModalForm from './UserListBlockModalForm';
 
 interface Props {
+  userLists: EmbeddedUserList[];
   isOpen: boolean;
   onClose: () => void;
   onBlockComplete: (block: Block) => void;
@@ -32,7 +33,7 @@ const getModalTitle = (stage: ModalStage, blockType: BlockType) => {
   }
 }
 
-const AddBlockModal: React.FC<Props> = ({ isOpen, onClose, onBlockComplete }) => {
+const AddBlockModal: React.FC<Props> = ({ userLists, isOpen, onClose, onBlockComplete }) => {
   const resetState = () => {
     setModalStage(ModalStage.SelectType);
     setBlock({
@@ -69,6 +70,7 @@ const AddBlockModal: React.FC<Props> = ({ isOpen, onClose, onBlockComplete }) =>
             }} />;
         case BlockType.UserList:
           return <UserListBlockModalForm 
+            userLists={userLists}
             onBack={() => setModalStage(ModalStage.SelectType)}
             onNext={(input: UserListBlockInput) => {
               setBlock(prevBlock => {
