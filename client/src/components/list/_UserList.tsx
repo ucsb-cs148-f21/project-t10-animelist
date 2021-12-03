@@ -1,8 +1,9 @@
+import { useApolloClient } from "@apollo/client";
 import { PlusSquareIcon, SettingsIcon } from "@chakra-ui/icons";
 import { Button, ButtonGroup, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Table, Tbody, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import { ContinuousRatingSystem, DiscreteRatingSystem, UserList as UserListType, UserListItem as UserListItemType, UserListRating } from "../../generated/graphql";
+import { ContinuousRatingSystem, DiscreteRatingSystem, UserList as UserListType, UserListItem as UserListItemType, UserListRating, _UserListDocument } from "../../generated/graphql";
 import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
 import { initializeApolloAnilist } from "../../utils/createApolloAnilist";
 import SearchAddAnime from "../search/_SearchAddAnime";
@@ -27,7 +28,12 @@ export interface IListItem {
 }
 
 export const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> = ({ addedIds, listId }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose: onCloseDisclosure } = useDisclosure();
+  const client = useApolloClient();
+  const onClose = async () => {
+    await client.refetchQueries({ include: [_UserListDocument] });
+    onCloseDisclosure();
+  }
   return (
     <>
       <ButtonGroup alignSelf="flex-end">
@@ -80,9 +86,12 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
         coverImage: anilistMedia.coverImage.medium,
         bannerImage: anilistMedia.bannerImage
       }));
-
+      
       setListItems(
-        prev => prev.concat(listItems)
+        prev => {
+          const ids = new Set<number>(prev.map(item => item.id));
+          return page === 1 ? listItems : prev.concat(listItems.filter(item => !ids.has(item.id)));
+        }
       );
     }
   });
