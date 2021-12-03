@@ -1,6 +1,8 @@
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
-import { Text } from '@chakra-ui/layout';
+import { HStack, Text, Wrap } from '@chakra-ui/layout';
 import * as React from 'react';
+import { BlockType } from '../../generated/graphql';
+import AddBlockOption from './AddBlockOption';
 
 interface Props {
   isOpen: boolean,
@@ -9,13 +11,18 @@ interface Props {
 
 const AddBlockModal: React.FC<Props> = ({ isOpen, onClose }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} size='xl'>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Add Profile Block</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text>hello world</Text>
+          <Wrap spacing='12px'>
+            <AddBlockOption type={BlockType.UserList} />
+            <AddBlockOption type={BlockType.Statistics} />
+            <AddBlockOption type={BlockType.Text} />
+            <AddBlockOption type={BlockType.Spacer} />
+          </Wrap>
         </ModalBody>
       </ModalContent>
     </Modal>
