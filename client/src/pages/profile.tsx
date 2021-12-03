@@ -67,11 +67,7 @@ const Profile: React.FC<{}> = () => {
       
       <ProfilePageBlockGrid blocks={data.me.profilePageBlocks} />
 
-        <Box w='100%'>
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla bibendum ante ac ligula tincidunt, mattis dignissim nisl convallis. Vestibulum pulvinar molestie quam in lacinia. Aenean lacinia tristique velit. Duis non arcu orci. In feugiat erat sit amet maximus laoreet. Suspendisse aliquam elementum purus, ut consequat risus blandit et. In quis rhoncus augue, a hendrerit arcu.
-          </Text>
-        </Box>
+      <Grid>
         <Box w='100%'>
           <Table>
             <Thead>
@@ -94,6 +90,7 @@ const Profile: React.FC<{}> = () => {
             </Tbody>
           </Table>
         </Box>
+      </Grid>
        
     </VStack>
   );

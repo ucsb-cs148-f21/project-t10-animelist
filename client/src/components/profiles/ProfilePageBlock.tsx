@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Block, BlockType, SpacerBlock, StatisticsBlock, TextBlock, UserListBlock } from "../../generated/graphql";
 import SpacerBlockDisplay from './SpacerBlockDisplay';
 import StatisticsBlockDisplay from './StatisticsBlockDisplay';
+import TextBlockDisplay from './TextBlockDisplay';
+import UserListBlockDisplay from './UserListBlockDisplay';
 
 interface Props {
   block: Block;

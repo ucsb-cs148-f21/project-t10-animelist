@@ -14,6 +14,7 @@ const PAGE_SIZE = 20;
 export interface UserListProps {
   userlist: UserListType;
   isOwn: boolean;
+  fullSize: boolean;
 }
 
 export interface IListItem {
@@ -56,7 +57,7 @@ export const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> =
   );
 };
 
-const UserList: React.FC<UserListProps> = ({ userlist, isOwn }) => {
+const UserList: React.FC<UserListProps> = ({ userlist, isOwn, fullSize }) => {
   const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
   const [listItems, setListItems] = useState<IListItem[]>([])
   const [page, setPage] = useState<number>(1);
