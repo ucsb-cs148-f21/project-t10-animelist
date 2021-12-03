@@ -2,7 +2,7 @@ import { Avatar, Box, Button, ButtonGroup, Center, Container, Grid, GridItem, He
 import * as React from 'react';
 import { useRouter } from "next/router";
 import ProfileCard from "../components/profiles/ProfileCard";
-import { MalLinkOauthDocument, MalLinkOauthQuery, useProfileQuery } from '../generated/graphql';
+import { Block, MalLinkOauthDocument, MalLinkOauthQuery, useProfileQuery } from '../generated/graphql';
 import useImperativeQuery from "../utils/useImperativeQuery";
 import { ApolloQueryResult } from "@apollo/client";
 import Link from "next/link";
@@ -10,6 +10,10 @@ import UserListItem from "../components/list/_UserListItem";
 import ProfilePageBlockGrid from "../components/profiles/ProfilePageBlockGrid";
 import { EditIcon } from "@chakra-ui/icons";
 import AddBlockModal from "../components/profiles/AddBlockModal";
+
+const addBlock = (block: Block) => {
+  console.log(block);
+}
 
 const Profile: React.FC<{}> = () => {
   const { data, loading } = useProfileQuery();
@@ -61,7 +65,7 @@ const Profile: React.FC<{}> = () => {
             <IconButton aria-label='Edit profile' icon={<EditIcon />}
               onClick={onOpenAddBlock} />
           </Tooltip>
-          <AddBlockModal isOpen={isOpenAddBlock} onClose={onCloseAddBlock} />
+          <AddBlockModal isOpen={isOpenAddBlock} onClose={onCloseAddBlock} onBlockComplete={addBlock} />
         </Box>
       </Flex>
       <ButtonGroup

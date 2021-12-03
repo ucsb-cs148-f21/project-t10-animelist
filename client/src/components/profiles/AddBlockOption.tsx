@@ -1,7 +1,7 @@
 import { ArrowUpDownIcon, HamburgerIcon, Icon, InfoIcon } from '@chakra-ui/icons';
 import { Box, Center, Text, VStack } from '@chakra-ui/layout';
 import * as React from 'react';
-import { BlockType } from '../../generated/graphql';
+import { Block, BlockType } from '../../generated/graphql';
 import { CgSpaceBetweenV } from 'react-icons/cg';
 import { IoIosStats, IoMdText} from 'react-icons/io';
 import { BsListUl } from 'react-icons/bs';
@@ -12,7 +12,7 @@ const ICON_BOX_SIZE = '4em';
 interface Props {
   type: BlockType;
   selected?: BlockType;
-  clickHandler: (type: BlockType) => void;
+  setBlock: (func: (prevBlock: Block) => Block) => void;
 }
 
 const getInfoFor = (type: BlockType) => {
@@ -28,11 +28,20 @@ const getInfoFor = (type: BlockType) => {
   }
 }
 
-const AddBlockOption: React.FC<Props> = ({ type, selected, clickHandler}) => {
+const handleClick = (setBlock: (func: (prevBlock: Block) => Block) => void, type: BlockType) => {
+  setBlock(prevBlock => {
+    return {
+      ...prevBlock,
+      type: type
+    };
+  });
+}
+
+const AddBlockOption: React.FC<Props> = ({ type, selected, setBlock}) => {
   const [icon, label] = getInfoFor(type);
 
   return (
-    <Button onClick={() => clickHandler(type)}
+    <Button onClick={() => handleClick(setBlock, type)}
       colorScheme='blue' borderWidth='1px' borderRadius='xl' minWidth='250px'
       variant={(type === selected) ? 'solid' : 'ghost'}
       size='xl' padding={6} >
