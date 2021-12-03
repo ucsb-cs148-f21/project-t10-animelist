@@ -1,9 +1,8 @@
 package com.github.animelist.animelist.service;
 
+import com.github.animelist.animelist.controller.RatingSystemController;
 import com.github.animelist.animelist.entity.User;
-import com.github.animelist.animelist.model.input.CreateUserListInput;
-import com.github.animelist.animelist.model.input.UserListEntryInput;
-import com.github.animelist.animelist.model.input.UserListItemInput;
+import com.github.animelist.animelist.model.input.*;
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
 import com.github.animelist.animelist.model.userlist.EmbeddedUserList;
 import com.github.animelist.animelist.model.userlist.UserList;
@@ -16,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static com.github.animelist.animelist.util.MongoUtil.verifyOneUpdated;
@@ -107,5 +107,39 @@ public class UserListService {
         update.set("userList.$.rating", entry.rating());
 
         return mongoTemplate.updateFirst(query, update, User.class).getMatchedCount() == 1;
+    }
+
+    public boolean updateUserList(final String ownerId, final UpdateUserListInput input) {
+        final UserList userList = getUserList(input.listId()).orElseThrow();
+
+        if (!userList.getOwnerId().toString().equals(ownerId)) {
+            throw new RuntimeException("User does not own this list.");
+        }
+
+        if (userList.getName().equals(input.name()) && userList.getRatingSystem().getId().equals(input.ratingSystemId())) {
+            return false;
+        }
+
+        final RatingSystem newRatingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId()).orElseThrow();
+
+        if (!input.ratingSystemId().equals(userList.getRatingSystem().getId())) {
+            for (UserListItem item : userList.getItems()) {
+                if (item.getRating() == null) continue;
+                item.setRating(newRatingSystem.convert(userList.getRatingSystem(), item.getRating()));
+            }
+            userList.setRatingSystem(newRatingSystem);
+        }
+
+        if (!userList.getName().equals(input.name())) {
+            userList.setName(input.name());
+            final Query userQuery = new Query().addCriteria(Criteria.where("_id").is(userList.getOwnerId()).and("userLists.id").is(userList.getId()));
+            final Update updateNameEmbeddedUserList = new Update().set("userLists.$.name", userList.getName());
+            mongoTemplate.updateFirst(userQuery, updateNameEmbeddedUserList, User.class);
+        }
+
+
+        mongoTemplate.save(userList);
+
+        return true;
     }
 }

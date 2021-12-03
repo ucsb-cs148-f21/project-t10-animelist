@@ -6,6 +6,12 @@ type UserList {
   ratingSystem: RatingSystem
 }
 
+input UpdateUserListInput {
+  name: String!
+  listId: String!
+  ratingSystemId: String!
+}
+
 type EmbeddedUserList {
   id: ID!
   name: String!

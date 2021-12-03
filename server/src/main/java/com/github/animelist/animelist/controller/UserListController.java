@@ -2,6 +2,7 @@ package com.github.animelist.animelist.controller;
 
 import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.model.input.CreateUserListInput;
+import com.github.animelist.animelist.model.input.UpdateUserListInput;
 import com.github.animelist.animelist.model.input.UserListEntryInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.user.UserListEntry;
@@ -73,4 +74,13 @@ public class UserListController {
 
         return new UserListEntry(input.mediaID(), input.rated(), input.rating());
     }
+
+    @MutationMapping
+    @PreAuthorize("isAuthenticated()")
+    public boolean updateUserList(@Argument("input") final UpdateUserListInput input) {
+        final var userDetails = AuthUtil.getUserDetails();
+
+        return userListService.updateUserList(userDetails.getId(), input);
+    }
+
 }
