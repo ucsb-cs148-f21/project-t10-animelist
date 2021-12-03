@@ -16,7 +16,10 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
+import java.util.Objects;
+
 import static com.github.animelist.animelist.util.AuthUtil.getUserDetails;
+import static java.util.Objects.isNull;
 
 @Controller
 public class UserListController {
