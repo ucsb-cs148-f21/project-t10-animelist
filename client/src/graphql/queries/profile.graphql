@@ -1,0 +1,46 @@
+query Profile {
+  me {
+    username
+
+    userLists {
+      id
+      name
+    }
+
+    profilePageBlocks {
+      width
+      type
+
+      ...UserListBlockFields
+      ...TextBlockFields
+      ...StatisticsBlockFields 
+    }
+  }
+}
+
+fragment UserListBlockFields on UserListBlock {
+  additionalData {
+    userList {
+      name
+      items {
+        mediaID
+        watchStatus
+        rating {
+          displayRating
+        }
+      }
+    }
+  }
+}
+
+fragment TextBlockFields on TextBlock {
+  textBlockInput {
+    text
+  }
+}
+
+fragment StatisticsBlockFields on StatisticsBlock {
+  additionalData {
+    entries
+  }
+}

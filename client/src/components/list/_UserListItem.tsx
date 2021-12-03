@@ -8,6 +8,7 @@ import { IListItem } from './_UserList';
 export interface UserListItemProps {
   item: IListItem;
   canEdit: boolean;
+  showImage: boolean;
 }
 
 const badgeFor = (watchStatus: WatchStatus) => {
@@ -27,15 +28,16 @@ const badgeFor = (watchStatus: WatchStatus) => {
   }
 }
 
-const UserListItem: React.FC<UserListItemProps> = ({ item: initialItem, canEdit }) => {
+const UserListItem: React.FC<UserListItemProps> = ({ item: initialItem, canEdit, showImage }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [item, changeItemState] = React.useState<IListItem>(initialItem);
 
+
   return (
     <Tr>
-      <Td><Image src={item.coverImage} minWidth="67px" width="67px" height="100px" objectFit="cover" /></Td>
+      {showImage && <Td><Image src={item.coverImage} minWidth="67px" width="67px" height="100px" objectFit="cover" /></Td>}
       <Td>{item.title}</Td>
-      <Td>{badgeFor(item.watchStatus as WatchStatus)}</Td>
+      <Td display={{ base: "none", md: "table-cell" }}>{badgeFor(item.watchStatus as WatchStatus)}</Td>
       <Td>{item.rating ? item.rating.displayRating : <Icon as={BsDash} />}</Td>
       { canEdit && <Td><Button onClick={onOpen}>Edit</Button><EditAnimeModal item={item} isOpen={isOpen} onClose={onClose} onSave={changeItemState}/></Td> }
     </Tr>

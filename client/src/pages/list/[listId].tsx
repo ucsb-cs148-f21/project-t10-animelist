@@ -35,7 +35,9 @@ const ListPage: React.FC<{}> = () => {
 
   return (
     <VStack py={{ base: 10 }} width="full" maxWidth="6xl">
-      <UserList userlist={data.userList} isOwn={meData && meData.me && meData.me.id == data.userList.ownerId} />
+      <UserList userlist={data.userList}
+        isOwn={meData && meData.me && meData.me.id == data.userList.ownerId} 
+        fullSize={true} />
     </VStack>
   );
 };
