@@ -115,7 +115,8 @@ export type Mutation = {
   malLink?: Maybe<Scalars['Boolean']>;
   malLogin?: Maybe<LoginResponse>;
   register?: Maybe<RegisterResponse>;
-  updateProfilePageBlocks: Array<Array<Block>>;
+  updateProfilePageBlocks?: Maybe<Scalars['Boolean']>;
+  updateUserList?: Maybe<Scalars['Boolean']>;
   updateUserListEntry?: Maybe<UserListEntry>;
   updateUserListItem?: Maybe<UserListItem>;
 };
@@ -163,6 +164,11 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateProfilePageBlocksArgs = {
   input: ProfilePageInput;
+};
+
+
+export type MutationUpdateUserListArgs = {
+  input: UpdateUserListInput;
 };
 
 
@@ -277,6 +283,12 @@ export type TextBlockInput = {
 export type TextBlockSettings = {
   __typename?: 'TextBlockSettings';
   text: Scalars['String'];
+};
+
+export type UpdateUserListInput = {
+  listId: Scalars['String'];
+  name: Scalars['String'];
+  ratingSystemId: Scalars['String'];
 };
 
 export type UpdateUserListItemInput = {
@@ -455,7 +467,7 @@ export type UpdateProfilePageBlocksMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProfilePageBlocksMutation = { __typename?: 'Mutation', updateProfilePageBlocks: Array<Array<{ __typename: 'SpacerBlock' } | { __typename: 'StatisticsBlock' } | { __typename: 'TextBlock' } | { __typename: 'UserListBlock' }>> };
+export type UpdateProfilePageBlocksMutation = { __typename?: 'Mutation', updateProfilePageBlocks?: Maybe<boolean> };
 
 export type UpdateUserListEntryMutationVariables = Exact<{
   input: UserListEntryInput;
@@ -882,9 +894,7 @@ export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const UpdateProfilePageBlocksDocument = gql`
     mutation UpdateProfilePageBlocks($input: ProfilePageInput!) {
-  updateProfilePageBlocks(input: $input) {
-    __typename
-  }
+  updateProfilePageBlocks(input: $input)
 }
     `;
 export type UpdateProfilePageBlocksMutationFn = Apollo.MutationFunction<UpdateProfilePageBlocksMutation, UpdateProfilePageBlocksMutationVariables>;

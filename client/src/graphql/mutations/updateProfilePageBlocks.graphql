@@ -1,5 +1,3 @@
 mutation UpdateProfilePageBlocks($input: ProfilePageInput!) {
-  updateProfilePageBlocks(input: $input) {
-    __typename
-  }
+  updateProfilePageBlocks(input: $input)
 }

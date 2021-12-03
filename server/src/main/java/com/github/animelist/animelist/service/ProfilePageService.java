@@ -42,9 +42,7 @@ public class ProfilePageService {
         this.userListService = userListService;
     }
 
-    // returning a DataFetcherResult wrapper allows to add a local context field, so that we
-    // can resolve fields on the blocks based on the user stored in that local context
-    public DataFetcherResult<List<List<Block>>> updateProfilePageBlocks(List<List<BlockInput>> blocks) {
+    public Boolean updateProfilePageBlocks(List<List<BlockInput>> blocks) {
         List<List<Block>> outputBlocks = blocks.stream().map(this::convertRowToFullBlocks)
             .collect(Collectors.toCollection(ArrayList::new));
         
@@ -54,10 +52,7 @@ public class ProfilePageService {
         user.setProfilePageBlocks(outputBlocks);
         userService.updateUser(user);
 
-        return DataFetcherResult.<List<List<Block>>>newResult()
-            .data(outputBlocks)
-            .localContext(user)
-            .build();
+        return true;
     }
 
     public UserList getUserListSlice(UserListBlockSettings settings) {
