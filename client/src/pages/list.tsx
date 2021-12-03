@@ -1,25 +1,29 @@
-import { VStack } from "@chakra-ui/react";
-import router from "next/router";
+import { ArrowRightIcon } from "@chakra-ui/icons";
+import { Button, Heading, HStack, Link, Text, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/dist/client/router";
 import * as React from "react";
-import UserList from "../components/list/UserList";
-import Loading from "../components/Loading";
-import { useUserListQuery } from "../generated/graphql";
+import { useMeQuery } from "../generated/graphql";
 
 const List: React.FC<{}> = () => {
-  const { data, loading } = useUserListQuery();
-
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (!data || !data.me) {
-    router.push("/login");
-    return <div />;
-  }
+  const { data, loading } = useMeQuery();
+  const router = useRouter();
 
   return (
-    <VStack py={{ base: 10 }} width="full">
-      <UserList list={data.me.userList} />
+    <VStack py={{ base: 10 }} width="sm">
+      <Heading>Your Lists</Heading>
+      {
+        data.me.userLists && data.me.userLists.length !== 0 &&
+        data.me.userLists.map((userlist) => (
+          <Button width="full" maxW="sm" onClick={() => router.push(`list/${userlist.id}`)}>
+            <HStack width="full" justifyContent="space-between">
+              <Text>
+                {userlist.name}
+              </Text>
+              <ArrowRightIcon />
+            </HStack>
+          </Button>
+        ))
+      }
     </VStack>
   );
 };
