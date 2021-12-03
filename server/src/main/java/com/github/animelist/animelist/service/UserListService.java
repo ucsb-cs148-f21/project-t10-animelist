@@ -110,6 +110,7 @@ public class UserListService {
     }
 
     public boolean updateUserList(final String ownerId, final UpdateUserListInput input) {
+
         final RatingSystem newRatingSystem = ratingSystemService.getRatingSystem(input.ratingSystemId()).orElseThrow();
 
         final UserList userList = getUserList(input.listId()).orElseThrow();
@@ -118,13 +119,15 @@ public class UserListService {
             throw new RuntimeException("User does not own this list.");
         }
 
-        for (UserListItem item : userList.getItems()) {
-            if (item.getRating() == null) continue;
-            item.setRating(newRatingSystem.convert(userList.getRatingSystem(), item.getRating()));
+        if (!input.ratingSystemId().equals(userList.getRatingSystem().getId())) {
+            for (UserListItem item : userList.getItems()) {
+                if (item.getRating() == null) continue;
+                item.setRating(newRatingSystem.convert(userList.getRatingSystem(), item.getRating()));
+            }
+            userList.setRatingSystem(newRatingSystem);
         }
 
         userList.setName(input.name());
-        userList.setRatingSystem(newRatingSystem);
 
         return mongoTemplate.save(userList) != null;
     }
