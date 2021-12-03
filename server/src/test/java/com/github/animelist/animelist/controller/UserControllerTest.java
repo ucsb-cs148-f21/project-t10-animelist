@@ -63,7 +63,7 @@ public class UserControllerTest {
 
         when(userService.getUser(TEST_ID)).thenReturn(Optional.of(mockUser));
 
-        final User actualUser = userController.me();
+        final User actualUser = userController.me().getData();
 
         assertThat(actualUser, is(mockUser));
     }

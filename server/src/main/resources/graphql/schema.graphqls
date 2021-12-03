@@ -3,6 +3,7 @@ scalar DateTime
 type User {
   id: ID!
   username: String!
+  profilePageBlocks: [[Block!]!]!
   userList: [UserListEntry!]!
   userLists: [EmbeddedUserList]
   ratingSystems: [EmbeddedRatingSystem]
@@ -68,5 +69,6 @@ type Mutation {
   createUserList(input: CreateUserListInput!): UserList
   addUserListItem(input: AddUserListItemInput!): UserListItem
   updateUserListItem(input: UpdateUserListItemInput!): UserListItem
+  updateProfilePageBlocks(input: ProfilePageInput!): [[Block!]!]!
   updateUserList(input: UpdateUserListInput!): Boolean
 }
