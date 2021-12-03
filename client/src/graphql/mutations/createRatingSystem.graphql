@@ -1,0 +1,6 @@
+mutation CreateRatingSystem($input: RatingSystemInput!) {
+  createRatingSystem(input: $input) {
+    id
+    name
+  }
+}
