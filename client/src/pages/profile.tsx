@@ -2,7 +2,7 @@ import { Avatar, Box, Button, ButtonGroup, Center, Container, Grid, GridItem, He
 import * as React from 'react';
 import { useRouter } from "next/router";
 import ProfileCard from "../components/profiles/ProfileCard";
-import { Block, MalLinkOauthDocument, MalLinkOauthQuery, useProfileQuery } from '../generated/graphql';
+import { Block, StatisticsBlock, MalLinkOauthDocument, MalLinkOauthQuery, useProfileQuery, BlockInput, useUpdateProfilePageBlocksMutation, UserListBlockInput, TextBlockInput, ProfileDocument } from '../generated/graphql';
 import useImperativeQuery from "../utils/useImperativeQuery";
 import { ApolloQueryResult } from "@apollo/client";
 import Link from "next/link";
@@ -11,13 +11,31 @@ import ProfilePageBlockGrid from "../components/profiles/ProfilePageBlockGrid";
 import { EditIcon } from "@chakra-ui/icons";
 import AddBlockModal from "../components/profiles/AddBlockModal";
 import { profile } from "console";
-
-const addBlock = (block: Block) => {
-  console.log(block);
-}
+import { convertBlockToBlockInput } from "../utils/convertBlock";
 
 const Profile: React.FC<{}> = () => {
+  const addBlock = (newBlock: BlockInput) => {
+    // convert current blocks into BlockInput types
+    let updatedBlocks: BlockInput[][] = data.me.profilePageBlocks.map(row => row.map(convertBlockToBlockInput))
+
+    let row = [newBlock];
+    updatedBlocks.push(row);
+
+    console.log(updatedBlocks);
+    updateProfilePageBlocks({
+      variables: {
+        input: {
+          blocks: updatedBlocks
+        }
+      },
+      refetchQueries: [
+        ProfileDocument
+      ]
+    });
+  }
+
   const { data, loading } = useProfileQuery();
+  const [ updateProfilePageBlocks ] = useUpdateProfilePageBlocksMutation();
   const malOauth = useImperativeQuery(MalLinkOauthDocument);
   const router = useRouter();
 

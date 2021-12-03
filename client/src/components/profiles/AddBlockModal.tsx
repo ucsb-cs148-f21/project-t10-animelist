@@ -88,11 +88,13 @@ const AddBlockModal: React.FC<Props> = ({ userLists, isOpen, onClose, onBlockCom
     width: Width.Full
   });
 
-  if (modalStage === ModalStage.Done) {
-    onClose();
-    onBlockComplete(block);
-    resetState();
-  }
+  React.useEffect(() => {
+    if (modalStage === ModalStage.Done) {
+      onClose();
+      onBlockComplete(block);
+      resetState();
+    }
+  }, [modalStage]);
 
   // check if block type doesn't require any additional details. if so, skip the
   // additional details stage and go to the done stage
