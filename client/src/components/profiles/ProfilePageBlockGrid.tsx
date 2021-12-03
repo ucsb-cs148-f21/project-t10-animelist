@@ -15,8 +15,8 @@ const ProfilePageBlockGrid: React.FC<Props> = ({ blocks }) => {
       gap={4}
     >
       {
-        blocks.map(row =>
-          <div>{row.map(block => <ProfilePageBlock block={block} />)}</div>
+        blocks.map(row => 
+          row.map(block => <ProfilePageBlock block={block} />)
         )
       }
     </Grid>

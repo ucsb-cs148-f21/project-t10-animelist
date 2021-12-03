@@ -116,13 +116,15 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn, fullSize }) => {
   }
 
   return (
-    <VStack width="full" p={6}>
-      <Heading>{userlist.name}</Heading>
+    <VStack width="full" p={fullSize ? 6 : 0}>
+      <Heading size={fullSize ? 'xl' : 'md'} alignSelf={fullSize ? 'center' : 'flex-start'}>
+        {userlist.name}
+      </Heading>
       {isOwn && <ListOwnerBar addedIds={new Set(userlist.items.map(item => item.mediaID))} listId={userlist.id} />}
       <Table>
         <Thead>
           <Tr>
-            <Th>Image</Th>
+            {fullSize && <Th>Image</Th>}
             <Th>Anime title</Th>
             <Th>Watch Status</Th>
             <Th>Rating</Th>
@@ -131,7 +133,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn, fullSize }) => {
         </Thead>
         <Tbody>
           {
-            listItems.map((item) => <UserListItem key={item.id} item={item} canEdit={isOwn}/>)
+            listItems.map((item) => <UserListItem key={item.id} item={item} canEdit={isOwn} showImage={fullSize} />)
           }
         </Tbody>
       </Table>

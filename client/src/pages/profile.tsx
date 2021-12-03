@@ -67,31 +67,6 @@ const Profile: React.FC<{}> = () => {
       
       <ProfilePageBlockGrid blocks={data.me.profilePageBlocks} />
 
-      <Grid>
-        <Box w='100%'>
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>Image</Th>
-                <Th>Anime title</Th>
-                <Th>Watch Status</Th>
-                <Th>Rating</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {
-                [1, 2, 3].map(i => <Tr>
-                  <Td>Test</Td>
-                  <Td>Test</Td>
-                  <Td>Test</Td>
-                  <Td>Test</Td>
-                </Tr>)
-              }
-            </Tbody>
-          </Table>
-        </Box>
-      </Grid>
-       
     </VStack>
   );
 };
