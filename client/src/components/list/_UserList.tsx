@@ -39,6 +39,7 @@ export const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> =
     <>
       <ButtonGroup alignSelf="flex-end">
         <Button leftIcon={<PlusSquareIcon/>} alignSelf="flex-end" colorScheme="blue" onClick={onOpen}>Add Anime</Button>
+        <Button leftIcon={<SettingsIcon/>}  onClick={onOpen} >Settings</Button>
       </ButtonGroup>
       <Modal isCentered   scrollBehavior="inside" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -56,13 +57,9 @@ export const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> =
   );
 };
 
-export const UserListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> = ({ addedIds, listId }) => {
-  const { isOpen, onOpen, onClose} = useDisclosure();
+export const EditUserListModal: React.FC<{ isOpen: boolean, onClose: () => void,}> = ({ isOpen, onClose}) => {
   return (
     <>
-      <ButtonGroup alignSelf="flex-end">
-        <Button leftIcon={<SettingsIcon/>}  onClick={onOpen} >Settings</Button>
-      </ButtonGroup>
       <Modal isCentered   scrollBehavior="inside" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent padding="10px" maxW="56rem">
