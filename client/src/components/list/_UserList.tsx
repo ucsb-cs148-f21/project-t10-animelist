@@ -1,6 +1,6 @@
 import { useApolloClient } from "@apollo/client";
 import { PlusSquareIcon, SettingsIcon } from "@chakra-ui/icons";
-import { Button, ButtonGroup, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Table, Tbody, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
+import { Button, ButtonGroup, FormControl, FormLabel, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Table, Tbody, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { ContinuousRatingSystem, DiscreteRatingSystem, UserList as UserListType, UserListItem as UserListItemType, UserListRating, _UserListDocument } from "../../generated/graphql";
@@ -39,7 +39,6 @@ export const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> =
     <>
       <ButtonGroup alignSelf="flex-end">
         <Button leftIcon={<PlusSquareIcon/>} alignSelf="flex-end" colorScheme="blue" onClick={onOpen}>Add Anime</Button>
-        <Button leftIcon={<SettingsIcon/>}>Settings</Button>
       </ButtonGroup>
       <Modal isCentered   scrollBehavior="inside" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -57,6 +56,44 @@ export const ListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> =
   );
 };
 
+export const UserListOwnerBar: React.FC<{ addedIds: Set<number>; listId: string }> = ({ addedIds, listId }) => {
+  const { isOpen, onOpen, onClose} = useDisclosure();
+  return (
+    <>
+      <ButtonGroup alignSelf="flex-end">
+        <Button leftIcon={<SettingsIcon/>}  onClick={onOpen} >Settings</Button>
+      </ButtonGroup>
+      <Modal isCentered   scrollBehavior="inside" isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent padding="10px" maxW="56rem">
+          <ModalCloseButton />
+          <ModalHeader>
+            <Heading>update name and rating system</Heading>
+          </ModalHeader>
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>New name</FormLabel>
+              <Input />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>New ratingsystem</FormLabel>
+              <Input />
+            </FormControl>
+          </ModalBody>
+          
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3}>
+              Save
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+        </Modal>
+    </>
+    
+  );
+};
 const UserList: React.FC<UserListProps> = ({ userlist, isOwn, fullSize }) => {
   const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
   const [listItems, setListItems] = useState<IListItem[]>([])
@@ -121,6 +158,7 @@ const UserList: React.FC<UserListProps> = ({ userlist, isOwn, fullSize }) => {
         {userlist.name}
       </Heading>
       {isOwn && <ListOwnerBar addedIds={new Set(userlist.items.map(item => item.mediaID))} listId={userlist.id} />}
+      {isOwn && <UserListOwnerBar addedIds={new Set(userlist.items.map(item => item.mediaID))} listId={userlist.id} />}
       <Table>
         <Thead>
           <Tr>
