@@ -469,6 +469,13 @@ export type UpdateProfilePageBlocksMutationVariables = Exact<{
 
 export type UpdateProfilePageBlocksMutation = { __typename?: 'Mutation', updateProfilePageBlocks?: Maybe<boolean> };
 
+export type UpdateUserListMutationVariables = Exact<{
+  input: UpdateUserListInput;
+}>;
+
+
+export type UpdateUserListMutation = { __typename?: 'Mutation', updateUserList?: Maybe<boolean> };
+
 export type UpdateUserListEntryMutationVariables = Exact<{
   input: UserListEntryInput;
 }>;
@@ -923,6 +930,37 @@ export function useUpdateProfilePageBlocksMutation(baseOptions?: Apollo.Mutation
 export type UpdateProfilePageBlocksMutationHookResult = ReturnType<typeof useUpdateProfilePageBlocksMutation>;
 export type UpdateProfilePageBlocksMutationResult = Apollo.MutationResult<UpdateProfilePageBlocksMutation>;
 export type UpdateProfilePageBlocksMutationOptions = Apollo.BaseMutationOptions<UpdateProfilePageBlocksMutation, UpdateProfilePageBlocksMutationVariables>;
+export const UpdateUserListDocument = gql`
+    mutation UpdateUserList($input: UpdateUserListInput!) {
+  updateUserList(input: $input)
+}
+    `;
+export type UpdateUserListMutationFn = Apollo.MutationFunction<UpdateUserListMutation, UpdateUserListMutationVariables>;
+
+/**
+ * __useUpdateUserListMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserListMutation, { data, loading, error }] = useUpdateUserListMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUserListMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserListMutation, UpdateUserListMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserListMutation, UpdateUserListMutationVariables>(UpdateUserListDocument, options);
+      }
+export type UpdateUserListMutationHookResult = ReturnType<typeof useUpdateUserListMutation>;
+export type UpdateUserListMutationResult = Apollo.MutationResult<UpdateUserListMutation>;
+export type UpdateUserListMutationOptions = Apollo.BaseMutationOptions<UpdateUserListMutation, UpdateUserListMutationVariables>;
 export const UpdateUserListEntryDocument = gql`
     mutation UpdateUserListEntry($input: UserListEntryInput!) {
   updateUserListEntry(input: $input) {
