@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = (props) => {
     >
       <Flex align="center" mr={5}>
         <Heading size="lg" letterSpacing={"tighter"}>
-          <Link href="/">T10-AnimeList</Link>
+          <Link href={props.user ? "/list" : "/"}>T10-AnimeList</Link>
         </Heading>
       </Flex>
 
