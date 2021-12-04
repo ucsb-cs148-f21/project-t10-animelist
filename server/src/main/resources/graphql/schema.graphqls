@@ -69,6 +69,6 @@ type Mutation {
   createUserList(input: CreateUserListInput!): UserList
   addUserListItem(input: AddUserListItemInput!): UserListItem
   updateUserListItem(input: UpdateUserListItemInput!): UserListItem
-  updateProfilePageBlocks(input: ProfilePageInput!): [[Block!]!]!
+  updateProfilePageBlocks(input: ProfilePageInput!): Boolean
   updateUserList(input: UpdateUserListInput!): Boolean
 }

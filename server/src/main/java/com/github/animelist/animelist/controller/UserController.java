@@ -51,6 +51,8 @@ public class UserController {
         this.response = response;
     }
 
+    // returning a DataFetcherResult wrapper allows to add a local context field, so that we
+    // can resolve fields on the blocks based on the user stored in that local context
     @QueryMapping
     @PreAuthorize("isAuthenticated()")
     public DataFetcherResult<User> me() {
