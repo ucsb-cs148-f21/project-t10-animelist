@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Box, Button, Flex, Heading, Image, Stack, Text, Link, VStack } from "@chakra-ui/react"
+import { Box, Button, Flex, Heading, Image, Stack, Text, Link, VStack, ButtonGroup, useColorModeValue } from "@chakra-ui/react"
 import { FaGithub } from 'react-icons/fa';
 import { useMeQuery } from '../generated/graphql';
 import router from 'next/router';
+import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
 
 const Home: React.FC<{}> = () => {
   const { data, } = useMeQuery();
@@ -29,24 +30,50 @@ const Home: React.FC<{}> = () => {
         px={{ base: 10 }}
       >
         <Heading>
-          Anime List App
+          <Text
+            as='span'
+            position='relative'
+            _after={{
+              content: "''",
+              width: 'full',
+              height: '10%',
+              position: 'absolute',
+              bottom: -1.5,
+              left: 0,
+              bg: useColorModeValue('blue.100', 'blue.700'),
+              zIndex: -1,
+            }}
+          >
+            T10 - Anime List
+          </Text>
         </Heading>
+
         <Text>
-          This is the current anime list web app (currently in development) for team 10 in CS148-F21
+          Welcome to your personalized anime list experience!
+          Track your favorite animes and the ones you've been planning to watch,
+          using a highly customizable rating system and a profile page where you can
+          show off your taste.
         </Text>
-        <Stack
-          direction={'column'}
-          align={'center'}
-        >
-          <Button as="a" href="https://github.com/ucsb-cs148-f21/project-t10-animelist" leftIcon={<FaGithub />}>
-            GitHub
-          </Button>
-        </Stack>
+
+        <ButtonGroup variant="outline">
+          <Link href="/signup">
+            <Button colorScheme='blue' variant='solid'>
+              Sign up
+            </Button>
+          </Link>
+          <Link href="/login">
+            <Button colorScheme='blue'>
+              Login
+            </Button>
+          </Link>
+        </ButtonGroup>
+
+        <ColorModeSwitcher />
       </VStack>
 
       <Flex flex={2}>
         <Image alt='Anime scenery' objectFit='cover'
-          src={'/images/landing-page-dark.jpg'} />
+          src={useColorModeValue('images/landing-page-light.jpg', '/images/landing-page-dark.jpg')} />
       </Flex>
     </Stack>
   );
