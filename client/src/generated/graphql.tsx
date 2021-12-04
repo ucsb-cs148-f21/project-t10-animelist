@@ -516,7 +516,7 @@ export type ProfileQueryVariables = Exact<{
 }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string }>, user?: Maybe<{ __typename?: 'User', id: string, username: string, userLists?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedUserList', id: string, name: string }>>>, profilePageBlocks: Array<Array<{ __typename?: 'SpacerBlock', width: Width, type: BlockType } | { __typename?: 'StatisticsBlock', width: Width, type: BlockType, additionalData: { __typename?: 'StatisticsBlockAdditionalData', entries: number } } | { __typename?: 'TextBlock', width: Width, type: BlockType, textBlockInput: { __typename?: 'TextBlockSettings', text: string } } | { __typename?: 'UserListBlock', width: Width, type: BlockType, userListBlockInput: { __typename?: 'UserListBlockSettings', listId: string, maxEntries?: Maybe<number> }, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } }>> }> };
+export type ProfileQuery = { __typename?: 'Query', user?: Maybe<{ __typename?: 'User', id: string, username: string, userLists?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedUserList', id: string, name: string }>>>, profilePageBlocks: Array<Array<{ __typename?: 'SpacerBlock', width: Width, type: BlockType } | { __typename?: 'StatisticsBlock', width: Width, type: BlockType, additionalData: { __typename?: 'StatisticsBlockAdditionalData', entries: number } } | { __typename?: 'TextBlock', width: Width, type: BlockType, textBlockInput: { __typename?: 'TextBlockSettings', text: string } } | { __typename?: 'UserListBlock', width: Width, type: BlockType, userListBlockInput: { __typename?: 'UserListBlockSettings', listId: string, maxEntries?: Maybe<number> }, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } }>> }> };
 
 export type UserListBlockFieldsFragment = { __typename?: 'UserListBlock', userListBlockInput: { __typename?: 'UserListBlockSettings', listId: string, maxEntries?: Maybe<number> }, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } };
 
@@ -1180,9 +1180,6 @@ export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const ProfileDocument = gql`
     query Profile($userId: String!) {
-  me {
-    id
-  }
   user(userId: $userId) {
     id
     username
