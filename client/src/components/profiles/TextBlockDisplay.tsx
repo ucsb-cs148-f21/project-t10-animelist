@@ -9,7 +9,7 @@ interface Props {
 const TextBlockDisplay: React.FC<Props> = ({ block }) => {
   return (
     <Box w='100%'>
-      <Text>
+      <Text whiteSpace='pre-wrap'>
         {block.textBlockInput.text}
       </Text>
     </Box>

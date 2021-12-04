@@ -42,19 +42,6 @@ const Header: React.FC<HeaderProps> = (props) => {
         {isOpen ? <CloseIcon /> : <HamburgerIcon />}
       </Box>
 
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        display={{ base: isOpen ? "block" : "none", md: "flex" }}
-        width={{ base: "full", md: "auto" }}
-        alignItems="center"
-        flexGrow={1}
-        mt={{ base: 4, md: 0 }}
-      >
-        <StyledLink href="https://chakra-ui.com" isExternal>
-          Chakra Docs <ExternalLinkIcon mx="2px" />
-        </StyledLink>
-      </Stack>
-
       <Box
         display={{ base: isOpen ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}

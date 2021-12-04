@@ -38,7 +38,7 @@ public class ProfilePageController {
 
     @MutationMapping
     @PreAuthorize("isAuthenticated()")
-    public DataFetcherResult<List<List<Block>>> updateProfilePageBlocks(
+    public Boolean updateProfilePageBlocks(
         @Argument final Map<String, Object> args) {
        
         //workaround to avoid unsuccessful cast from LinkedHashMap to BlockInput

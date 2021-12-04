@@ -115,7 +115,8 @@ export type Mutation = {
   malLink?: Maybe<Scalars['Boolean']>;
   malLogin?: Maybe<LoginResponse>;
   register?: Maybe<RegisterResponse>;
-  updateProfilePageBlocks: Array<Array<Block>>;
+  updateProfilePageBlocks?: Maybe<Scalars['Boolean']>;
+  updateUserList?: Maybe<Scalars['Boolean']>;
   updateUserListEntry?: Maybe<UserListEntry>;
   updateUserListItem?: Maybe<UserListItem>;
 };
@@ -163,6 +164,11 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateProfilePageBlocksArgs = {
   input: ProfilePageInput;
+};
+
+
+export type MutationUpdateUserListArgs = {
+  input: UpdateUserListInput;
 };
 
 
@@ -277,6 +283,12 @@ export type TextBlockInput = {
 export type TextBlockSettings = {
   __typename?: 'TextBlockSettings';
   text: Scalars['String'];
+};
+
+export type UpdateUserListInput = {
+  listId: Scalars['String'];
+  name: Scalars['String'];
+  ratingSystemId: Scalars['String'];
 };
 
 export type UpdateUserListItemInput = {
@@ -450,6 +462,13 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register?: Maybe<{ __typename?: 'RegisterResponse', success: boolean }> };
 
+export type UpdateProfilePageBlocksMutationVariables = Exact<{
+  input: ProfilePageInput;
+}>;
+
+
+export type UpdateProfilePageBlocksMutation = { __typename?: 'Mutation', updateProfilePageBlocks?: Maybe<boolean> };
+
 export type UpdateUserListEntryMutationVariables = Exact<{
   input: UserListEntryInput;
 }>;
@@ -482,9 +501,9 @@ export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', 
 export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProfileQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', username: string, userLists?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedUserList', id: string, name: string }>>>, profilePageBlocks: Array<Array<{ __typename?: 'SpacerBlock', width: Width, type: BlockType } | { __typename?: 'StatisticsBlock', width: Width, type: BlockType, additionalData: { __typename?: 'StatisticsBlockAdditionalData', entries: number } } | { __typename?: 'TextBlock', width: Width, type: BlockType, textBlockInput: { __typename?: 'TextBlockSettings', text: string } } | { __typename?: 'UserListBlock', width: Width, type: BlockType, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } }>> }> };
+export type ProfileQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', username: string, userLists?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedUserList', id: string, name: string }>>>, profilePageBlocks: Array<Array<{ __typename?: 'SpacerBlock', width: Width, type: BlockType } | { __typename?: 'StatisticsBlock', width: Width, type: BlockType, additionalData: { __typename?: 'StatisticsBlockAdditionalData', entries: number } } | { __typename?: 'TextBlock', width: Width, type: BlockType, textBlockInput: { __typename?: 'TextBlockSettings', text: string } } | { __typename?: 'UserListBlock', width: Width, type: BlockType, userListBlockInput: { __typename?: 'UserListBlockSettings', listId: string, maxEntries?: Maybe<number> }, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } }>> }> };
 
-export type UserListBlockFieldsFragment = { __typename?: 'UserListBlock', additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } };
+export type UserListBlockFieldsFragment = { __typename?: 'UserListBlock', userListBlockInput: { __typename?: 'UserListBlockSettings', listId: string, maxEntries?: Maybe<number> }, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } };
 
 export type TextBlockFieldsFragment = { __typename?: 'TextBlock', textBlockInput: { __typename?: 'TextBlockSettings', text: string } };
 
@@ -497,6 +516,10 @@ export type UserListQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'U
 
 export const UserListBlockFieldsFragmentDoc = gql`
     fragment UserListBlockFields on UserListBlock {
+  userListBlockInput {
+    listId
+    maxEntries
+  }
   additionalData {
     userList {
       name
@@ -869,6 +892,37 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateProfilePageBlocksDocument = gql`
+    mutation UpdateProfilePageBlocks($input: ProfilePageInput!) {
+  updateProfilePageBlocks(input: $input)
+}
+    `;
+export type UpdateProfilePageBlocksMutationFn = Apollo.MutationFunction<UpdateProfilePageBlocksMutation, UpdateProfilePageBlocksMutationVariables>;
+
+/**
+ * __useUpdateProfilePageBlocksMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfilePageBlocksMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfilePageBlocksMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfilePageBlocksMutation, { data, loading, error }] = useUpdateProfilePageBlocksMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProfilePageBlocksMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfilePageBlocksMutation, UpdateProfilePageBlocksMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfilePageBlocksMutation, UpdateProfilePageBlocksMutationVariables>(UpdateProfilePageBlocksDocument, options);
+      }
+export type UpdateProfilePageBlocksMutationHookResult = ReturnType<typeof useUpdateProfilePageBlocksMutation>;
+export type UpdateProfilePageBlocksMutationResult = Apollo.MutationResult<UpdateProfilePageBlocksMutation>;
+export type UpdateProfilePageBlocksMutationOptions = Apollo.BaseMutationOptions<UpdateProfilePageBlocksMutation, UpdateProfilePageBlocksMutationVariables>;
 export const UpdateUserListEntryDocument = gql`
     mutation UpdateUserListEntry($input: UserListEntryInput!) {
   updateUserListEntry(input: $input) {
