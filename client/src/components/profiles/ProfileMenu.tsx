@@ -27,7 +27,7 @@ const ProfileMenu: React.FC<Props> = ({ user }) => {
         />
       </MenuButton>
       <MenuList>
-        <Link href="/profile">
+        <Link href={"/profile/" + user.id}>
           <MenuItem>
             Profile
           </MenuItem>

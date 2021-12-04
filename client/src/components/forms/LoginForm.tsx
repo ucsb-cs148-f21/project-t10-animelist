@@ -44,7 +44,7 @@ const LoginForm: React.FC<{}> = () => {
           });
         } else {
           setAccessToken(response.data.login.token);
-          router.push("/profile");
+          router.push("/profile/" + response.data.login.user.id);
         }
       }).catch((err: ApolloError) => {
         toast({

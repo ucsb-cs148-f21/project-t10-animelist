@@ -66,6 +66,15 @@ public class UserController {
             .build();
     }
 
+    @QueryMapping
+    public DataFetcherResult<User> user(@Argument("userId") final String userId) {
+        User user = userService.getUser(userId).orElseThrow();
+        return DataFetcherResult.<User>newResult()
+            .data(user)
+            .localContext(user)
+            .build();
+    }
+
     @MutationMapping
     public RegisterResponse register(@Argument("input") final RegisterInput input) {
         final User user = userService.createUser(input.username(), input.email(), input.password());
