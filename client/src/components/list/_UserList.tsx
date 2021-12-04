@@ -96,17 +96,17 @@ export const EditUserListModal: React.FC<{ initialName: string, initialRatingSys
       <ModalContent padding="10px" maxW="56rem">
         <ModalCloseButton />
         <ModalHeader>
-          <Heading>update name and rating system</Heading>
+          <Heading>List Settings</Heading>
         </ModalHeader>
         <form onSubmit={formik.handleSubmit}>
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>New name</FormLabel>
+              <FormLabel>Name</FormLabel>
               <Input id="name" {...formik.getFieldProps("name")} />
             </FormControl>
 
             <FormControl mt={4}>
-              <FormLabel>New ratingsystem</FormLabel>
+              <FormLabel>Rating System</FormLabel>
               <Select
                 size="lg"
                 id="ratingSystemId"
