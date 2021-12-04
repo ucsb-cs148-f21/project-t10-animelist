@@ -1,8 +1,9 @@
 package com.github.animelist.animelist.service;
 
-import com.github.animelist.animelist.controller.RatingSystemController;
 import com.github.animelist.animelist.entity.User;
-import com.github.animelist.animelist.model.input.*;
+import com.github.animelist.animelist.model.input.CreateUserListInput;
+import com.github.animelist.animelist.model.input.UpdateUserListInput;
+import com.github.animelist.animelist.model.input.UserListItemInput;
 import com.github.animelist.animelist.model.ratingsystem.RatingSystem;
 import com.github.animelist.animelist.model.userlist.EmbeddedUserList;
 import com.github.animelist.animelist.model.userlist.UserList;
@@ -15,7 +16,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static com.github.animelist.animelist.util.MongoUtil.verifyOneUpdated;
@@ -107,18 +107,6 @@ public class UserListService {
         query.addCriteria(where("_id").is(new ObjectId(listId)).and("ownerId").is(new ObjectId(ownerId)));
 
         return query;
-    }
-
-    @Deprecated
-    public boolean updateUserListEntry(final String userId, final UserListEntryInput entry) {
-        final Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(userId).and("userList.mediaID").is(entry.mediaID()));
-
-        final Update update = new Update();
-        update.set("userList.$.rated", entry.rated());
-        update.set("userList.$.rating", entry.rating());
-
-        return mongoTemplate.updateFirst(query, update, User.class).getMatchedCount() == 1;
     }
 
     public boolean updateUserList(final String ownerId, final UpdateUserListInput input) {

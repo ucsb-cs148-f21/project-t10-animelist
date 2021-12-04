@@ -1,149 +1,224 @@
-import { ApolloClient, gql, NormalizedCacheObject } from "@apollo/client";
-import { Avatar, Button, Heading, Table, TableCaption, Tbody, Td, Th, Thead, Tr, VStack } from "@chakra-ui/react";
-import Link from "next/link";
+import { useApolloClient } from "@apollo/client";
+import { PlusSquareIcon, SettingsIcon } from "@chakra-ui/icons";
+import { Button, ButtonGroup, FormControl, FormLabel, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Table, Tbody, Th, Thead, Tr, useDisclosure, VStack } from "@chakra-ui/react";
+import { useFormik } from "formik";
 import * as React from "react";
-import { UserListEntry } from "../../generated/graphql";
-import { createApolloAnilist } from "../../utils/createApolloAnilist";
-import Loading from "../Loading";
-import UserListRow from "./UserListRow";
+import { useEffect, useRef, useState } from "react";
+import { ContinuousRatingSystem, DiscreteRatingSystem, UserList as UserListType, UserListItem as UserListItemType, UserListRating, useUpdateUserListMutation, _UserListDocument } from "../../generated/graphql";
+import { useFetchAnimeInfoQuery } from "../../generated/graphql_anilist";
+import { initializeApolloAnilist } from "../../utils/createApolloAnilist";
+import SearchAddAnime from "../search/SearchAddAnime";
+import { useCreateUserListMutation, useMeQuery } from "../../generated/graphql";
+import UserListItem from "./UserListItem";
 
-const pageSize = 20 ;
+const PAGE_SIZE = 20;
 
-interface UserListProps {
-  list: UserListEntry[];
+export interface UserListProps {
+  userlist: UserListType;
+  isOwn: boolean;
+  fullSize: boolean;
 }
 
-const UserList: React.FC<UserListProps> = ({ list }) => {
-  const [medias, setMedias] = React.useState(new Map());
-  const [mediasFetched, setMediasFetched] = React.useState(false);
-  const [pages, setPages] = React.useState(1);
+export interface IListItem {
+  id: number;
+  listId: string;
+  title: string;
+  watchStatus: string;
+  coverImage: string;
+  bannerImage: string;
+  ratingSystem?: ContinuousRatingSystem | DiscreteRatingSystem;
+  rating?: UserListRating;
+}
 
-  const totalPages = Math.ceil(list.length / pageSize);
-
-  // need to use a callback function instead of useRef because updating
-  // the ref won't trigger a re-render. see https://reactjs.org/docs/refs-and-the-dom.html
-  const [lastElement, setLastElement] = React.useState(null);
-  const lastElementRef = React.useCallback(node => {
-    if (node !== null) {
-      setLastElement(node);
-    }
-  }, []);
-
-  const observer = React.useRef(
-    new IntersectionObserver(
-      (entries) => {
-        const first = entries[0];
-        if (first.isIntersecting && pages < totalPages) {
-          setPages((pages) => pages + 1);
-        }
-      }
-    )
+export const ListOwnerBar: React.FC<{ addedIds: Set<number>; userlist: UserListType }> = ({ addedIds, userlist }) => {
+  const { isOpen: isOpenAddAnimeModal, onOpen: onOpenAddAnimeModal, onClose: onCloseAddAnimeModal } = useDisclosure();
+  const { isOpen: isOpenEditAnimeModal, onOpen: onOpenEditAnimeModal, onClose: onCloseEditAnimeModal } = useDisclosure();
+  const client = useApolloClient();
+  const onClose = async () => {
+    await client.refetchQueries({ include: [_UserListDocument] });
+    onCloseAddAnimeModal();
+  }
+  return (
+    <>
+      <ButtonGroup alignSelf="flex-end">
+        <Button leftIcon={<PlusSquareIcon />} alignSelf="flex-end" colorScheme="blue" onClick={onOpenAddAnimeModal}>Add Anime</Button>
+        <Button leftIcon={<SettingsIcon />} onClick={onOpenEditAnimeModal} >Settings</Button>
+      </ButtonGroup>
+      <Modal isCentered scrollBehavior="inside" isOpen={isOpenAddAnimeModal} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent padding="10px" maxW="56rem">
+          <ModalCloseButton />
+          <ModalHeader>
+            <Heading>Add Anime</Heading>
+          </ModalHeader>
+          <ModalBody>
+            <SearchAddAnime addedIds={addedIds} listId={userlist.id} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <EditUserListModal initialName={userlist.name} initialRatingSystemId={userlist.ratingSystem.id} listId={userlist.id} isOpen={isOpenEditAnimeModal} onClose={onCloseEditAnimeModal} />
+    </>
   );
+};
 
-  React.useEffect(() => {
-    const apolloClient = createApolloAnilist();
-    fetchAnimeInfo(apolloClient);
-
-    return () => apolloClient.stop();
-  }, [list, pages]);
-
-  React.useEffect(() => {
-    if (lastElement) {
-      observer.current.observe(lastElement);
-    }
-
-    return () => {
-      if (lastElement) {
-        observer.current.unobserve(lastElement);
-      }
-    };
-  }, [lastElement]);
-  
-  async function fetchAnimeInfo(apolloClient: ApolloClient<NormalizedCacheObject>) {
-    const query = gql`
-      query FetchAnimeInfo($ids: [Int]!) {
-        Page {
-          pageInfo {
-            total
-            currentPage
-            lastPage
-            hasNextPage
-            perPage
-          }
-          media(id_in: $ids, type: ANIME, isAdult: false) {
-            id
-            title {
-              romaji
-            }
-            coverImage {
-              medium
-            }
+export const EditUserListModal: React.FC<{ initialName: string, initialRatingSystemId: string, listId: string, isOpen: boolean, onClose: () => void, }> = ({ initialName, initialRatingSystemId, listId, isOpen, onClose }) => {
+  const [updateUserList] = useUpdateUserListMutation();
+  const { data: meData } = useMeQuery();
+  const formik = useFormik({
+    initialValues: {
+      name: initialName,
+      ratingSystemId: initialRatingSystemId
+    },
+    onSubmit: async ({ name, ratingSystemId }) => {
+      await updateUserList({
+        variables: {
+          input: {
+            name,
+            listId,
+            ratingSystemId
           }
         }
-      }
-    `;
-
-    const lastPage = list.slice((pages - 1) * pageSize, pages * pageSize);
-    const lastPageIds = lastPage.map(anime => anime.mediaID);
-
-    const { data: newMedias }  = await apolloClient.query({
-      query,
-      variables: {
-        ids: lastPageIds
-      }
-    });
-
-    // convert array of media into an array of pairs, where first value
-    // is the media ID and second value is the entire media object,
-    // then convert the array of pairs into a Map so that we can fetch
-    // media data by media ID.
-    const newMediasMap = new Map(newMedias.Page.media.map(
-      (media: any) => [media.id, media]
-    ));
-
-    const mergedMediasMap = new Map([...Array.from(medias), ...Array.from(newMediasMap)])
-
-    setMedias(mergedMediasMap);
-    setMediasFetched(true);
-  }
-
-  if (!mediasFetched) {
-    return <Loading />;
-  }
-
-  const displayedList = list.slice(0,pageSize*pages);
+      })
+      .then(
+        req => {
+          window.location.reload();
+        },
+        err => {
+          console.log("Error!")
+        }
+      )
+    }
+  });
   
   return (
-    <VStack width="full" p={6} maxWidth="6xl">
+    <Modal isCentered scrollBehavior="inside" isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent padding="10px" maxW="56rem">
+        <ModalCloseButton />
+        <ModalHeader>
+          <Heading>List Settings</Heading>
+        </ModalHeader>
+        <form onSubmit={formik.handleSubmit}>
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Name</FormLabel>
+              <Input id="name" {...formik.getFieldProps("name")} />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Rating System</FormLabel>
+              <Select
+                size="lg"
+                id="ratingSystemId"
+                {...formik.getFieldProps("ratingSystemId")}
+                isRequired
+              >
+                <option value="10_DISCRETE" >10 point</option>
+                <option value="10_CONTINUOUS" >10 point decimal</option>
+                <option value="100_CONTINUOUS" >100 point decimal</option>
+                <option value="5_STAR" >5 stars</option>
+                <option value="3_SMILEY" >3 smiley</option>
+                {
+                  meData && meData.me.ratingSystems && meData.me.ratingSystems.map(item => <option key={item.id} value={item.id}>{item.name}</option>)
+                }
+              </Select>
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <ButtonGroup>
+              <Button colorScheme="red" variant="outline" onClick={onClose}>Cancel</Button>
+              <Button colorScheme="green" type="submit">
+                Save
+              </Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </form>
+      </ModalContent>
+    </Modal>
+  );
+};
+const UserList: React.FC<UserListProps> = ({ userlist, isOwn, fullSize }) => {
+  const MAX_PAGE = Math.ceil(userlist.items.length / PAGE_SIZE)
+  const [listItems, setListItems] = useState<IListItem[]>([])
+  const [page, setPage] = useState<number>(1);
+  const { loading } = useFetchAnimeInfoQuery({
+    client: initializeApolloAnilist(),
+    variables: {
+      ids: userlist.items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map(item => item.mediaID)
+    },
+    onCompleted: data => {
+      const indexOf = userlist.items.reduce((map, item, idx) => {
+        map[item.mediaID] = idx;
+        return map;
+      }, {});
+
+      const userListItemOf: Record<number, UserListItemType> = userlist.items.reduce((map, item) => {
+        map[item.mediaID] = item
+        return map;
+      }, {});
+
+      const listItems = data.Page.media.slice().sort((a, b) => indexOf[a.id] - indexOf[b.id]).map(anilistMedia => ({
+        id: anilistMedia.id,
+        title: anilistMedia.title.romaji,
+        watchStatus: userListItemOf[anilistMedia.id].watchStatus,
+        rating: userListItemOf[anilistMedia.id].rating,
+        ratingSystem: userlist.ratingSystem as any,
+        listId: userlist.id,
+        coverImage: anilistMedia.coverImage.medium,
+        bannerImage: anilistMedia.bannerImage
+      }));
+
+      setListItems(
+        prev => {
+          const ids = new Set<number>(prev.map(item => item.id));
+          return page === 1 ? listItems : prev.concat(listItems.filter(item => !ids.has(item.id)));
+        }
+      );
+    }
+  });
+
+  const loader = useRef(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver((entities) => {
+      if (entities[0].isIntersecting) {
+        setPage(Math.min(MAX_PAGE, page + 1))
+      }
+    });
+    if (loader.current) {
+      observer.observe(loader.current)
+    }
+  }, [loading]);
+
+  if (loading && listItems.length == 0) {
+    return (
+      <div />
+    )
+  }
+
+  return (
+    <VStack width="full" p={fullSize ? 6 : 0}>
+      <Heading size={fullSize ? 'xl' : 'md'} alignSelf={fullSize ? 'center' : 'flex-start'}>
+        {userlist.name}
+      </Heading>
+      {isOwn && <ListOwnerBar addedIds={new Set(userlist.items.map(item => item.mediaID))} userlist={userlist} />}
       <Table>
-        <TableCaption>This is my animelist</TableCaption>
         <Thead>
           <Tr>
-            <Th>Image</Th>
+            {fullSize && <Th>Image</Th>}
             <Th>Anime title</Th>
-            <Th>Score</Th>
-            <Th></Th> {/* empty column for Edit button */}
+            <Th display={{ base: "none", md: "table-cell" }}>Watch Status</Th>
+            <Th>Rating</Th>
+            {isOwn && <Th />}
           </Tr>
         </Thead>
         <Tbody>
-          {displayedList.map((anime, i) => {
-            // check if media is defined in case media ID wasn't in anilist database
-            const media = medias.get(anime.mediaID);
-            return (<UserListRow
-              key={anime.mediaID}
-              ref={i === (displayedList.length - 1) ? lastElementRef : null}
-              entryData={{
-                ...anime,
-                title: (media ? media.title.romaji : "Unknown Title"),
-                coverImage: (media ? media.coverImage.medium : "")
-              }}
-            />);
-          })}
+          {
+            listItems.map((item) => <UserListItem key={item.id} item={item} canEdit={isOwn} showImage={fullSize} />)
+          }
         </Tbody>
       </Table>
-      <Link href="/search">
-        <Button colorScheme="blue">Add Anime</Button>
-      </Link>
+      {!loading && page < MAX_PAGE && <div ref={loader} />}
     </VStack>
   )
 };

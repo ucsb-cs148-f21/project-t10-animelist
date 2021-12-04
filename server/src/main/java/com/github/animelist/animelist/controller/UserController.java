@@ -1,15 +1,14 @@
 package com.github.animelist.animelist.controller;
 
-import com.github.animelist.animelist.service.RefreshTokenService;
-import com.github.animelist.animelist.service.UserService;
-import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.entity.User;
+import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.model.input.LoginInput;
 import com.github.animelist.animelist.model.input.RegisterInput;
 import com.github.animelist.animelist.model.response.LoginResponse;
 import com.github.animelist.animelist.model.response.RegisterResponse;
-import com.github.animelist.animelist.model.user.UserListEntry;
-
+import com.github.animelist.animelist.service.RefreshTokenService;
+import com.github.animelist.animelist.service.UserService;
+import graphql.execution.DataFetcherResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-
-import graphql.execution.DataFetcherResult;
-import graphql.schema.DataFetcher;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -116,11 +112,4 @@ public class UserController {
         refreshTokenService.setRefreshTokenCookie(response, null);
     }
 
-    @MutationMapping
-    public boolean addListEntry(@Argument("input") final UserListEntry input) {
-        User currentUser = me().getData();
-        currentUser.addUserListEntry(input);
-        userService.updateUser(currentUser);
-        return true;
-    }
 }

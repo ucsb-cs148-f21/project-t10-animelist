@@ -38,7 +38,7 @@ const ProfileMenu: React.FC<Props> = ({ user }) => {
             await logout();
             setAccessToken("");
             await apolloClient.cache.reset();
-            router.push("/");
+            window.location.href = "/";
           }}
         >
           Logout

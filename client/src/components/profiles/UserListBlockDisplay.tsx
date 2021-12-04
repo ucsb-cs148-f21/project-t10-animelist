@@ -1,5 +1,5 @@
 import * as React from 'react';
-import UserList from '../../components/list/_UserList';
+import UserList from '../list/UserList';
 import { UserListBlock } from '../../generated/graphql';
 
 interface Props {

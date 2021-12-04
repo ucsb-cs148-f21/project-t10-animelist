@@ -2,8 +2,8 @@ import { Tr, Td, Badge, Icon, Button, Image, useDisclosure } from '@chakra-ui/re
 import * as React from 'react';
 import { BsDash } from 'react-icons/bs';
 import { ContinuousRatingSystem, DiscreteRatingSystem, RatingSystem, WatchStatus } from '../../generated/graphql';
-import EditAnimeModal from './_EditAnimeModal';
-import { IListItem } from './_UserList';
+import EditAnimeModal from './EditAnimeModal';
+import { IListItem } from './UserList';
 
 export interface UserListItemProps {
   item: IListItem;

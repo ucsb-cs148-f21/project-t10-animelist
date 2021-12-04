@@ -46,14 +46,6 @@ const Header: React.FC<HeaderProps> = (props) => {
         display={{ base: isOpen ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
       >
-        <Link href="/search">
-          <IconButton
-            onClick={onClose}
-            variant="ghost"
-            aria-label="Search"
-            icon={<SearchIcon />}
-          />
-        </Link>
         {
           !props.user ? (
             <ButtonGroup variant="outline">
