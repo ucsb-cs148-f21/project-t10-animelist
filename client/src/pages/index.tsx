@@ -99,9 +99,14 @@ const Home: React.FC<{}> = () => {
         <ColorModeSwitcher />
       </VStack>
 
-      <Flex flex={2} mx={0}>
+      <Flex flex={2} mx={0} position='relative'>
         <Image alt='Anime scenery' objectFit='cover'
           src={useColorModeValue('images/landing-page-light.jpg', '/images/landing-page-dark.jpg')} />
+        <Text position='absolute' bottom={1} right={1}
+          padding={1}
+          backgroundColor={useColorModeValue('gray.400', 'gray.800')}>
+          Image &copy; {useColorModeValue('Studio Ghibli, Inc.', 'CoMix Wave Films, Inc.')}
+        </Text>
       </Flex>
     </Stack>
   );
