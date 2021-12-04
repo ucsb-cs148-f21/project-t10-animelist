@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, ButtonGroup, Center, Container, Grid, GridItem, Heading, HStack, Spinner, VStack, Text, Table, Tbody, Th, Thead, Tr, Td, Stat, StatArrow, StatGroup, StatHelpText, StatLabel, StatNumber, Flex, IconButton, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { Avatar, Box, Button, ButtonGroup, Center, Container, Grid, GridItem, Heading, HStack, Spinner, VStack, Text, Table, Tbody, Th, Thead, Tr, Td, Stat, StatArrow, StatGroup, StatHelpText, StatLabel, StatNumber, Flex, IconButton, Tooltip, useDisclosure, useToast } from "@chakra-ui/react";
 import * as React from 'react';
 import { useRouter } from "next/router";
 import ProfileCard from "../components/profiles/ProfileCard";
@@ -31,6 +31,10 @@ const Profile: React.FC<{}> = () => {
       refetchQueries: [
         ProfileDocument
       ]
+    }).then(success => {
+        if (success) {
+          toast({ position: "top", status: "success", title: "Success!", description: `Successfully added block` });
+        }
     });
   }
 
@@ -38,6 +42,7 @@ const Profile: React.FC<{}> = () => {
   const [ updateProfilePageBlocks ] = useUpdateProfilePageBlocksMutation();
   const malOauth = useImperativeQuery(MalLinkOauthDocument);
   const router = useRouter();
+  const toast = useToast();
 
   const {
     isOpen: isOpenAddBlock,
