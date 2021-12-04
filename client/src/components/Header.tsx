@@ -28,15 +28,9 @@ const Header: React.FC<HeaderProps> = (props) => {
     >
       <Flex align="center" mr={5}>
         <Heading size="lg" letterSpacing={"tighter"}>
-          <Link href={props.user ? "/list" : "/"}>T10-AnimeList</Link>
+          <Link href={props.user ? "/list" : "/"}>OnlyWeebs</Link>
         </Heading>
       </Flex>
-
-      <div>
-        <Head>
-          <title>T10-AnimeList</title>
-        </Head>
-      </div>
 
       <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
         {isOpen ? <CloseIcon /> : <HamburgerIcon />}

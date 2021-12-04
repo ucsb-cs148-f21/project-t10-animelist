@@ -1,4 +1,5 @@
 import { Center, Spinner, Stack } from "@chakra-ui/react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import { useMeQuery } from "../generated/graphql";
@@ -11,7 +12,7 @@ export default function Layout({ children }) {
 
   if (loading) {
     return (
-      <Loading/>
+      <Loading />
     );
   }
 
@@ -20,13 +21,16 @@ export default function Layout({ children }) {
       height="100vh"
       alignItems="center"
     >
+      <Head>
+        <title>OnlyWeebs</title>
+      </Head>
       {(router.pathname !== '/') &&
-      <Header
-        maxW="6xl"
-        margin="0 auto"
-        width="100%"
-        user={data?.me}
-      />}
+        <Header
+          maxW="6xl"
+          margin="0 auto"
+          width="100%"
+          user={data?.me}
+        />}
       {children}
     </Stack>
   );

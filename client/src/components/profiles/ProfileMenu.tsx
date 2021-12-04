@@ -32,6 +32,11 @@ const ProfileMenu: React.FC<Props> = ({ user }) => {
             Profile
           </MenuItem>
         </Link>
+        <Link href={"/list"}>
+          <MenuItem>
+            My Lists
+          </MenuItem>
+        </Link>
         <MenuDivider/>
         <MenuItem
           onClick={async () => {
