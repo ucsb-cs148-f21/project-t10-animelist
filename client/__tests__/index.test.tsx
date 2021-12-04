@@ -30,6 +30,6 @@ describe('Home', () => {
     );
 
     const h2 = await screen.findByRole('heading');
-    expect(h2).toHaveTextContent('T10 - Anime List');
+    expect(h2).toHaveTextContent('OnlyWeebs');
   });
 })
