@@ -11,13 +11,7 @@ Follow instructions to dpeloy the animelist app. The backend will be hosted on H
 # MongoDB setup
 - Create Mongo database using MongoDB atlas service for free [here](https://www.mongodb.com/cloud/atlas/lp/try2?utm_content=rsatest101321_exp_rsaad&utm_source=google&utm_campaign=gs_americas_united_states_search_core_brand_atlas_desktop_rsaexp2&utm_term=mongodb&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=14931263937&adgroup=129255360958)
 - Make sure `Network Access` for your MongoDB clusters has an allowed access entry for `0.0.0.0/0` which will allow `heroku` backend to connect to the database.
-- Your mongodb uri will follow this format:
-
-```
-mongodb+srv://admin:<password>@cs148-t10-animelist-clu.xx4xk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-```
-
-where `admin` is your admin username (by default it is `admin`), `<password>` is your admin user password, and `myFirstDatabase` is your database name.
+- [Find your mongo uri](https://docs.mongodb.com/manual/reference/connection-string/)
 - Save your mongodb uri and your created database name since these will have to put into heroku config vars when deploying
 
 # Heroku + Vercel deployment
@@ -60,7 +54,7 @@ Please sign up for a vercel account at [vercel.com](https://vercel.com/`)
 To get MyAnimeList Oauth funtionality, you need to create a MyAnimeList app
 [using these instructions.](https://myanimelist.net/blog.php?eid=835707) (Follow Step 0. only to simply register your app on MyAnimeList)
 
-After, you should received a clientId and clientSecret which you can update in your
+After, you should received a clientId and clientSecret in your app settings which you can update in your
 Heroku config vars.
 ## Pitfalls
 - Do not have trailing slash in URLs when settins `CORS` and `NEXT_PUBLIC_BASE_API_URL`
