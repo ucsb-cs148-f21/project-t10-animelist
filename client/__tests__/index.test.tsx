@@ -4,6 +4,9 @@ import TestRenderer from 'react-test-renderer';
 import { MeDocument } from '../src/generated/graphql';
 import { MockedProvider } from '@apollo/client/testing';
 
+import '@testing-library/jest-dom/extend-expect';
+import { render, screen } from '@testing-library/react';
+
 describe('Home', () => {
   const meQueryMockHappy = {
     request: {
@@ -19,14 +22,14 @@ describe('Home', () => {
     }
   };
 
-  it('renders Home page when user logged out', () => {
-    const component = TestRenderer.create(
+  it('renders Home page when user logged out', async () => {
+    render(
       <MockedProvider mocks={[]} addTypename={false}>
         <Home />
       </MockedProvider>
     );
 
-    const h2 = component.root.findByType("h2");
-    expect(h2.children.join('')).toContain('Anime List App');
+    const h2 = await screen.findByRole('heading');
+    expect(h2).toHaveTextContent('T10 - Anime List');
   });
 })
