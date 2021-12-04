@@ -28,20 +28,20 @@ const getInfoFor = (type: BlockType) => {
   }
 }
 
-const handleClick = (setBlock: (func: (prevBlock: Block) => Block) => void, type: BlockType) => {
-  setBlock(prevBlock => {
-    return {
-      ...prevBlock,
-      type: type
-    };
-  });
-}
-
 const AddBlockOption: React.FC<Props> = ({ type, selected, setBlock}) => {
+  const handleClick = () => {
+    setBlock(prevBlock => {
+      return {
+        ...prevBlock,
+        type: type
+      };
+    });
+  }
+
   const [icon, label] = getInfoFor(type);
 
   return (
-    <Button onClick={() => handleClick(setBlock, type)}
+    <Button onClick={handleClick}
       colorScheme='blue' borderWidth='1px' borderRadius='xl' minWidth='250px'
       variant={(type === selected) ? 'solid' : 'ghost'}
       size='xl' padding={6} >

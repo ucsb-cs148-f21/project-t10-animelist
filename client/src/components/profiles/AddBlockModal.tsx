@@ -20,19 +20,6 @@ enum ModalStage {
   Done
 }
 
-const getModalTitle = (stage: ModalStage, blockType: BlockType) => {
-  if (stage === ModalStage.AddBlockDetails) {
-    switch (blockType) {
-      case BlockType.Text:
-        return "Add Details for Text Block";
-      case BlockType.UserList:
-        return "Add Details for User List Block";
-    }
-  } else {
-    return "Add Profile Block";
-  }
-}
-
 const AddBlockModal: React.FC<Props> = ({ userLists, isOpen, onClose, onBlockComplete }) => {
   const resetState = () => {
     setModalStage(ModalStage.SelectType);
@@ -40,6 +27,19 @@ const AddBlockModal: React.FC<Props> = ({ userLists, isOpen, onClose, onBlockCom
       type: BlockType.UserList,
       width: Width.Full
     });
+  }
+
+  const getModalTitle = () => {
+    if (modalStage === ModalStage.AddBlockDetails) {
+      switch (block.type) {
+        case BlockType.Text:
+          return "Add Details for Text Block";
+        case BlockType.UserList:
+          return "Add Details for User List Block";
+      }
+    } else {
+      return "Add Profile Block";
+    }
   }
 
   const getModalBody = () => {

@@ -1,23 +1,21 @@
+import _ from "lodash";
 import { BlockInput } from "../generated/graphql";
 
-const convertBlockToBlockInput = (block) => {
-  let convertedBlock: BlockInput = {
-    width: block.width,
-    type: block.type,
-  };
-
-  // need to manually copy fields to remove __typename field
-  if (block.__typename === "UserListBlock") {
-    convertedBlock.userListBlockInput = {
-      listId: block.userListBlockInput.listId,
-      maxEntries: block.userListBlockInput.maxEntries
-    };
-  } else if (block.__typename === "TextBlock") {
-    convertedBlock.textBlockInput = {
-      text: block.textBlockInput.text
+// recursively remove __typename and additionalData fields since those fields are not present in
+// the BlockInput type
+const removeExtraneousFields = (obj) => {
+  for (const property in obj) {
+    if (property === '__typename' || property === 'additionalData') {
+      delete obj[property];
+    } else if (typeof obj[property] === 'object' && obj[property] != null) {
+      removeExtraneousFields(obj[property]);
     }
   }
+}
 
+const convertBlockToBlockInput = (block) => {
+  let convertedBlock: BlockInput = _.cloneDeep(block);
+  removeExtraneousFields(convertedBlock);
   return convertedBlock;
 }
 
