@@ -46,7 +46,7 @@ const AddBlockModal: React.FC<Props> = ({ userLists, isOpen, onClose, onBlockCom
     if (modalStage === ModalStage.SelectType) {
       return (
         <VStack spacing='1rem' padding='0.5rem'>
-          <Wrap spacing='12px'>
+          <Wrap spacing='12px' justify='center'>
             <AddBlockOption type={BlockType.UserList} selected={block.type} setBlock={setBlock} />
             <AddBlockOption type={BlockType.Statistics} selected={block.type} setBlock={setBlock} />
             <AddBlockOption type={BlockType.Text} selected={block.type} setBlock={setBlock} />
