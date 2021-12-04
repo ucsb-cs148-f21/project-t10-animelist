@@ -108,7 +108,7 @@ const AddBlockModal: React.FC<Props> = ({ userLists, isOpen, onClose, onBlockCom
     <Modal isOpen={isOpen} onClose={() => {onClose(); resetState();}} size='xl'>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{getModalTitle(modalStage, block.type)}</ModalHeader>
+        <ModalHeader>{getModalTitle()}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {getModalBody()} 

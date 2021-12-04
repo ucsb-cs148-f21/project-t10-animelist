@@ -38,7 +38,7 @@ const UserListBlockModalForm: React.FC<Props> = ({ userLists, onBack, onNext }) 
                     placeholder={hasLists ? 'Select a list' : 'You have no lists!'}
                     isDisabled={!hasLists}
                   >
-                    {hasLists && userLists.map(list => <option value={list.id}>{list.name}</option>)}
+                    {hasLists && userLists.map(list => <option key={list.id} value={list.id}>{list.name}</option>)}
                   </Select>
                 </FormControl>
               )}
