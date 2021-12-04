@@ -1,11 +1,8 @@
 package com.github.animelist.animelist.controller;
 
-import com.github.animelist.animelist.model.JwtUserDetails;
 import com.github.animelist.animelist.model.input.CreateUserListInput;
 import com.github.animelist.animelist.model.input.UpdateUserListInput;
-import com.github.animelist.animelist.model.input.UserListEntryInput;
 import com.github.animelist.animelist.model.input.UserListItemInput;
-import com.github.animelist.animelist.model.user.UserListEntry;
 import com.github.animelist.animelist.model.userlist.UserList;
 import com.github.animelist.animelist.model.userlist.UserListItem;
 import com.github.animelist.animelist.service.UserListService;
@@ -16,11 +13,6 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-
-import java.util.Objects;
-
-import static com.github.animelist.animelist.util.AuthUtil.getUserDetails;
-import static java.util.Objects.isNull;
 
 @Controller
 public class UserListController {
@@ -62,20 +54,6 @@ public class UserListController {
 
         return userListService.updateItem(userDetails.getId(), input)
                 .orElseThrow(() -> new RuntimeException("Update item failed"));
-    }
-
-    @MutationMapping
-    @PreAuthorize("isAuthenticated()")
-    public UserListEntry updateUserListEntry(@Argument("input") final UserListEntryInput input){
-        JwtUserDetails userDetails = getUserDetails();
-
-        boolean succeeded = userListService.updateUserListEntry(userDetails.getId(), input);
-
-        if (!succeeded) {
-            throw new RuntimeException("Failed to update user list entry or it may not exist");
-        }
-
-        return new UserListEntry(input.mediaID(), input.rated(), input.rating());
     }
 
     @MutationMapping

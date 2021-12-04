@@ -2,7 +2,6 @@ package com.github.animelist.animelist.entity;
 
 import com.github.animelist.animelist.model.profilepage.Block;
 import com.github.animelist.animelist.model.ratingsystem.EmbeddedRatingSystem;
-import com.github.animelist.animelist.model.user.UserListEntry;
 import com.github.animelist.animelist.model.userlist.EmbeddedUserList;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -29,8 +28,6 @@ public class User extends DateAudit {
 
     private List<EmbeddedRatingSystem> ratingSystems;
 
-    private List<UserListEntry> userList;
-
     private int tokenVersion = 1;
 
     public User(
@@ -46,7 +43,6 @@ public class User extends DateAudit {
         this.profilePageBlocks = new ArrayList<List<Block>>();
         this.userLists = new ArrayList<>();
         this.ratingSystems = new ArrayList<>();
-        this.userList = new ArrayList<>();
     }
 
     public User() {
@@ -96,14 +92,6 @@ public class User extends DateAudit {
         return userLists;
     }
 
-    public List<UserListEntry> getUserList() {
-        return userList;
-    }
-
-    public void addUserListEntry(UserListEntry entry) {
-        userList.add(entry);
-    }
-
     public int getTokenVersion() {
         return tokenVersion;
     }
@@ -121,7 +109,6 @@ public class User extends DateAudit {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", userList=" + userList + 
                 ", tokenVersion=" + tokenVersion +
                 '}';
     }
@@ -132,12 +119,12 @@ public class User extends DateAudit {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         User user = (User) o;
-        return getTokenVersion() == user.getTokenVersion() && Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getUserList(), user.getUserList());
+        return getTokenVersion() == user.getTokenVersion() && Objects.equals(getId(), user.getId()) && Objects.equals(getUsername(), user.getUsername()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPassword(), user.getPassword());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getId(), getUsername(), getEmail(), getPassword(), getUserList(), getTokenVersion());
+        return Objects.hash(super.hashCode(), getId(), getUsername(), getEmail(), getPassword(), getTokenVersion());
     }
 
     public static User.Builder builder() {

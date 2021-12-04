@@ -1,7 +1,7 @@
 import { Heading, VStack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/dist/client/router';
 import * as React from 'react';
-import UserList, { ListOwnerBar } from '../../components/list/_UserList';
+import UserList, { ListOwnerBar } from '../../components/list/UserList';
 import { useMeQuery, use_UserListQuery } from '../../generated/graphql';
 
 const ListPage: React.FC<{}> = () => {
@@ -27,7 +27,7 @@ const ListPage: React.FC<{}> = () => {
     return (
       <VStack py={{ base: 10 }} width="full" maxWidth="6xl">
         <Heading>{ data.userList.name }</Heading>
-        <ListOwnerBar addedIds={new Set(data.userList.items.map(item => item.mediaID))} listId={data.userList.id}/>
+        <ListOwnerBar addedIds={new Set(data.userList.items.map(item => item.mediaID))} userlist={data.userList}/>
         <Text>You have no items, yet! :(</Text>
       </VStack>
     );
