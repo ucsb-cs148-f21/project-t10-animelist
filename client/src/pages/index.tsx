@@ -1,9 +1,28 @@
 import * as React from 'react';
-import { Box, Button, Flex, Heading, Image, Stack, Text, Link, VStack, ButtonGroup, useColorModeValue } from "@chakra-ui/react"
+import { Box, Button, Flex, Heading, Image, Stack, Text, Link, VStack, ButtonGroup, useColorModeValue, Icon } from "@chakra-ui/react"
 import { FaGithub } from 'react-icons/fa';
 import { useMeQuery } from '../generated/graphql';
 import router from 'next/router';
 import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
+import { BsPencil } from 'react-icons/bs';
+import { IconType } from 'react-icons';
+import { IoIosShare, IoMdSettings } from 'react-icons/io';
+
+interface FeatureCardProps {
+  icon: IconType;
+  label: string;
+}
+const FeatureCard: React.FC<FeatureCardProps> = ({ icon, label, children }) => (
+  <Box borderWidth='1px' borderRadius='xl'
+    padding={{ base: 4 }}
+    margin={{ base: 1, md: 2 }}
+    flex={1}
+  >
+    <Icon as={icon} boxSize='3rem' marginBottom={2} />
+    <Text fontSize='xl' fontWeight='semibold'>{label}</Text>
+    <Text>{children}</Text>
+  </Box>
+)
 
 const Home: React.FC<{}> = () => {
   const { data, } = useMeQuery();
@@ -19,8 +38,7 @@ const Home: React.FC<{}> = () => {
       direction={{ base: 'column', md: 'row' }}
       as={Box}
       textAlign="center"
-      spacing={{ base: 8, md: 14 }}
-
+      spacing={0}
     >
       <VStack
         flex={1}
@@ -68,10 +86,20 @@ const Home: React.FC<{}> = () => {
           </Link>
         </ButtonGroup>
 
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          alignItems='stretch'
+          justifyContent='space-between'
+        >
+          <FeatureCard icon={BsPencil} label='Track'>Keep track of your anime history.</FeatureCard>
+          <FeatureCard icon={IoMdSettings} label='Customize'>Shape your experience exactly how you want it.</FeatureCard>
+          <FeatureCard icon={IoIosShare} label='Share'>Share your profile with friends.</FeatureCard>
+        </Flex>
+
         <ColorModeSwitcher />
       </VStack>
 
-      <Flex flex={2}>
+      <Flex flex={2} mx={0}>
         <Image alt='Anime scenery' objectFit='cover'
           src={useColorModeValue('images/landing-page-light.jpg', '/images/landing-page-dark.jpg')} />
       </Flex>
