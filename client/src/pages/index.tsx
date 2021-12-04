@@ -62,7 +62,7 @@ const Home: React.FC<{}> = () => {
               zIndex: -1,
             }}
           >
-            T10 - Anime List
+            OnlyWeebs
           </Text>
         </Heading>
 
