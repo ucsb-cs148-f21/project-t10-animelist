@@ -51,6 +51,7 @@ input MALOauthInput {
 
 type Query {
   me: User
+  user(userId: String!): User
   malLinkOauth: String!
   malLoginOauth: String!
   getRatingSystem(ratingSystemID: String!): RatingSystem

@@ -191,12 +191,18 @@ export type Query = {
   malLinkOauth: Scalars['String'];
   malLoginOauth: Scalars['String'];
   me?: Maybe<User>;
+  user?: Maybe<User>;
   userList?: Maybe<UserList>;
 };
 
 
 export type QueryGetRatingSystemArgs = {
   ratingSystemID: Scalars['String'];
+};
+
+
+export type QueryUserArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -505,10 +511,12 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, ratingSystems?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedRatingSystem', id: string, name: string }>>>, userLists?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedUserList', id: string, name: string }>>> }> };
 
-export type ProfileQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProfileQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
 
 
-export type ProfileQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', username: string, userLists?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedUserList', id: string, name: string }>>>, profilePageBlocks: Array<Array<{ __typename?: 'SpacerBlock', width: Width, type: BlockType } | { __typename?: 'StatisticsBlock', width: Width, type: BlockType, additionalData: { __typename?: 'StatisticsBlockAdditionalData', entries: number } } | { __typename?: 'TextBlock', width: Width, type: BlockType, textBlockInput: { __typename?: 'TextBlockSettings', text: string } } | { __typename?: 'UserListBlock', width: Width, type: BlockType, userListBlockInput: { __typename?: 'UserListBlockSettings', listId: string, maxEntries?: Maybe<number> }, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } }>> }> };
+export type ProfileQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string }>, user?: Maybe<{ __typename?: 'User', id: string, username: string, userLists?: Maybe<Array<Maybe<{ __typename?: 'EmbeddedUserList', id: string, name: string }>>>, profilePageBlocks: Array<Array<{ __typename?: 'SpacerBlock', width: Width, type: BlockType } | { __typename?: 'StatisticsBlock', width: Width, type: BlockType, additionalData: { __typename?: 'StatisticsBlockAdditionalData', entries: number } } | { __typename?: 'TextBlock', width: Width, type: BlockType, textBlockInput: { __typename?: 'TextBlockSettings', text: string } } | { __typename?: 'UserListBlock', width: Width, type: BlockType, userListBlockInput: { __typename?: 'UserListBlockSettings', listId: string, maxEntries?: Maybe<number> }, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } }>> }> };
 
 export type UserListBlockFieldsFragment = { __typename?: 'UserListBlock', userListBlockInput: { __typename?: 'UserListBlockSettings', listId: string, maxEntries?: Maybe<number> }, additionalData: { __typename?: 'UserListBlockAdditionalData', userList: { __typename?: 'UserList', name: string, items?: Maybe<Array<Maybe<{ __typename?: 'UserListItem', mediaID: number, watchStatus: string, rating?: Maybe<{ __typename?: 'UserListRating', displayRating: string }> }>>> } } };
 
@@ -1171,8 +1179,12 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const ProfileDocument = gql`
-    query Profile {
+    query Profile($userId: String!) {
   me {
+    id
+  }
+  user(userId: $userId) {
+    id
     username
     userLists {
       id
@@ -1203,10 +1215,11 @@ ${StatisticsBlockFieldsFragmentDoc}`;
  * @example
  * const { data, loading, error } = useProfileQuery({
  *   variables: {
+ *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useProfileQuery(baseOptions?: Apollo.QueryHookOptions<ProfileQuery, ProfileQueryVariables>) {
+export function useProfileQuery(baseOptions: Apollo.QueryHookOptions<ProfileQuery, ProfileQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options);
       }

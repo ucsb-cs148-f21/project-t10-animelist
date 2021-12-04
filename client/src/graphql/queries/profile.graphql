@@ -1,5 +1,10 @@
-query Profile {
+query Profile($userId: String!) {
   me {
+    id
+  }
+
+  user(userId: $userId) {
+    id
     username
 
     userLists {
