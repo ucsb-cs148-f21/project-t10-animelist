@@ -25,12 +25,8 @@ import static com.github.animelist.animelist.util.AuthUtil.getUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import graphql.execution.DataFetcherResult;
-
 @Component
 public class ProfilePageService {
-    public static final int DEFAULT_USER_LIST_ENTRY_LIMIT = 5;
-
     private final UserService userService;
     private final UserListService userListService;
 
@@ -58,10 +54,10 @@ public class ProfilePageService {
     public UserList getUserListSlice(UserListBlockSettings settings) {
         UserList list = userListService.getUserList(settings.getListId()).orElseThrow();
 
-        int entryLimit = (settings.getMaxEntries() != null) ?
-            settings.getMaxEntries() : DEFAULT_USER_LIST_ENTRY_LIMIT;
-        entryLimit = Math.min(entryLimit, list.getItems().size());
-        list.setItems(list.getItems().subList(0, entryLimit));
+        if (settings.getMaxEntries() != null) {
+            int entryLimit = Math.min(settings.getMaxEntries(), list.getItems().size());
+            list.setItems(list.getItems().subList(0, entryLimit));
+        }
 
         return list;
     }
