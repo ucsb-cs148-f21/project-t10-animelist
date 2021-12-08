@@ -16,3 +16,5 @@ As a group, we have decided to utilize React Next.js for the frontend, Spring Bo
 
 # Deployment
 [Deployed on Vercel here.](https://cs148-t10-animelist.vercel.app/)
+
+[Deploy doc](https://github.com/ucsb-cs148-f21/project-t10-animelist/blob/main/docs/DEPLOY.md)
