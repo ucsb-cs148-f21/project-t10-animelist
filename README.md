@@ -14,6 +14,15 @@ The anime list's user base encompasses any and all anime fans looking to track a
 # Tech Stack:
 As a group, we have decided to utilize React Next.js for the frontend, Spring Boot with GraphQL for the backend, and MongoDB for the database program.
 
+# Repository Structure
+* `client` - This directory holds the code for our Next.js frontend. Within it you will find the following structure:
+  * ` __tests__` - Frontend tests
+  * `public` - Static files that will be served at the root directory of the hosted site (used for images)
+  * `src` - Main source code for the frontend
+* `server` - This directory holds the code for our Spring Boot backend. You will find the following subdirectory structure within:
+  * `src/main` - Main source code.
+  * `src/test` - Unit tests.
+
 # Deployment
 [Deployed on Vercel here.](https://cs148-t10-animelist.vercel.app/)
 
