@@ -12,102 +12,7 @@ Our application provides a platform for anime viewers who are interested in main
 
 There are already some capable sites that fulfill this purpose, such as MyAnimeList (MAL) and Anilist. We plan to differentiate ourselves from these existing offerings by catering to a "power-user" group of users that would benefit from a greater degree of customizability. Before apps like MyAnimeList, using a spreadsheet was a common solution for this use case, which required significant manual work but allowed complete customization to the user's needs. We aim to have our app closer to spreadsheets on the customization spectrum, without sacrificing much convenience.
 
-## 3. UX Considerations
-
-As briefly mentioned above, we want our app to be highly customizable and personal compared to the experiences offered by existing anime list apps. However, we recognize that a high degree of customizability can sometimes come at the cost of convenience, which is something we want to avoid. Throughout the design process, we have aimed to balance these two factors.
-
-The following subsections will show some high-level user flows for common processes in our app.
-
-### 3.1. Account Creation
-
-```mermaid
-journey
-    title Account Creation
-    section Sign up
-        Navigate to homepage: 3
-        Click "sign up" button: 3
-        Enter account info: 4
-    section Log in
-        Enter account info: 3
-        Logged in: 4
-```
-
-### 3.2. Rating System Creation
-
-Note: we have a separate doc detailing why this system exists and how it works (currently not in repo but should eventually be added). For now, the gist of it is that users can create custom rating systems to associate with their lists. Each rating system can either be discrete (discrete scores can be assigned) or continuous (scores can be any real number in a given range).
-
-```mermaid
-journey
-  title Rating System Creation (Discrete)
-  section Basic info
-    Name rating system: 4
-    Choose between discrete/continuous: 3
-  section Discrete parameters
-    Assign labels to ratings: 5
-  section Subratings
-    Choose yes/no for multiple subratings: 3
-    Define subrating categories: 4
-```
-
-```mermaid
-journey
-  title Rating System Creation (Continuous)
-  section Basic info
-    Name rating system: 4
-    Choose between discrete/continuous: 3
-  section Continuous parameters
-    Choose lowest score: 3
-    Choose highest score: 3
-  section Subratings
-    Choose yes/no for multiple subratings: 3
-    Define subrating categories: 4
-```
-
-### 3.3. Anime List Creation
-
-WIP
-
-```mermaid
-journey
-  title Anime List Creation
-  section Select details
-    Anime list title: 4
-    Select rating system: 4
-```
-
-### 3.4. Anime List Editing
-
-WIP
-
-### 3.5. Profile Page Customization
-
-```mermaid
-journey
-  title Add Profile Block
-  Enter editing mode: 3
-  Choose block type: 4
-  Enter block details (if applicable): 3
-  Exit editing mode: 4
-```
-
-```mermaid
-journey
-  title Edit Profile Block
-  Enter editing mode: 3
-  Click edit button on existing block: 4
-  Edit block details: 4
-  Exit editing mode: 4
-```
-
-```mermaid
-journey
-  title Delete Profile Block
-  Enter editing mode: 3
-  Click delete button on existing block: 4
-  Exit editing mode: 4
-```
-
-## 4. High-Level Architecture
+## 3. System Architecture
 
 ```mermaid
 flowchart LR
@@ -140,7 +45,137 @@ Second, the frontend files that actually run in the user's browser are implement
 
 Finally, as previously mentioned, we use GraphQL to communicate between the frontend and backend! GraphQL is an API specification that acts as an alternative to traditional REST APIs. Rather than making a request to a REST endpoint and receiving data back with a shape determined by the endpoint, GraphQL allows us to traverse a graph of data and specify exactly what objects and fields we want to retrieve. It also allows us to get all of the data we need in a single request, rather than having to make multiple requests to retrieve all of the necessary data. This is because the data is represented as nodes and fields, where the fields can themselves be nodes.
 
+## 4. UX Considerations
+
+As briefly mentioned above, we want our app to be highly customizable and personal compared to the experiences offered by existing anime list apps. However, we recognize that a high degree of customizability can sometimes come at the cost of convenience, which is something we want to avoid. Throughout the design process, we have aimed to balance these two factors.
+
+Furthermore, an important step in our design and implementation was to consider minor details in the interface and user flow, which we consider essential to creating an exceptional user experience.
+
+The following bullet list outlines the user flow that we envisioned:
+
+* User visits site for the first time and sees landing page.
+
+* User creates an account for the site, then logs in.
+
+* (Optional) User configures custom rating systems for their lists.
+
+* User creates anime lists using preset or custom rating systems.
+
+* [Loop] User adds entries to their list via search.
+
+* User edits the watch status and ratings for their entries.
+
+* User customizes their profile and shows the lists they've curated.
+
+* Go back to the [Loop] step. User continues to use the app as they continue to watch anime.
+
+The following subsections will show some high-level user flows for common processes in our app.
+
+### 4.1. Account Creation
+
+```mermaid
+journey
+    title Account Creation
+    section Sign up
+        Navigate to homepage: 3
+        Click "sign up" button: 3
+        Enter account info: 4
+    section Log in
+        Enter account info: 3
+        Logged in: 4
+```
+
+### 4.2. Rating System Creation
+
+Note: we have a separate doc detailing why this system exists and how it works.
+
+For now, the gist of it is that users can create custom rating systems to associate with their lists. Each rating system can either be discrete (discrete scores can be assigned) or continuous (scores can be any real number in a given range).
+
+```mermaid
+journey
+  title Rating System Creation (Discrete)
+  section Basic info
+    Name rating system: 4
+    Choose between discrete/continuous: 3
+  section Discrete parameters
+    Assign labels to ratings: 5
+  section Subratings
+    Choose yes/no for multiple subratings: 3
+    Define subrating categories: 4
+```
+
+```mermaid
+journey
+  title Rating System Creation (Continuous)
+  section Basic info
+    Name rating system: 4
+    Choose between discrete/continuous: 3
+  section Continuous parameters
+    Choose lowest score: 3
+    Choose highest score: 3
+  section Subratings
+    Choose yes/no for multiple subratings: 3
+    Define subrating categories: 4
+```
+
+### 4.3. Anime List Creation
+
+```mermaid
+journey
+  title Anime List Creation
+  section Select details
+    Anime list title: 4
+    Select rating system: 4
+```
+
+### 4.4. Anime List Editing
+
+```mermaid
+journey
+  title Anime List Editing
+  section Add entry
+    Search for anime: 4
+    Add entry to list: 5
+  section Rate entry
+    Set watch status: 3
+    (Optional) add rating: 4
+```
+
+### 4.5. Profile Page Customization
+
+```mermaid
+journey
+  title Add Profile Block
+  Enter editing mode: 3
+  Choose block type: 4
+  Enter block details (if applicable): 3
+  Exit editing mode: 4
+```
+
+```mermaid
+journey
+  title Edit Profile Block (Unimplemented)
+  Enter editing mode: 3
+  Click edit button on existing block: 4
+  Edit block details: 4
+  Exit editing mode: 4
+```
+
+```mermaid
+journey
+  title Delete Profile Block (Unimplemented)
+  Enter editing mode: 3
+  Click delete button on existing block: 4
+  Exit editing mode: 4
+```
+
 ## 5. Design Process Documentation
+
+We followed a fairly standard Scrum process, and I (Rowan) acted as Scrum master for roughly the latter half of the course.
+
+One process we used that isn't included in the standard Scrum process is writing design docs. After our MVP, for each major feature that we implemented, we wrote a fairly detailed design document that outlined the motivation behind the feature and how the system would work. These design docs included details such as how the user would interact with the feature and what new backend APIs we would need to support the feature.
+
+
 
 * 10/6/21: We discussed the problem scenario and user journey for our app. This led us to our initial vision for the app as an anime list that can appeal to a "power user" userbase.
 
